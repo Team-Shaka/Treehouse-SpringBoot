@@ -11,8 +11,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI SpringCodeBaseAPI() {
         Info info = new Info()
-                .title("PeerNa API")
-                .description("PeerNa API 명세서")
+                .title("Treehouse API")
+                .description("Treehouse API 명세서")
                 .version("1.0.0");
 
         return new OpenAPI()
