@@ -36,6 +36,11 @@ public class UserService {
         return UserMapper.toCheckNameDTO(userQueryAdapter.checkName(request));
     }
 
+    @Transactional(readOnly = true)
+    public User findById(Long id){
+        return userQueryAdapter.findById(id);
+    }
+
     @Transactional
     public UserResponseDTO.registerUser register(UserRequestDTO.registerUser request){
         User user = UserMapper.toUser(request.getUserName(), request.getPhoneNumber());
