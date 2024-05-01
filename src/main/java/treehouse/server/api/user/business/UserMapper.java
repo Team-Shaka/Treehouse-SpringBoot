@@ -1,14 +1,28 @@
 package treehouse.server.api.user.business;
 
+import jakarta.annotation.PostConstruct;
 import lombok.*;
+import org.springframework.stereotype.Component;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
 import treehouse.server.global.entity.User.UserStatus;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
+//@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class UserMapper {
 
+    private final UserService userService;
+    private static UserService staticUserService;
+    @PostConstruct
+    public void init(){
+        this.staticUserService = this.userService;
+    }
+
+    public static User toUserSecurity(String id){
+        return staticUserService.findById(Long.valueOf(id));
+    }
 
     public static UserResponseDTO.checkName toCheckNameDTO(boolean isDuplicated){
         return UserResponseDTO.checkName.builder()
