@@ -40,7 +40,7 @@ public class AuthMemberArgumentResolver implements HandlerMethodArgumentResolver
      * resolveArgument
      * 실제로 파라미터의 값을 해석해주는 메서드
      *  파라미터에 전달할 객체를 반환
-     * - SecurityContextHolder에서 인증 객체를 가져와서 Member 객체로 변환하여 반환
+     * - SecurityContextHolder에서 인증 객체를 가져와서 User 객체로 변환하여 반환
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
