@@ -3,6 +3,7 @@ package treehouse.server.global.entity.Invitation;
 
 import jakarta.persistence.*;
 import lombok.*;
+import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
@@ -29,6 +30,10 @@ public class Invitation extends BaseDateTimeEntity {
     @JoinColumn(name = "senderId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member sender;
+
+    @JoinColumn(name = "receiverId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User receiver;
     @JoinColumn(name = "treeId")
     @ManyToOne(fetch = FetchType.LAZY)
     private TreeHouse treeHouse;
