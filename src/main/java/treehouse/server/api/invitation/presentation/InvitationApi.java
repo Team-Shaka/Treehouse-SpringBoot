@@ -19,7 +19,7 @@ import treehouse.server.global.security.handler.annotation.AuthMember;
 @Slf4j
 @Validated
 @Tag(name = "😎 Invitation API", description = "초대장 관련 API 입니다. 초대장 조회, 전송 등의 API가 포함됩니다.")
-@RequestMapping("/invi")
+@RequestMapping("/users")
 public class InvitationApi {
 
     private final InvitationService invitationService;
