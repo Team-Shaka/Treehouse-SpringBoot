@@ -18,7 +18,7 @@ import treehouse.server.global.security.handler.annotation.AuthMember;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-@Tag(name = "😎 Invitation API", description = "초대장 관련 API 입니다. 초대장 조회, 전송 등의 API가 포함됩니다.")
+@Tag(name = "📨 Invitation API", description = "초대장 관련 API 입니다. 초대장 조회, 전송 등의 API가 포함됩니다.")
 @RequestMapping("/users")
 public class InvitationApi {
 
@@ -32,5 +32,10 @@ public class InvitationApi {
         return CommonResponse.onSuccess(invitationService.getInvitations(user));
     }
 
+    @GetMapping("/availableInvitation")
+    @Operation(summary = "소유한 초대장 개수 및 게이지 조회", description = "소유한 초대장 개수 및 게이지를 조회합니다.")
+    public CommonResponse<InvitationResponseDTO.myInvitationInfo> getAvailableInvitation(@AuthMember @Parameter(hidden = true) User user){
 
+        return CommonResponse.onSuccess(invitationService.getMyInvitationInfo(user));
+    }
 }
