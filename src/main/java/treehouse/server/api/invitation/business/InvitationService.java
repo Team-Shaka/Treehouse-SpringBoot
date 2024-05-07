@@ -39,10 +39,7 @@ public class InvitationService {
     @Transactional
     public InvitationResponseDTO.getInvitations getInvitations(User user) {
 
-        log.error("User name : ", user.getName());
-        log.error("User id : ", user.getId());
         List<Invitation> invitations = invitationQueryAdapter.findAllByPhone(user.getPhone());
-        log.error("size : ", invitations.size());
 
         List<InvitationResponseDTO.getInvitation> invitationDtos = invitations.stream()
                 .map(invitation -> {
@@ -56,5 +53,9 @@ public class InvitationService {
                 })
                 .collect(Collectors.toList());
         return invitationMapper.toGetInvitations(invitationDtos);
+    }
+
+    public InvitationResponseDTO.myInvitationInfo getMyInvitationInfo(User user){
+        return invitationMapper.toMyInvitationInfo(user);
     }
 }

@@ -30,5 +30,12 @@ public class InvitationMapper {
                 .invitations(invitationDtos)
                 .build();
     }
+
+    public InvitationResponseDTO.myInvitationInfo toMyInvitationInfo(User user){
+        return InvitationResponseDTO.myInvitationInfo.builder()
+                .availableInvitation(user.getInvitationCount())
+                .activeRate(user.getActiveRate())
+                .build();
+    }
 }
 
