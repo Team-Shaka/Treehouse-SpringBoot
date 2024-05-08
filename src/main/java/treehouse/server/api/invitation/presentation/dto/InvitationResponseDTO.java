@@ -28,4 +28,21 @@ public class InvitationResponseDTO {
         List<InvitationResponseDTO.getInvitation> invitations;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class myInvitationInfo{
+        private Integer availableInvitation;
+        private Integer activeRate;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class invitationAccept {
+        private Long treehouseId;
+
+    }
 }

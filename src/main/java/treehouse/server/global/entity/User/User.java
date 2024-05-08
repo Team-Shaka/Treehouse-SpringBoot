@@ -36,9 +36,10 @@ public class User extends BaseDateTimeEntity {
 
     // 활동량 및 초대장 개수 트리별로 적용되는 것 맞는지 확인하기
     @Builder.Default
-    private Double activeRate = 0.0; //활동량
+    private Integer activeRate = 0; //활동량
     @Builder.Default
     private Integer invitationCount = 3; //남아있는 초대장의 개수
+
 
     // 탈퇴일자 필요한지 확인하기
     // 특정 트리의 탈퇴한 멤버를 Member Table 에 그대로 쌓을건지?
