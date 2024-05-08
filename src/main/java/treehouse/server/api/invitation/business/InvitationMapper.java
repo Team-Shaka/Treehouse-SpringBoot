@@ -37,5 +37,11 @@ public class InvitationMapper {
                 .activeRate(user.getActiveRate())
                 .build();
     }
+
+    public InvitationResponseDTO.invitationAccept toInvitationResult(Long treeHouseId){
+        return InvitationResponseDTO.invitationAccept.builder()
+                .treehouseId(treeHouseId)
+                .build();
+    }
 }
 

@@ -37,4 +37,12 @@ public class InvitationResponseDTO {
         private Integer activeRate;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class invitationAccept {
+        private Long treehouseId;
+
+    }
 }

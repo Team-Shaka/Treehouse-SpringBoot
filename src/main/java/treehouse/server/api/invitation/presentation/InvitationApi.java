@@ -38,4 +38,12 @@ public class InvitationApi {
 
         return CommonResponse.onSuccess(invitationService.getMyInvitationInfo(user));
     }
+
+    @PostMapping("/invitations/accept")
+    @Operation(summary = "초대장을 수락할지 거절할지 결정", description = "초대장을 수락할지 거절할지 결정하는 API 입니다.")
+    public CommonResponse<InvitationResponseDTO.invitationAccept> acceptInvitation(
+            @AuthMember @Parameter(hidden = true) User user, @RequestBody InvitationRequestDTO.invitationAcceptDecision request) {
+        return CommonResponse.onSuccess(invitationService.decisionInvitation(user, request));
+    }
+
 }
