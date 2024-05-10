@@ -23,7 +23,10 @@ public class Notification extends BaseDateTimeEntity {
     private String title;
 
     private String body;
-    private boolean readStatus;
+    private boolean isChecked;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
 
     @JoinColumn(name = "senderId")
     @ManyToOne(fetch = FetchType.LAZY)

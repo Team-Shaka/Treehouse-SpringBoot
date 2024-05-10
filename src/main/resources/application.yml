@@ -71,7 +71,7 @@ jwt:
     key: ${JWT_SECRET}
   #  secret : ${JWT_SECRET}
   authorities-key: authoritiesKey
-  access-token-validity-in-seconds: 30000 # 30 s
+  access-token-validity-in-seconds: 3000000 # 30 s
   refresh-token-validity-in-seconds: 60000 # 1 min
 
 

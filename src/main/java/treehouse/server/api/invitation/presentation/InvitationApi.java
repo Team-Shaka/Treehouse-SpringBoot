@@ -25,7 +25,7 @@ public class InvitationApi {
     private final InvitationService invitationService;
 
     @GetMapping("/invitation")
-    @Operation(summary = "초대장 조회", description = "내가 받은 초대장을 조회합니다.")
+    @Operation(summary = "초대장 조회 \uD83D\uDD11", description = "내가 받은 초대장을 조회합니다.")
     public CommonResponse<InvitationResponseDTO.getInvitations> getInvitations(
             @AuthMember @Parameter(hidden = true) User user
     ) {
@@ -33,14 +33,14 @@ public class InvitationApi {
     }
 
     @GetMapping("/availableInvitation")
-    @Operation(summary = "소유한 초대장 개수 및 게이지 조회", description = "소유한 초대장 개수 및 게이지를 조회합니다.")
+    @Operation(summary = "소유한 초대장 개수 및 게이지 조회 \uD83D\uDD11", description = "소유한 초대장 개수 및 게이지를 조회합니다.")
     public CommonResponse<InvitationResponseDTO.myInvitationInfo> getAvailableInvitation(@AuthMember @Parameter(hidden = true) User user){
 
         return CommonResponse.onSuccess(invitationService.getMyInvitationInfo(user));
     }
 
     @PostMapping("/invitations/accept")
-    @Operation(summary = "초대장을 수락할지 거절할지 결정", description = "초대장을 수락할지 거절할지 결정하는 API 입니다.")
+    @Operation(summary = "초대장을 수락할지 거절할지 결정 \uD83D\uDD11", description = "초대장을 수락할지 거절할지 결정하는 API 입니다.")
     public CommonResponse<InvitationResponseDTO.invitationAccept> acceptInvitation(
             @AuthMember @Parameter(hidden = true) User user, @RequestBody InvitationRequestDTO.invitationAcceptDecision request) {
         return CommonResponse.onSuccess(invitationService.decisionInvitation(user, request));
