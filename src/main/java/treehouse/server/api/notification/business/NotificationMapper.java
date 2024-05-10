@@ -2,14 +2,12 @@ package treehouse.server.api.notification.business;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 import treehouse.server.api.notification.presentation.dto.NotificationResponseDTO;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.notification.Notification;
 
 import java.util.List;
 
-@Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NotificationMapper {
 
