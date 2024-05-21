@@ -20,7 +20,7 @@ import treehouse.server.global.security.handler.annotation.AuthMember;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-@Tag(name = "Feed API", description = "트리하우스 피드 관련 API 입니다. 게시글 작성, 피드 조회 등의 API가 포함됩니다.")
+@Tag(name = "\uD83D\uDCF0 Feed API", description = "트리하우스 피드 관련 API 입니다. 게시글 작성, 피드 조회 등의 API가 포함됩니다.")
 @RequestMapping("/treehouses/{treehouseId}/feeds")
 public class PostApi {
 
