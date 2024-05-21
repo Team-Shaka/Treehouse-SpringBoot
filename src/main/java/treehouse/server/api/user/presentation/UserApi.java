@@ -25,7 +25,7 @@ public class UserApi {
     private final UserService userService;
 
     @PostMapping("/checkName")
-    @Operation(summary = "아이디 중복 체크", description = "서비스에서 사용할 유저이름을 중복 체크합니다.")
+    @Operation(summary = "아이디 중복 체크 ✅", description = "서비스에서 사용할 유저이름을 중복 체크합니다.")
     public CommonResponse<UserResponseDTO.checkName> checkName(
             @RequestBody final UserRequestDTO.checkName request
     ){
@@ -33,7 +33,7 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
+    @Operation(summary = "회원가입 ✅", description = "회원가입을 진행합니다.")
     public CommonResponse<UserResponseDTO.registerUser> registerMember(
             @RequestBody final UserRequestDTO.registerUser request
     ){
@@ -41,7 +41,7 @@ public class UserApi {
     }
 
     @PostMapping("/reissue")
-    @Operation(summary = "토큰 재발급", description = "토큰을 재발급 합니다.")
+    @Operation(summary = "토큰 재발급 ✅", description = "토큰을 재발급 합니다.")
     public CommonResponse<UserResponseDTO.reissue> reissue(
         @RequestBody final UserRequestDTO.reissue request
     ){

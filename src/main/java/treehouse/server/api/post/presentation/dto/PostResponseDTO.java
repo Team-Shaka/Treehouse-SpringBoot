@@ -1,4 +1,4 @@
-package treehouse.server.api.feed.presentation.dto;
+package treehouse.server.api.post.presentation.dto;
 
 import lombok.*;
 import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
@@ -6,13 +6,13 @@ import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FeedResponseDto {
+public class PostResponseDTO {
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class getFeedDetails {
+    public static class getPostDetails {
 
         private MemberResponseDTO.getMember memberProfile;
         private Long postId;
