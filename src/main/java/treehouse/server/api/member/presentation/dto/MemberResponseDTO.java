@@ -13,4 +13,15 @@ public class MemberResponseDTO {
         private Long userId;
         private Long treehouseId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getMemberProfile {
+        private Long memberId;
+        private String memberName;
+        private String memberProfileImageUrl;
+        private Integer memberBranch;
+    }
 }

@@ -28,7 +28,7 @@ public class MemberApi {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    @Operation(summary = "회원가입", description = "트리하우스 멤버로 가입합니다.")
+    @Operation(summary = "트리하우스 회원가입 \uD83D\uDD11✅", description = "트리하우스 멤버로 가입합니다.")
     public CommonResponse<MemberResponseDTO.registerMember> registerTreehouseMember(
             @RequestBody final MemberRequestDTO.registerMember request,
             @AuthMember @Parameter(hidden = true) User user

@@ -25,4 +25,13 @@ public class MemberMapper {
                 .treehouseId(treehouseId) // treehouseId는 관련 기능 구현 후 변경 예정
                 .build();
     }
+
+    public static MemberResponseDTO.getMemberProfile toGetMemberProfile(Member member) {
+        return MemberResponseDTO.getMemberProfile.builder()
+                .memberId(member.getId())
+                .memberName(member.getName())
+                .memberProfileImageUrl(member.getProfileImageUrl())
+                .memberBranch(3) // Branch 기능 개발 이후 변경 예정
+                .build();
+    }
 }

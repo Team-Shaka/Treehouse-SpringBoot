@@ -3,7 +3,7 @@ package treehouse.server.global.entity.comment;
 import jakarta.persistence.*;
 import lombok.*;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
-import treehouse.server.global.entity.feed.Feed;
+import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.member.Member;
 
 @Entity
@@ -22,5 +22,5 @@ public class Comment extends BaseDateTimeEntity {
 
     @JoinColumn(name = "feedId")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Feed feed;
+    private Post post;
 }
