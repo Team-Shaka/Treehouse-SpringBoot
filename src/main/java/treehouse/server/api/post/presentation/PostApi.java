@@ -28,7 +28,7 @@ public class PostApi {
 
     @GetMapping("/posts/{postId}")
     @Operation(summary = "게시글 상세조회 \uD83D\uDD11✅", description = "특정 게시글의 상세정보를 조회합니다.")
-    public CommonResponse<PostResponseDTO.getPostDetails> getFeedDetails(
+    public CommonResponse<PostResponseDTO.getPostDetails> getPostDetails(
             @PathVariable Long treehouseId,
             @PathVariable Long postId,
             @AuthMember @Parameter(hidden = true) User user
