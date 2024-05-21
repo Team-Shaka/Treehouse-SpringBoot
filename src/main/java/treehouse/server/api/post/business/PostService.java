@@ -23,7 +23,7 @@ public class PostService {
      * @param user
      * @param postId
      * @param treehouseId - 게시글 정보에 표시할 memberBranch을 계산하고 감정표현의 isPushed 상태를 반환하기 위해 user와 treehouseId 사용
-     * @return FeedResponseDto.getFeedDetails
+     * @return PostResponseDTO.getPostDetails
      */
     @Transactional(readOnly = true)
     public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId){
