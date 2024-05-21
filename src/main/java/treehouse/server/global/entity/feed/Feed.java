@@ -24,7 +24,7 @@ public class Feed extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "treehouseId")
     @ManyToOne(fetch = FetchType.LAZY)
     private TreeHouse treeHouse;
 
