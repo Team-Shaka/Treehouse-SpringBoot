@@ -4,19 +4,35 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostCommandAdapter;
+import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
+import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
+import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
+import treehouse.server.global.entity.post.PostImage;
+import treehouse.server.global.entity.treeHouse.TreeHouse;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class PostService {
 
     private final PostCommandAdapter postCommandAdapter;
     private final PostQueryAdapter postQueryAdapter;
+
+    private final MemberQueryAdapter memberQueryAdapter;
+
+    private final PostImageCommandAdapter postImageCommandAdapter;
+
+    private final TreehouseQueryAdapter treehouseQueryAdapter;
 
     /**
      * 게시글 상세조회
@@ -29,5 +45,19 @@ public class PostService {
     public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId){
         Post post = postQueryAdapter.findById(postId);
         return PostMapper.toGetPostDetails(post);
+    }
+
+    public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId){
+
+        // TODO AOP로 처리
+        Member member = memberQueryAdapter.getMember(user);
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+
+        Post post = PostMapper.toPost(request, member, treehouse);
+        List<PostImage> postImageList = PostMapper.toPostImageList(request);
+        postImageList.forEach(postImage -> postImage.setPost(post));
+        postImageCommandAdapter.savePostImageList(postImageList);
+        return PostMapper.toCreatePostResult(postCommandAdapter.savePost(post));
     }
 }

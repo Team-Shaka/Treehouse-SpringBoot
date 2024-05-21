@@ -20,4 +20,11 @@ public class PostImage extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
+    public void setPost(Post post){
+        if(this.post != null)
+            this.post.getPostImageList().remove(this);
+        this.post = post;
+        post.getPostImageList().add(this);
+    }
+
 }
