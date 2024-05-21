@@ -1,4 +1,4 @@
-package treehouse.server.global.entity.feed;
+package treehouse.server.global.entity.post;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,15 +9,15 @@ import treehouse.server.global.entity.common.BaseDateTimeEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedImage extends BaseDateTimeEntity {
+public class PostImage extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String imageUrl;
 
-    @JoinColumn(name = "feedId")
+    @JoinColumn(name = "postId")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Feed feed;
+    private Post post;
 
 }
