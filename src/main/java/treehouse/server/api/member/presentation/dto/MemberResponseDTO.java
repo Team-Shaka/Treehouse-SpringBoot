@@ -18,7 +18,7 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class getMember {
+    public static class getMemberProfile {
         private Long memberId;
         private String memberName;
         private String memberProfileImageUrl;
