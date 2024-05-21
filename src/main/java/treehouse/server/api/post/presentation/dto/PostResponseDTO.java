@@ -14,7 +14,7 @@ public class PostResponseDTO {
     @AllArgsConstructor
     public static class getPostDetails {
 
-        private MemberResponseDTO.getMember memberProfile;
+        private MemberResponseDTO.getMemberProfile memberProfile;
         private Long postId;
         private String context;
         private List<String> pictureUrlList;

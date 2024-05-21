@@ -26,8 +26,8 @@ public class MemberMapper {
                 .build();
     }
 
-    public static MemberResponseDTO.getMember toGetMember(Member member) {
-        return MemberResponseDTO.getMember.builder()
+    public static MemberResponseDTO.getMemberProfile toGetMemberProfile(Member member) {
+        return MemberResponseDTO.getMemberProfile.builder()
                 .memberId(member.getId())
                 .memberName(member.getName())
                 .memberProfileImageUrl(member.getProfileImageUrl())

@@ -13,7 +13,7 @@ public class PostMapper {
 
     public static PostResponseDTO.getPostDetails toGetPostDetails(Post post) {
         return PostResponseDTO.getPostDetails.builder()
-                .memberProfile(MemberMapper.toGetMember(post.getWriter()))
+                .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
                 .postId(post.getId())
                 .context(post.getContent())
                 .pictureUrlList(post.getPostImageList().stream()
