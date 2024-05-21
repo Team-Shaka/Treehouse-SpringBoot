@@ -132,8 +132,8 @@ jwt:
     key: ${JWT_SECRET}
   #  secret : ${JWT_SECRET}
   authorities-key: authoritiesKey
-  access-token-validity-in-seconds: 20000 # 30 m
-  refresh-token-validity-in-seconds: 30000 # 14 d
+  access-token-validity-in-seconds: 2000000 # 30 m
+  refresh-token-validity-in-seconds: 3000000 # 14 d
 
 cloud:
   aws:

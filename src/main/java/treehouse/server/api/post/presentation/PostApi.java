@@ -3,14 +3,13 @@ package treehouse.server.api.post.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import treehouse.server.api.post.business.PostService;
+import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.entity.User.User;
@@ -27,12 +26,22 @@ public class PostApi {
     private final PostService postService;
 
     @GetMapping("/posts/{postId}")
-    @Operation(summary = "게시글 상세조회 \uD83D\uDD11✅", description = "특정 게시글의 상세정보를 조회합니다.")
+    @Operation(summary = "게시글 상세조회 \uD83D\uDD11✅, 🔑", description = "특정 게시글의 상세정보를 조회합니다.")
     public CommonResponse<PostResponseDTO.getPostDetails> getPostDetails(
             @PathVariable Long treehouseId,
             @PathVariable Long postId,
             @AuthMember @Parameter(hidden = true) User user
     ){
         return CommonResponse.onSuccess(postService.getPostDetails(user, postId, treehouseId));
+    }
+
+    @PostMapping("/")
+    @Operation(summary = "게시글 작성 🔑", description = "게시글 작성 API 입니다.")
+    public CommonResponse<PostResponseDTO.createPostResult> createPost(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @RequestBody @Valid PostRequestDTO.createPost request,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(postService.createPost(user,request, treehouseId));
     }
 }
