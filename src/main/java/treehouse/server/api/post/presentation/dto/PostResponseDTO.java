@@ -21,6 +21,7 @@ public class PostResponseDTO {
         private Long postId;
         private String context;
         private List<String> pictureUrlList;
+        private Integer commentCount;
 //        private List<ReactionResponseDto.getReaction> reactionList; Reaction 기능 개발 이후 적용
         private String postedAt;
     }
@@ -36,4 +37,5 @@ public class PostResponseDTO {
         @JsonProperty("postId")
         private Long postId;
     }
+
 }
