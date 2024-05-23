@@ -2,6 +2,9 @@ package treehouse.server.api.post.business;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
@@ -68,16 +71,14 @@ public class PostService {
      * @return List<PostResponseDTO.getPostDetails>
      */
     @Transactional(readOnly = true)
-    public List<PostResponseDTO.getPostDetails> getPosts(User user, Long treehouseId){
+    public List<PostResponseDTO.getPostDetails> getPosts(User user, Long treehouseId, int page){
         // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
 
-        List<Post> posts = postQueryAdapter.findAllByTreehouse(treehouse);
-        List<PostResponseDTO.getPostDetails> postDtos = posts.stream()
-                .map(post -> PostMapper.toGetPostDetails(post))
-                .toList();
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
 
-        return postDtos;
+        return PostMapper.toGetPostList(postsPage);
     }
 }
