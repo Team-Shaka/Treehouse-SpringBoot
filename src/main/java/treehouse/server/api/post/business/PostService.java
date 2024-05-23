@@ -21,6 +21,7 @@ import treehouse.server.global.entity.post.PostImage;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -79,6 +80,10 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
 
-        return PostMapper.toGetPostList(postsPage);
+        List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
+                .map(PostMapper::toGetPostDetails)
+                .collect(Collectors.toList());
+
+        return postDtos;
     }
 }
