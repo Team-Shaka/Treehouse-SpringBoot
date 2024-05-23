@@ -2,6 +2,7 @@ package treehouse.server.api.post.business;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
@@ -55,5 +56,21 @@ public class PostMapper {
         return PostResponseDTO.createPostResult.builder()
                 .postId(post.getId())
                 .build();
+    }
+
+    public static List<PostResponseDTO.getPostDetails> toGetPostList(Page<Post> postsPage) {
+        return postsPage.getContent().stream()
+                .map(post -> PostResponseDTO.getPostDetails.builder()
+                        .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
+                        .postId(post.getId())
+                        .context(post.getContent())
+                        .pictureUrlList(post.getPostImageList().stream()
+                                .map(PostImage::getImageUrl).toList()
+                        )
+                        .commentCount(post.getCommentList().size())
+//                        .reactionList() // Reaction 기능 개발 이후 수정
+                        .postedAt(TimeFormatter.format(post.getCreatedAt()))
+                        .build())
+                .toList();
     }
 }

@@ -51,8 +51,9 @@ public class PostApi {
     @Operation(summary = "게시글 목록 조회 🔑", description = "트리하우스의 게시글 목록을 조회합니다.")
     public CommonResponse<List<PostResponseDTO.getPostDetails>> getPosts(
             @PathVariable Long treehouseId,
+            @RequestParam(defaultValue = "0") int page,
             @AuthMember @Parameter(hidden = true) User user
     ){
-        return CommonResponse.onSuccess(postService.getPosts(user, treehouseId));
+        return CommonResponse.onSuccess(postService.getPosts(user, treehouseId, page));
     }
 }
