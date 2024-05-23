@@ -27,6 +27,7 @@ public class PostMapper {
                 .pictureUrlList(post.getPostImageList().stream()
                         .map(PostImage::getImageUrl).toList()
                 )
+                .commentCount(post.getCommentList().size())
 //                .reactionList() // Reaction 기능 개발 이후 수정
                 .postedAt(TimeFormatter.format(post.getCreatedAt()))
                 .build();
