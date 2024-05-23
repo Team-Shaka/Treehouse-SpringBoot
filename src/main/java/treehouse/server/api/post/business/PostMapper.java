@@ -58,19 +58,4 @@ public class PostMapper {
                 .build();
     }
 
-    public static List<PostResponseDTO.getPostDetails> toGetPostList(Page<Post> postsPage) {
-        return postsPage.getContent().stream()
-                .map(post -> PostResponseDTO.getPostDetails.builder()
-                        .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
-                        .postId(post.getId())
-                        .context(post.getContent())
-                        .pictureUrlList(post.getPostImageList().stream()
-                                .map(PostImage::getImageUrl).toList()
-                        )
-                        .commentCount(post.getCommentList().size())
-//                        .reactionList() // Reaction 기능 개발 이후 수정
-                        .postedAt(TimeFormatter.format(post.getCreatedAt()))
-                        .build())
-                .toList();
-    }
 }
