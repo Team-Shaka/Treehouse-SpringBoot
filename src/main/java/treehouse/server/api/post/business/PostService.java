@@ -3,6 +3,9 @@ package treehouse.server.api.post.business;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
@@ -24,6 +27,7 @@ import treehouse.server.global.feign.client.PresignedUrlLambdaClient;
 import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,18 +48,19 @@ public class PostService {
 
     /**
      * 게시글 상세조회
+     *
      * @param user
      * @param postId
      * @param treehouseId - 게시글 정보에 표시할 memberBranch을 계산하고 감정표현의 isPushed 상태를 반환하기 위해 user와 treehouseId 사용
      * @return PostResponseDTO.getPostDetails
      */
     @Transactional(readOnly = true)
-    public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId){
+    public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId) {
         Post post = postQueryAdapter.findById(postId);
         return PostMapper.toGetPostDetails(post);
     }
 
-    public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId){
+    public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
 
         Member member = memberQueryAdapter.getMember(user);
 
@@ -68,7 +73,7 @@ public class PostService {
         return PostMapper.toCreatePostResult(postCommandAdapter.savePost(post));
     }
 
-    public PostResponseDTO.createPresignedUrlResult createPresignedUrl(PostRequestDTO.uploadFile request){
+    public PostResponseDTO.createPresignedUrlResult createPresignedUrl(PostRequestDTO.uploadFile request) {
 
         // 사진 크기 체크
 
@@ -81,5 +86,27 @@ public class PostService {
 
 
         return PostMapper.toCreatePresignedUrlResult(result);
+    }
+
+    /**
+     * 게시글 목록 조회
+     * @param user
+     * @param treehouseId - 게시글 정보에 표시할 memberBranch을 계산하고 감정표현의 isPushed 상태를 반환하기 위해 user와 treehouseId 사용
+     * @return List<PostResponseDTO.getPostDetails>
+     */
+    @Transactional(readOnly = true)
+    public List<PostResponseDTO.getPostDetails> getPosts (User user, Long treehouseId,int page){
+        // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
+
+        List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
+                .map(PostMapper::toGetPostDetails)
+                .collect(Collectors.toList());
+
+        return postDtos;
     }
 }

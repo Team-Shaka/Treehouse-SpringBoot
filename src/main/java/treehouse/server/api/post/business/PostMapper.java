@@ -2,6 +2,7 @@ package treehouse.server.api.post.business;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
@@ -28,6 +29,7 @@ public class PostMapper {
                 .pictureUrlList(post.getPostImageList().stream()
                         .map(PostImage::getImageUrl).toList()
                 )
+                .commentCount(post.getCommentList().size())
 //                .reactionList() // Reaction 기능 개발 이후 수정
                 .postedAt(TimeFormatter.format(post.getCreatedAt()))
                 .build();
