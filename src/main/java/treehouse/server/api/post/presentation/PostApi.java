@@ -15,6 +15,8 @@ import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.security.handler.annotation.AuthMember;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +33,7 @@ public class PostApi {
             @PathVariable Long treehouseId,
             @PathVariable Long postId,
             @AuthMember @Parameter(hidden = true) User user
-    ){
+    ) {
         return CommonResponse.onSuccess(postService.getPostDetails(user, postId, treehouseId));
     }
 
@@ -41,8 +43,8 @@ public class PostApi {
             @PathVariable(name = "treehouseId") Long treehouseId,
             @RequestBody @Valid PostRequestDTO.createPost request,
             @AuthMember @Parameter(hidden = true) User user
-    ){
-        return CommonResponse.onSuccess(postService.createPost(user,request, treehouseId));
+    ) {
+        return CommonResponse.onSuccess(postService.createPost(user, request, treehouseId));
     }
 
     @PostMapping("/posts/images")
@@ -51,8 +53,17 @@ public class PostApi {
             @PathVariable(name = "treehouseId") Long treehouseId,
             @RequestBody @Valid PostRequestDTO.uploadFile request,
             @AuthMember @Parameter(hidden = true) User user
-    ){
+    ) {
 
         return CommonResponse.onSuccess(postService.createPresignedUrl(request));
+    }
+    @GetMapping
+    @Operation(summary = "게시글 목록 조회 🔑", description = "트리하우스의 게시글 목록을 조회합니다.")
+    public CommonResponse<List<PostResponseDTO.getPostDetails>> getPosts(
+            @PathVariable Long treehouseId,
+            @RequestParam(defaultValue = "0") int page,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(postService.getPosts(user, treehouseId, page));
     }
 }
