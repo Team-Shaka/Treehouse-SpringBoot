@@ -48,6 +48,11 @@ dependencies {
 	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	// feign client
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
+
 	// jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'

@@ -36,4 +36,21 @@ public class PostResponseDTO {
         @JsonProperty("postId")
         private Long postId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class createPresignedUrlResult{
+
+        @Schema(description = "생성된 파일 업로드 경로", example = "url")
+        @NotNull(message = "생성된 url은 null이 될 수 없습니다.")
+        @JsonProperty("presignedUrl")
+        private String uploadUrl;
+
+        @Schema(description = "생성된 파일 접근 경로, 서버로 전달 해주세요", example = "url")
+        @NotNull(message = "파일 접근 경로는 null이 될 수 없습니다.")
+        @JsonProperty("accessUrl")
+        private String accessUrl;
+    }
 }
