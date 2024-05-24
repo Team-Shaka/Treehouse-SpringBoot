@@ -33,20 +33,30 @@ public class PostApi {
             @PathVariable Long treehouseId,
             @PathVariable Long postId,
             @AuthMember @Parameter(hidden = true) User user
-    ){
+    ) {
         return CommonResponse.onSuccess(postService.getPostDetails(user, postId, treehouseId));
     }
 
     @PostMapping("/posts")
-    @Operation(summary = "게시글 작성 🔑", description = "게시글 작성 API 입니다.")
+    @Operation(summary = "게시글 작성 \uD83D\uDD11✅ 🔑", description = "게시글 작성 API 입니다.")
     public CommonResponse<PostResponseDTO.createPostResult> createPost(
             @PathVariable(name = "treehouseId") Long treehouseId,
             @RequestBody @Valid PostRequestDTO.createPost request,
             @AuthMember @Parameter(hidden = true) User user
-    ){
-        return CommonResponse.onSuccess(postService.createPost(user,request, treehouseId));
+    ) {
+        return CommonResponse.onSuccess(postService.createPost(user, request, treehouseId));
     }
 
+    @PostMapping("/posts/images")
+    @Operation(summary = "presigned Url 발급 API \uD83D\uDD11✅ 🔑", description = "사진 업로드를 위한 presigned Url을 발급받는 API 입니다.")
+    public CommonResponse<PostResponseDTO.createPresignedUrlResult> createPresignedUrl(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @RequestBody @Valid PostRequestDTO.uploadFile request,
+            @AuthMember @Parameter(hidden = true) User user
+    ) {
+
+        return CommonResponse.onSuccess(postService.createPresignedUrl(request));
+    }
     @GetMapping
     @Operation(summary = "게시글 목록 조회 🔑", description = "트리하우스의 게시글 목록을 조회합니다.")
     public CommonResponse<List<PostResponseDTO.getPostDetails>> getPosts(
