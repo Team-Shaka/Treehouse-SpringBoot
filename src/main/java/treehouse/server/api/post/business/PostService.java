@@ -1,6 +1,7 @@
 package treehouse.server.api.post.business;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,16 +12,21 @@ import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
+import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+import treehouse.server.global.exception.GlobalErrorCode;
+import treehouse.server.global.exception.ThrowClass.PostException;
+import treehouse.server.global.feign.client.PresignedUrlLambdaClient;
+import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class PostService {
@@ -33,6 +39,8 @@ public class PostService {
     private final PostImageCommandAdapter postImageCommandAdapter;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
+
+    private final PresignedUrlLambdaClient presignedUrlLambdaClient;
 
     /**
      * 게시글 상세조회
@@ -49,7 +57,6 @@ public class PostService {
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId){
 
-        // TODO AOP로 처리
         Member member = memberQueryAdapter.getMember(user);
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
@@ -59,5 +66,20 @@ public class PostService {
         postImageList.forEach(postImage -> postImage.setPost(post));
         postImageCommandAdapter.savePostImageList(postImageList);
         return PostMapper.toCreatePostResult(postCommandAdapter.savePost(post));
+    }
+
+    public PostResponseDTO.createPresignedUrlResult createPresignedUrl(PostRequestDTO.uploadFile request){
+
+        // 사진 크기 체크
+
+        if (request.getFileSize() > Consts.FileSizeLimit.LIMIT.getLimit())
+            throw new PostException(GlobalErrorCode.FILE_LIMIT_ERROR);
+
+        // AWS Lambda 호출
+
+        PresignedUrlDTO.PresignedUrlResult result = presignedUrlLambdaClient.getPresignedUrl(request.getFileName());
+
+
+        return PostMapper.toCreatePresignedUrlResult(result);
     }
 }

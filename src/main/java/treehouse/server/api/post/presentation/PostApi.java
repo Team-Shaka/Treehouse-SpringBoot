@@ -35,13 +35,24 @@ public class PostApi {
         return CommonResponse.onSuccess(postService.getPostDetails(user, postId, treehouseId));
     }
 
-    @PostMapping("/")
-    @Operation(summary = "게시글 작성 🔑", description = "게시글 작성 API 입니다.")
+    @PostMapping("/posts")
+    @Operation(summary = "게시글 작성 \uD83D\uDD11✅ 🔑", description = "게시글 작성 API 입니다.")
     public CommonResponse<PostResponseDTO.createPostResult> createPost(
             @PathVariable(name = "treehouseId") Long treehouseId,
             @RequestBody @Valid PostRequestDTO.createPost request,
             @AuthMember @Parameter(hidden = true) User user
     ){
         return CommonResponse.onSuccess(postService.createPost(user,request, treehouseId));
+    }
+
+    @PostMapping("/posts/images")
+    @Operation(summary = "presigned Url 발급 API \uD83D\uDD11✅ 🔑", description = "사진 업로드를 위한 presigned Url을 발급받는 API 입니다.")
+    public CommonResponse<PostResponseDTO.createPresignedUrlResult> createPresignedUrl(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @RequestBody @Valid PostRequestDTO.uploadFile request,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+
+        return CommonResponse.onSuccess(postService.createPresignedUrl(request));
     }
 }
