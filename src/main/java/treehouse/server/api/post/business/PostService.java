@@ -2,6 +2,9 @@ package treehouse.server.api.post.business;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
@@ -18,6 +21,7 @@ import treehouse.server.global.entity.post.PostImage;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -59,5 +63,27 @@ public class PostService {
         postImageList.forEach(postImage -> postImage.setPost(post));
         postImageCommandAdapter.savePostImageList(postImageList);
         return PostMapper.toCreatePostResult(postCommandAdapter.savePost(post));
+    }
+
+    /**
+     * 게시글 목록 조회
+     * @param user
+     * @param treehouseId - 게시글 정보에 표시할 memberBranch을 계산하고 감정표현의 isPushed 상태를 반환하기 위해 user와 treehouseId 사용
+     * @return List<PostResponseDTO.getPostDetails>
+     */
+    @Transactional(readOnly = true)
+    public List<PostResponseDTO.getPostDetails> getPosts(User user, Long treehouseId, int page){
+        // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
+
+        List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
+                .map(PostMapper::toGetPostDetails)
+                .collect(Collectors.toList());
+
+        return postDtos;
     }
 }
