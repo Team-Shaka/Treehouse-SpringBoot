@@ -34,6 +34,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
 
     // USER + 400 BAD_REQUEST - 잘못된 요청
     NOT_VALID_PHONE_NUMBER(BAD_REQUEST, "USER400_1", "유효하지 않은 전화번호 입니다."),
+    FILE_LIMIT_ERROR(BAD_REQUEST, "POST400_1", "파일 용량 제한."),
 
     // USER + 401 Unauthorized - 권한 없음
 

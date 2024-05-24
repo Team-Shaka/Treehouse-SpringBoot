@@ -12,6 +12,7 @@ import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,4 +59,10 @@ public class PostMapper {
                 .build();
     }
 
+    public static PostResponseDTO.createPresignedUrlResult toCreatePresignedUrlResult(PresignedUrlDTO.PresignedUrlResult result){
+        return PostResponseDTO.createPresignedUrlResult.builder()
+                .uploadUrl(result.getUploadUrl())
+                .accessUrl(result.getDownloadUrl())
+                .build();
+    }
 }
