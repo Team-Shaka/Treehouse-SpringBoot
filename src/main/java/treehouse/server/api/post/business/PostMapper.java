@@ -2,12 +2,10 @@ package treehouse.server.api.post.business;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.global.common.TimeFormatter;
-import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
@@ -60,6 +58,12 @@ public class PostMapper {
         return PostResponseDTO.createPresignedUrlResult.builder()
                 .uploadUrl(result.getUploadUrl())
                 .accessUrl(result.getDownloadUrl())
+                .build();
+    }
+
+    public static PostResponseDTO.updatePostResult toUpdatePostResult(Post post) {
+        return PostResponseDTO.updatePostResult.builder()
+                .postId(post.getId())
                 .build();
     }
 }

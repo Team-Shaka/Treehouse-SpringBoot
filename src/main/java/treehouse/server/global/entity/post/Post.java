@@ -34,4 +34,8 @@ public class Post extends BaseDateTimeEntity {
 
     @OneToMany(mappedBy = "post")
     private List<PostImage> postImageList;
+
+    public void update(String context) {
+        this.content = context;
+    }
 }

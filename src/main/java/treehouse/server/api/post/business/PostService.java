@@ -119,4 +119,19 @@ public class PostService {
 
         return postDtos;
     }
+
+    @Transactional
+    public PostResponseDTO.updatePostResult updatePost(User user, Long postId, PostRequestDTO.updatePost request) {
+        Post post = postQueryAdapter.findById(postId);
+        //TODO 게시글 작성자와 현재 로그인 한 사용자가 같은지 확인하는 로직 추가
+        post.update(request.getContext());
+        return PostMapper.toUpdatePostResult(postCommandAdapter.savePost(post));
+    }
+
+    @Transactional
+    public void deletePost(User user, Long postId) {
+        Post post = postQueryAdapter.findById(postId);
+        //TODO 게시글 작성자와 현재 로그인 한 사용자가 같은지 확인하는 로직 추가
+        postCommandAdapter.deletePost(post);
+    }
 }
