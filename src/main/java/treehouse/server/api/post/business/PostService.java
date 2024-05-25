@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
@@ -57,7 +58,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId) {
         Post post = postQueryAdapter.findById(postId);
-        return PostMapper.toGetPostDetails(post);
+        List<PostImage> postImageList = post.getPostImageList();
+        List<String> postImageUrlList = postImageList.stream()
+                .map(PostImage::getImageUrl)
+                .toList();
+        return PostMapper.toGetPostDetails(post, postImageUrlList);
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
@@ -99,12 +104,17 @@ public class PostService {
         // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
-
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
 
         List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
-                .map(PostMapper::toGetPostDetails)
+                .map(post -> {
+                    List<PostImage> postImageList = post.getPostImageList();
+                    List<String> postImageUrlList= postImageList.stream()
+                            .map(PostImage::getImageUrl)
+                            .toList();
+                    return PostMapper.toGetPostDetails(post, postImageUrlList);
+                })
                 .collect(Collectors.toList());
 
         return postDtos;
