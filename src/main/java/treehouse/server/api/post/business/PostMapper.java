@@ -16,19 +16,16 @@ import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostMapper {
 
-    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post) {
+    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList) {
         return PostResponseDTO.getPostDetails.builder()
                 .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
                 .postId(post.getId())
                 .context(post.getContent())
-                .pictureUrlList(post.getPostImageList().stream()
-                        .map(PostImage::getImageUrl).toList()
-                )
+                .pictureUrlList(postImageUrlList)
                 .commentCount(post.getCommentList().size())
 //                .reactionList() // Reaction 기능 개발 이후 수정
                 .postedAt(TimeFormatter.format(post.getCreatedAt()))
