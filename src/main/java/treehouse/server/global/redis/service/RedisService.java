@@ -33,7 +33,7 @@ public class RedisService {
      */
     public RefreshToken generateRefreshToken(User user) {
         if (!userQueryAdapter.existById(user.getId()))
-            throw new GeneralException(GlobalErrorCode.MEMBER_NOT_FOUND);
+            throw new GeneralException(GlobalErrorCode.USER_NOT_FOUND);
 
         String refreshToken = tokenProvider.createRefreshToken();
 

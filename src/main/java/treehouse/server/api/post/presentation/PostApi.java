@@ -66,4 +66,26 @@ public class PostApi {
     ){
         return CommonResponse.onSuccess(postService.getPosts(user, treehouseId, page));
     }
+
+    @PatchMapping("/posts/{postId}")
+    @Operation(summary = "게시글 수정 ✅ 🔑", description = "게시글을 수정합니다(이미지는 수정불가)")
+    public CommonResponse<PostResponseDTO.updatePostResult> updatePost(
+            @PathVariable Long treehouseId,
+            @PathVariable Long postId,
+            @RequestBody @Valid PostRequestDTO.updatePost request,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(postService.updatePost(user, treehouseId, postId, request));
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @Operation(summary = "게시글 삭제 ✅ 🔑", description = "게시글을 삭제합니다.")
+    public CommonResponse deletePost(
+            @PathVariable Long treehouseId,
+            @PathVariable Long postId,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        postService.deletePost(user, treehouseId, postId);
+        return CommonResponse.onSuccess(null);
+    }
 }

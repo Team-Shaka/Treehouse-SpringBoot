@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
@@ -57,7 +58,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId) {
         Post post = postQueryAdapter.findById(postId);
-        return PostMapper.toGetPostDetails(post);
+        List<PostImage> postImageList = post.getPostImageList();
+        List<String> postImageUrlList = postImageList.stream()
+                .map(PostImage::getImageUrl)
+                .toList();
+        return PostMapper.toGetPostDetails(post, postImageUrlList);
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
@@ -95,18 +100,57 @@ public class PostService {
      * @return List<PostResponseDTO.getPostDetails>
      */
     @Transactional(readOnly = true)
-    public List<PostResponseDTO.getPostDetails> getPosts (User user, Long treehouseId,int page){
+    public List<PostResponseDTO.getPostDetails> getPosts (User user, Long treehouseId, int page){
         // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
-
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
 
         List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
-                .map(PostMapper::toGetPostDetails)
+                .map(post -> {
+                    List<PostImage> postImageList = post.getPostImageList();
+                    List<String> postImageUrlList= postImageList.stream()
+                            .map(PostImage::getImageUrl)
+                            .toList();
+                    return PostMapper.toGetPostDetails(post, postImageUrlList);
+                })
                 .collect(Collectors.toList());
 
         return postDtos;
+    }
+
+    @Transactional
+    public PostResponseDTO.updatePostResult updatePost(User user, Long treehouseId, Long postId, PostRequestDTO.updatePost request) {
+        //TODO 현재 로그인 한 사용자가 게시글 작성자인지 확인하는 로직 개선
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Post post = postQueryAdapter.findById(postId);
+        Member writer = post.getWriter();
+
+        if (!member.equals(writer)) {
+            throw new PostException(GlobalErrorCode.POST_UNAUTHORIZED);
+        }
+
+        post.update(request.getContext());
+        return PostMapper.toUpdatePostResult(postCommandAdapter.savePost(post));
+    }
+
+    @Transactional
+    public void deletePost(User user, Long treehouseId, Long postId) {
+
+        //TODO 현재 로그인 한 사용자가 게시글 작성자인지 확인하는 로직 개선
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Post post = postQueryAdapter.findById(postId);
+        Member writer = post.getWriter();
+
+        if (!member.equals(writer)) {
+            throw new PostException(GlobalErrorCode.POST_UNAUTHORIZED);
+        }
+
+        postCommandAdapter.deletePost(post);
     }
 }

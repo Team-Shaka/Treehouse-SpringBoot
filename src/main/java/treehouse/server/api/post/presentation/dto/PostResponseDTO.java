@@ -54,4 +54,14 @@ public class PostResponseDTO {
         @JsonProperty("accessUrl")
         private String accessUrl;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class updatePostResult {
+
+        @Schema(description = "수정 된 포스트 ID", example = "1")
+        private Long postId;
+    }
 }

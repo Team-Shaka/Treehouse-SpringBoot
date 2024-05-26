@@ -17,4 +17,7 @@ public class PostCommandAdapter {
         return postRepository.save(post);
     }
 
+    public void deletePost(Post post) {
+        postRepository.delete(post);
+    }
 }

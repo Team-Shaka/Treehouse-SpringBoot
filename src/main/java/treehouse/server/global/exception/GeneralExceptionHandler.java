@@ -19,8 +19,6 @@ import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.exception.ThrowClass.GeneralException;
 import treehouse.server.global.exception.dto.ErrorResponseDTO;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,11 +27,11 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class})
 public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @ExceptionHandler(value = { GeneralException.class})
-//    protected ApiResponse handleCustomException(GeneralException e) {
-//        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
-//        return ApiResponse.onFailure(e.getErrorCode(), "");
-//    }
+    @ExceptionHandler(value = { GeneralException.class})
+    protected ResponseEntity<Object> handleCustomException(GeneralException e, HttpServletRequest request) {
+        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
+        return handleExceptionInternal(e, e.getErrorReasonHttpStatus(), HttpHeaders.EMPTY, request);
+    }
 
 
     @ExceptionHandler

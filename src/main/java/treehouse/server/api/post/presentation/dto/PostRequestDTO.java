@@ -39,4 +39,13 @@ public class PostRequestDTO {
         @NotNull(message = "fileSize가 필요합니다.")
         private Double fileSize;
     }
+
+    @Getter
+    public static class updatePost{
+
+        @JsonProperty("context")
+        @Schema(description = "게시글 내용", example = "게시글 내용")
+        @NotBlank(message = "게시글 내용이 필요합니다.")
+        private String context;
+    }
 }

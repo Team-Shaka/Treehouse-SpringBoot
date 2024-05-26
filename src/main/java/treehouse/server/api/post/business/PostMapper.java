@@ -2,12 +2,10 @@ package treehouse.server.api.post.business;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.global.common.TimeFormatter;
-import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
@@ -16,19 +14,16 @@ import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostMapper {
 
-    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post) {
+    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList) {
         return PostResponseDTO.getPostDetails.builder()
                 .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
                 .postId(post.getId())
                 .context(post.getContent())
-                .pictureUrlList(post.getPostImageList().stream()
-                        .map(PostImage::getImageUrl).toList()
-                )
+                .pictureUrlList(postImageUrlList)
                 .commentCount(post.getCommentList().size())
 //                .reactionList() // Reaction 기능 개발 이후 수정
                 .postedAt(TimeFormatter.format(post.getCreatedAt()))
@@ -63,6 +58,12 @@ public class PostMapper {
         return PostResponseDTO.createPresignedUrlResult.builder()
                 .uploadUrl(result.getUploadUrl())
                 .accessUrl(result.getDownloadUrl())
+                .build();
+    }
+
+    public static PostResponseDTO.updatePostResult toUpdatePostResult(Post post) {
+        return PostResponseDTO.updatePostResult.builder()
+                .postId(post.getId())
                 .build();
     }
 }

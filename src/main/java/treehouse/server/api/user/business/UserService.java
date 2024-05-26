@@ -9,7 +9,6 @@ import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.User;
-import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.redis.RefreshToken;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.AuthException;
@@ -54,7 +53,7 @@ public class UserService {
     @Transactional
     public UserResponseDTO.registerUser login(UserRequestDTO.loginMember request){
         User user = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber())
-                .orElseThrow(() -> new GeneralException(GlobalErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GeneralException(GlobalErrorCode.USER_NOT_FOUND));
         TokenDTO loginResult = userCommandAdapter.login(user);
 
         return UserMapper.toRegister(user,loginResult.getAccessToken(), loginResult.getRefreshToken());
