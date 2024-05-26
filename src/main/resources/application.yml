@@ -108,6 +108,12 @@ spring:
     password: ${aws.db.password}
     url: jdbc:mysql://${aws.db.url}/${aws.db.name}?autoReconnect=true&setTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   sql:
     init:
       mode: never

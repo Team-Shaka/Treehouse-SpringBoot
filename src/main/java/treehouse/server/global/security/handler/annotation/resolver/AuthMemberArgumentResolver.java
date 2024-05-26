@@ -11,7 +11,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import treehouse.server.api.user.business.UserMapper;
-import treehouse.server.api.user.business.UserService;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.GeneralException;
@@ -51,7 +50,7 @@ public class AuthMemberArgumentResolver implements HandlerMethodArgumentResolver
             principal = authentication.getPrincipal();
         }
         if (principal == null || principal.getClass() == String.class) { //Authentication 객체가 null이거나, principal이 String 타입('anonymousUser')인 경우
-            throw new GeneralException(GlobalErrorCode.MEMBER_NOT_FOUND);
+            throw new GeneralException(GlobalErrorCode.USER_NOT_FOUND);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;

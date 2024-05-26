@@ -100,7 +100,7 @@ public class PostService {
      * @return List<PostResponseDTO.getPostDetails>
      */
     @Transactional(readOnly = true)
-    public List<PostResponseDTO.getPostDetails> getPosts (User user, Long treehouseId,int page){
+    public List<PostResponseDTO.getPostDetails> getPosts (User user, Long treehouseId, int page){
         // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
@@ -121,17 +121,36 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponseDTO.updatePostResult updatePost(User user, Long postId, PostRequestDTO.updatePost request) {
+    public PostResponseDTO.updatePostResult updatePost(User user, Long treehouseId, Long postId, PostRequestDTO.updatePost request) {
+        //TODO 현재 로그인 한 사용자가 게시글 작성자인지 확인하는 로직 개선
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
         Post post = postQueryAdapter.findById(postId);
-        //TODO 게시글 작성자와 현재 로그인 한 사용자가 같은지 확인하는 로직 추가
+        Member writer = post.getWriter();
+
+        if (!member.equals(writer)) {
+            throw new PostException(GlobalErrorCode.POST_UNAUTHORIZED);
+        }
+
         post.update(request.getContext());
         return PostMapper.toUpdatePostResult(postCommandAdapter.savePost(post));
     }
 
     @Transactional
-    public void deletePost(User user, Long postId) {
+    public void deletePost(User user, Long treehouseId, Long postId) {
+
+        //TODO 현재 로그인 한 사용자가 게시글 작성자인지 확인하는 로직 개선
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
         Post post = postQueryAdapter.findById(postId);
-        //TODO 게시글 작성자와 현재 로그인 한 사용자가 같은지 확인하는 로직 추가
+        Member writer = post.getWriter();
+
+        if (!member.equals(writer)) {
+            throw new PostException(GlobalErrorCode.POST_UNAUTHORIZED);
+        }
+
         postCommandAdapter.deletePost(post);
     }
 }
