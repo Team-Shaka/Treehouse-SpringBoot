@@ -75,7 +75,7 @@ public class PostApi {
             @RequestBody @Valid PostRequestDTO.updatePost request,
             @AuthMember @Parameter(hidden = true) User user
     ){
-        return CommonResponse.onSuccess(postService.updatePost(user, postId, request));
+        return CommonResponse.onSuccess(postService.updatePost(user, treehouseId, postId, request));
     }
 
     @DeleteMapping("/posts/{postId}")
@@ -85,7 +85,7 @@ public class PostApi {
             @PathVariable Long postId,
             @AuthMember @Parameter(hidden = true) User user
     ){
-        postService.deletePost(user, postId);
+        postService.deletePost(user, treehouseId, postId);
         return CommonResponse.onSuccess(null);
     }
 }

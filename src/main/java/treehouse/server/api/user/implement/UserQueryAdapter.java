@@ -31,7 +31,7 @@ public class UserQueryAdapter {
     }
 
     public User findById(Long id){
-        return userRepository.findById(id).orElseThrow(()->new UserException(GlobalErrorCode.MEMBER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(()->new UserException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
     public Optional<User> optionalUserFindById(Long id){
