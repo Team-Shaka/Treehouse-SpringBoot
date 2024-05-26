@@ -41,7 +41,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // USER + 403 Forbidden - 인증 거부
 
     // USER + 404 Not Found - 찾을 수 없음
-    MEMBER_NOT_FOUND(NOT_FOUND, "USER404_1", "등록된 사용자 정보가 없습니다."),
+    USER_NOT_FOUND(NOT_FOUND, "USER404_1", "등록된 사용자 정보가 없습니다."),
 
     // USER + 409 CONFLICT : Resource 를 찾을 수 없음
     DUPLICATE_PHONE_NUMBER(CONFLICT, "USER409_1", "중복된 전화번호가 존재합니다."),
@@ -56,6 +56,8 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // INVITATION + 404 Not Found - 찾을 수 없음
     INVITATION_NOT_FOUND(NOT_FOUND, "INVITATION404_1", "존재하지 않는 초대장입니다."),
 
+    // POST + 401 Unauthorized - 권한 없음
+    POST_UNAUTHORIZED(UNAUTHORIZED, "POST401_1", "게시글 수정 및 삭제 권한이 없습니다."),
     // POST + 404 Not Found - 찾을 수 없음
     POST_NOT_FOUND(NOT_FOUND, "POST404_1", "존재하지 않는 게시글입니다."),
 
