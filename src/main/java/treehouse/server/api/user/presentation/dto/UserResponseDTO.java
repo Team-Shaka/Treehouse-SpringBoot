@@ -47,4 +47,14 @@ public class UserResponseDTO {
     public static class checkSentSms{
         boolean messageSent;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class checkUserStatus{
+
+        Boolean isNewUser;
+        Boolean isInvited;
+    }
 }

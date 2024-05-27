@@ -53,4 +53,11 @@ public class UserMapper {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    public static UserResponseDTO.checkUserStatus toCheckUserStatus(Boolean isNewUser, Boolean isInvited){
+        return UserResponseDTO.checkUserStatus.builder()
+                .isNewUser(isNewUser)
+                .isInvited(isInvited)
+                .build();
+    }
 }
