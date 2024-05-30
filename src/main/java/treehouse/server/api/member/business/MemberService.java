@@ -34,4 +34,8 @@ public class MemberService {
 
         return MemberMapper.toRegister(request.getTreehouseId(), savedMember); // treehouseId는 관련 기능 구현 후 변경
     }
+
+    public void checkAlreadyMember(Long treeHouseId, String phoneNum){
+        memberQueryAdapter.existsByTreeHouseAndPhoneNum(treeHouseId, phoneNum);
+    }
 }

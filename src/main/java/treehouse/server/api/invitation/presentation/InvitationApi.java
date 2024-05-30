@@ -46,4 +46,5 @@ public class InvitationApi {
         return CommonResponse.onSuccess(invitationService.decisionInvitation(user, request));
     }
 
+
 }
