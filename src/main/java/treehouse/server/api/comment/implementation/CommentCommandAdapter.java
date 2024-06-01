@@ -15,4 +15,8 @@ public class CommentCommandAdapter {
     public Comment createComment(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
 }

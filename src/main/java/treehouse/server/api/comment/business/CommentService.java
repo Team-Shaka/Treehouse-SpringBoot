@@ -97,4 +97,11 @@ public class CommentService {
         Long commentId = commentCommandAdapter.createComment(comment).getId();
         return CommentMapper.toIdResponseDto(commentId);
     }
+
+    public void deleteComment(User user, Long treehouseId, Long postId, Long commentId) {
+
+        Comment comment = commentQueryAdapter.getCommentById(commentId);
+
+        commentCommandAdapter.deleteComment(comment);
+    }
 }
