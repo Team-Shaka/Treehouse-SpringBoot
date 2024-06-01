@@ -68,6 +68,9 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // COMMENT + 404 Not Found - 찾을 수 없음
     COMMENT_NOT_FOUND(NOT_FOUND, "COMMENT404_1", "존재하지 않는 댓글입니다."),
 
+    // COMMENT + 403 Forbidden - 금지됨
+    COMMENT_SELF_REPORT(FORBIDDEN, "COMMENT403_1", "자신의 댓글은 신고할 수 없습니다."),
+
     // REPLY + 404 Not Found - 찾을 수 없음
     REPLY_NOT_FOUND(NOT_FOUND, "REPLY404_1", "존재하지 않는 답글입니다."),
 
@@ -76,7 +79,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
 
 
     // NOTIFICATION + 404 Not Found - 찾을 수 없음
-    NOTIFICATION_NOT_FOUND(NOT_FOUND, "NOTIFICATION", "존재하지 않는 알림입니다."),
+    NOTIFICATION_NOT_FOUND(NOT_FOUND, "NOTIFICATION404_1", "존재하지 않는 알림입니다."),
 
     //FEIGN + 400 BAD_REQUEST - 잘못된 요청
     FEIGN_CLIENT_ERROR_400(BAD_REQUEST, "FEIGN400", "feignClient 에서 400번대 에러가 발생했습니다."),
