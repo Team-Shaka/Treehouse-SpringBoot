@@ -14,6 +14,7 @@ import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
+import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.comment.Comment;
@@ -25,6 +26,8 @@ import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.CommentException;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ import java.util.List;
 public class CommentService {
 
     private final ReportCommandAdapter reportCommandAdapter;
+    private final ReportQueryAdapter reportQueryAdapter;
 
     private final MemberQueryAdapter memberQueryAdapter;
 
@@ -66,10 +70,26 @@ public class CommentService {
 
     public CommentResponseDTO.CommentListDto getCommentResponseList(User user, Long postId, int page) {
 
-        // 신고한 댓글 제외 로직 추가
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
+
+        // 신고한 댓글 제외 로직 추가
+
+        for(Comment comment : commentListByPostId){
+            if(reportQueryAdapter.isReportedComment(comment)){
+                commentListByPostId.remove(comment);
+            }
+        }
+//
+//        commentListByPostId.stream()
+//                .filter(comment -> {
+//                    boolean isReported =  reportQueryAdapter.isReportedComment(comment);
+//                    return isReported ? commentListByPostId.remove(comment) : null;
+//                        }
+//
+//                )
+//                .collect(Collectors.toList());
 
         CommentResponseDTO.CommentListDto commentListDto = CommentMapper.toCommentListDto(commentListByPostId);
         return commentListDto;
