@@ -88,4 +88,17 @@ public class PostApi {
         postService.deletePost(user, treehouseId, postId);
         return CommonResponse.onSuccess(null);
     }
+
+
+    @PostMapping("/posts/{postId}/reports")
+    @Operation(summary = "게시글 신고 ✅ 🔑", description = "게시글을 신고합니다.")
+    public CommonResponse reportPost(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @PathVariable(name = "postId") Long postId,
+            @RequestBody @Validated PostRequestDTO.reportPost request,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        postService.reportPost(user,treehouseId,postId,request);
+        return CommonResponse.onSuccess(null);
+    }
 }
