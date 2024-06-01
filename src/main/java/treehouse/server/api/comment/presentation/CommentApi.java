@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import treehouse.server.api.comment.business.CommentService;
 import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
+import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
 import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.security.handler.annotation.AuthMember;
@@ -34,6 +35,18 @@ public class CommentApi {
     {
         commentService.reportComment(user,request,treehouseId,postId,commentId);
         return CommonResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "댓글 목록 조회 API 🔑", description = "댓글 목록을 조회하는 API 입니다.")
+    @GetMapping()
+    public CommonResponse<CommentResponseDTO.CommentListDto> getComments(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @PathVariable(name = "postId") Long postId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @Parameter(hidden = true) @AuthMember User user
+    )
+    {
+        return CommonResponse.onSuccess(commentService.getCommentResponseList(user, postId, page));
     }
 
 }
