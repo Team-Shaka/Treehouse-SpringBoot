@@ -20,4 +20,10 @@ public class CommentRequestDTO {
         @NotNull(message = "신고 대상 멤버 아이디는 필수입니다.")
         private Long targetMemberId;
     }
+
+    @Getter
+    public static class createComment{
+        // Comment 입력 조건에 따른 valid 조건 추가하기
+        private String comment;
+    }
 }

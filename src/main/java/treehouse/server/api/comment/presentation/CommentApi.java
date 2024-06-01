@@ -14,11 +14,11 @@ import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.security.handler.annotation.AuthMember;
 
-@RequestMapping("/treehouses/{treehouseId}/feeds/posts/{postId}/comments")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
 @Tag(name = "📃 Comment API", description = "트리하우스 댓글 관련 API 입니다.")
+@RequestMapping("/treehouses/{treehouseId}/feeds/posts/{postId}/comments")
 public class CommentApi {
 
     private final CommentService commentService;
@@ -43,10 +43,22 @@ public class CommentApi {
             @PathVariable(name = "treehouseId") Long treehouseId,
             @PathVariable(name = "postId") Long postId,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @Parameter(hidden = true) @AuthMember User user
+            @AuthMember @Parameter(hidden = true) User user
     )
     {
         return CommonResponse.onSuccess(commentService.getCommentResponseList(user, postId, page));
+    }
+
+    @PostMapping("")
+    @Operation(summary = "댓글 작성 API 🔑", description = "특정 Post에 대해서 댓글을 작성하는 API 입니다.")
+    public CommonResponse<CommentResponseDTO.CommentIdResponseDto> createComment(
+            @PathVariable(name = "treehouseId")Long treehouseId,
+            @PathVariable(name = "postId")Long postId,
+            @AuthMember @Parameter(hidden = true) User user,
+            @RequestBody CommentRequestDTO.createComment request
+            )
+    {
+        return CommonResponse.onSuccess(commentService.createComment(user, treehouseId, postId, request));
     }
 
 }
