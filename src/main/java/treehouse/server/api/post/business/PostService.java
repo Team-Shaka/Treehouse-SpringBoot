@@ -15,6 +15,7 @@ import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
+import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.constants.Consts;
@@ -178,7 +179,7 @@ public class PostService {
         if (reporter.equals(target))
             throw new PostException(GlobalErrorCode.POST_SELF_REPORT);
 
-        Report report = PostMapper.toReport(request, post, reporter, target);
+        Report report = ReportMapper.toPostReport(request, post, reporter, target);
 
         reportCommandAdapter.createReport(report);
     }
