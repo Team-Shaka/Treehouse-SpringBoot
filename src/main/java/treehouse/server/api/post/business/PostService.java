@@ -15,12 +15,14 @@ import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
+import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
+import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.PostException;
@@ -44,6 +46,8 @@ public class PostService {
     private final PostImageCommandAdapter postImageCommandAdapter;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
+
+    private final ReportCommandAdapter reportCommandAdapter;
 
     private final PresignedUrlLambdaClient presignedUrlLambdaClient;
 
@@ -152,5 +156,30 @@ public class PostService {
         }
 
         postCommandAdapter.deletePost(post);
+    }
+
+    /**
+     * 게시글 신고하기
+     * @param user
+     * @param treehouseId
+     * @param postId
+     * @param request
+     */
+    @Transactional
+    public void reportPost(User user, Long treehouseId, Long postId,PostRequestDTO.reportPost request) {
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member reporter = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Post post = postQueryAdapter.findById(postId);
+
+        Member target = post.getWriter();
+
+        if (reporter.equals(target))
+            throw new PostException(GlobalErrorCode.POST_SELF_REPORT);
+
+        Report report = PostMapper.toReport(request, post, reporter, target);
+
+        reportCommandAdapter.createReport(report);
     }
 }

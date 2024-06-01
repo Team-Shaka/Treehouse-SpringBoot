@@ -58,6 +58,10 @@ public enum GlobalErrorCode implements BaseErrorCode{
 
     // POST + 401 Unauthorized - 권한 없음
     POST_UNAUTHORIZED(UNAUTHORIZED, "POST401_1", "게시글 수정 및 삭제 권한이 없습니다."),
+
+    // POST + 403 Forbidden - 금지됨
+    POST_SELF_REPORT(FORBIDDEN, "POSt403_1", "자신의 게시글은 신고할 수 없습니다."),
+
     // POST + 404 Not Found - 찾을 수 없음
     POST_NOT_FOUND(NOT_FOUND, "POST404_1", "존재하지 않는 게시글입니다."),
 

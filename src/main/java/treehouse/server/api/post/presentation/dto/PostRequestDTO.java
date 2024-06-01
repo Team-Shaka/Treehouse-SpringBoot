@@ -48,4 +48,18 @@ public class PostRequestDTO {
         @NotBlank(message = "게시글 내용이 필요합니다.")
         private String context;
     }
+
+    @Getter
+    public static class reportPost{
+
+        @JsonProperty("reason")
+        @Schema(description = "신고 사유", example = "부적절한 게시글")
+        @NotBlank(message = "게시글 신고 사유가 필요합니다.")
+        private String reason;
+
+        @JsonProperty("targetMemberId")
+        @Schema(description = "작성자 멤버 아이디", example = "1")
+        @NotNull(message = "작성자 멤버 아이디는 필수입니다.")
+        private Long targetMemberId;
+    }
 }
