@@ -9,6 +9,7 @@ import treehouse.server.global.common.TimeFormatter;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
+import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
@@ -64,6 +65,15 @@ public class PostMapper {
     public static PostResponseDTO.updatePostResult toUpdatePostResult(Post post) {
         return PostResponseDTO.updatePostResult.builder()
                 .postId(post.getId())
+                .build();
+    }
+
+    public static Report toReport(PostRequestDTO.reportPost request, Post post, Member reporter, Member target){
+        return Report.builder()
+                .reason(request.getReason())
+                .post(post)
+                .reporterMember(reporter)
+                .targetMember(target)
                 .build();
     }
 }
