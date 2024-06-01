@@ -11,7 +11,7 @@ import treehouse.server.global.entity.member.Member;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseDateTimeEntity {
+public class  Comment extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -71,10 +71,9 @@ public class PostService {
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
-
-        Member member = memberQueryAdapter.getMember(user);
-
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Post post = PostMapper.toPost(request, member, treehouse);
         List<PostImage> postImageList = PostMapper.toPostImageList(request);

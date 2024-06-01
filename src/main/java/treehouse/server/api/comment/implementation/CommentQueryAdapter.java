@@ -8,6 +8,11 @@ import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.CommentException;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
 @Adapter
 @RequiredArgsConstructor
 @Slf4j
@@ -17,5 +22,9 @@ public class CommentQueryAdapter {
 
     public Comment getCommentById(Long commentId){
         return commentRepository.findById(commentId).orElseThrow(()->new CommentException(GlobalErrorCode.COMMENT_NOT_FOUND));
+    }
+
+    public List<Comment> getCommentListByPostId(Long postId, Pageable pageable) {
+        return commentRepository.findAllByPostId(postId, pageable);
     }
 }

@@ -16,7 +16,6 @@ public class MemberQueryAdapter {
     private final MemberRepository memberRepository;
 
     public Member getMember(User user){
-
         return memberRepository.findByUser(user).orElseThrow(()-> new MemberException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
