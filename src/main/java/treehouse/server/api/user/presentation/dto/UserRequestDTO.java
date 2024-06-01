@@ -59,4 +59,9 @@ public class UserRequestDTO {
         private String phoneNum;
         private Integer authNum;
     }
+
+    @Getter
+    public static class checkUserStatus {
+        private String phoneNumber;
+    }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.user.implement.UserCommandAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
@@ -29,6 +30,8 @@ public class UserService {
     private final UserCommandAdapter userCommandAdapter;
 
     private final RedisService redisService;
+
+    private final InvitationQueryAdapter invitationQueryAdapter;
 
     @Transactional(readOnly = true)
     public UserResponseDTO.checkName checkName(UserRequestDTO.checkName request){
@@ -69,4 +72,11 @@ public class UserService {
     }
 
 
+    public UserResponseDTO.checkUserStatus checkUserStatus(UserRequestDTO.checkUserStatus request) {
+
+        Boolean isNewUser = !userQueryAdapter.existByPhoneNumber(request.getPhoneNumber());
+        Boolean isInvited = invitationQueryAdapter.existByPhoneNumber(request.getPhoneNumber());
+
+        return UserMapper.toCheckUserStatus(isNewUser, isInvited);
+    }
 }

@@ -13,4 +13,6 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findAllByPhone(String phone);
 
     Invitation findByPhoneAndTreeHouse(String phone, TreeHouse treeHouse);
+
+    Boolean existsByPhone(String phoneNumber);
 }

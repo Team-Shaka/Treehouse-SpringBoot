@@ -55,4 +55,12 @@ public class UserApi {
     ){
         return CommonResponse.onSuccess((userService.login(request)));
     }
+
+    @PostMapping("/phone")
+    @Operation(summary = "휴대폰으로 상태 확인", description = "휴대폰 번호로 유저의 상태(신규 유저인지, 초대를 하나라도 받았는지)를 조회합니다.")
+    public CommonResponse<UserResponseDTO.checkUserStatus> checkPhoneAuth(
+            @RequestBody final UserRequestDTO.checkUserStatus request
+    ){
+        return CommonResponse.onSuccess(userService.checkUserStatus(request));
+    }
 }
