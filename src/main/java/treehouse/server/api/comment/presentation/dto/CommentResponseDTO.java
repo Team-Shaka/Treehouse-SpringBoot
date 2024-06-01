@@ -33,4 +33,12 @@ public class CommentResponseDTO {
         List<CommentInfoDto> commentList;
 
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentIdResponseDto{
+        Long commentId;
+    }
 }

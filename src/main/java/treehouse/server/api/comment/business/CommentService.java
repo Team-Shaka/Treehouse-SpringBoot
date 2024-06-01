@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.comment.implementation.CommentCommandAdapter;
 import treehouse.server.api.comment.implementation.CommentQueryAdapter;
 import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
 import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
@@ -16,6 +17,7 @@ import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
+import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.member.Member;
@@ -41,10 +43,12 @@ public class CommentService {
     private final MemberQueryAdapter memberQueryAdapter;
 
     private final CommentQueryAdapter commentQueryAdapter;
+    private final CommentCommandAdapter commentCommandAdapter;
 
     private final PostQueryAdapter postQueryAdapter;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
+    private final UserQueryAdapter userQueryAdapter;
 
 
     public void reportComment(User user, CommentRequestDTO.reportComment reqeust, Long treehouseId, Long postId, Long commentId){
@@ -68,30 +72,29 @@ public class CommentService {
         reportCommandAdapter.createReport(report);
     }
 
+    @Transactional(readOnly = true)
     public CommentResponseDTO.CommentListDto getCommentResponseList(User user, Long postId, int page) {
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-
         List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
-
-        // 신고한 댓글 제외 로직 추가
 
         for(Comment comment : commentListByPostId){
             if(reportQueryAdapter.isReportedComment(comment)){
                 commentListByPostId.remove(comment);
             }
         }
-//
-//        commentListByPostId.stream()
-//                .filter(comment -> {
-//                    boolean isReported =  reportQueryAdapter.isReportedComment(comment);
-//                    return isReported ? commentListByPostId.remove(comment) : null;
-//                        }
-//
-//                )
-//                .collect(Collectors.toList());
-
         CommentResponseDTO.CommentListDto commentListDto = CommentMapper.toCommentListDto(commentListByPostId);
         return commentListDto;
+    }
+
+    public CommentResponseDTO.CommentIdResponseDto createComment(User user, Long treehouseId, Long postId, CommentRequestDTO.createComment request){
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Post post = postQueryAdapter.findById(postId);
+        Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Comment comment = CommentMapper.toComment(writer, post, request.getComment());
+        Long commentId = commentCommandAdapter.createComment(comment).getId();
+        return CommentMapper.toIdResponseDto(commentId);
     }
 }
