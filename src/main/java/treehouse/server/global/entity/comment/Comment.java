@@ -20,6 +20,8 @@ public class Comment extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;
 
+    private String content;
+
     @JoinColumn(name = "postId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;

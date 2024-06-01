@@ -67,13 +67,4 @@ public class PostMapper {
                 .postId(post.getId())
                 .build();
     }
-
-    public static Report toReport(PostRequestDTO.reportPost request, Post post, Member reporter, Member target){
-        return Report.builder()
-                .reason(request.getReason())
-                .post(post)
-                .reporterMember(reporter)
-                .targetMember(target)
-                .build();
-    }
 }
