@@ -23,4 +23,7 @@ public class InvitationQueryAdapter {
         return invitationRepository.findAllByPhone(phone);
     }
 
+    public Boolean existByPhoneNumber(String phoneNumber) {
+        return invitationRepository.existsByPhone(phoneNumber);
+    }
 }

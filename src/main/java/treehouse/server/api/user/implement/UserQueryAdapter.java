@@ -37,4 +37,8 @@ public class UserQueryAdapter {
     public Optional<User> optionalUserFindById(Long id){
         return userRepository.findById(id);
     }
+
+    public Boolean existByPhoneNumber(String phoneNumber) {
+        return userRepository.existsByPhone(phoneNumber);
+    }
 }
