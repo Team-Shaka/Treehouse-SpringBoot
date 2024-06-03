@@ -48,9 +48,9 @@ public class UserApi {
         return CommonResponse.onSuccess(userService.reissue(request));
     }
 
-    @PostMapping("/login-tmp")
-    @Operation(summary = "로그인 임시", description = "로그인 임시.")
-    public CommonResponse<UserResponseDTO.registerUser> loginTemp(
+    @PostMapping("/login")
+    @Operation(summary = "로그인 ✅", description = "휴대폰 번호로 로그인합니다.")
+    public CommonResponse<UserResponseDTO.loginMember> login(
              @RequestBody final UserRequestDTO.loginMember request
     ){
         return CommonResponse.onSuccess((userService.login(request)));

@@ -10,6 +10,7 @@ import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.redis.RefreshToken;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.AuthException;
@@ -17,6 +18,9 @@ import treehouse.server.global.exception.ThrowClass.GeneralException;
 import treehouse.server.global.redis.service.RedisService;
 import treehouse.server.global.security.jwt.dto.TokenDTO;
 import treehouse.server.global.security.provider.TokenProvider;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -54,12 +58,17 @@ public class UserService {
 
     // temp
     @Transactional
-    public UserResponseDTO.registerUser login(UserRequestDTO.loginMember request){
-        User user = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber())
-                .orElseThrow(() -> new GeneralException(GlobalErrorCode.USER_NOT_FOUND));
+    public UserResponseDTO.loginMember login(UserRequestDTO.loginMember request){
+        User user = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber());
+
         TokenDTO loginResult = userCommandAdapter.login(user);
 
-        return UserMapper.toRegister(user,loginResult.getAccessToken(), loginResult.getRefreshToken());
+        List<Member> memberList = user.getMemberList();
+        List<Long> treehouseIdList = memberList.stream()
+                .map(member -> member.getTreeHouse().getId())
+                .collect(Collectors.toList());  // 특정 유저가 가입한 모든 트리하우스들의 id를 구하는 과정
+
+        return UserMapper.toLogin(user,loginResult.getAccessToken(), loginResult.getRefreshToken(), treehouseIdList);
     }
 
     @Transactional
