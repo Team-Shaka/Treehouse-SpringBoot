@@ -5,17 +5,19 @@ import org.springframework.stereotype.Component;
 import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
+import treehouse.server.global.entity.treeHouse.TreeHouse;
 
 @Component
 @RequiredArgsConstructor
 public class MemberMapper {
 
-    public static Member toMember(User user, String memberName, String bio, String profileImageUrl) {
+    public static Member toMember(User user, String memberName, String bio, String profileImageUrl, TreeHouse treeHouse) {
         return Member.builder()
                 .user(user)
                 .name(memberName)
                 .bio(bio)
                 .profileImageUrl(profileImageUrl)
+                .treeHouse(treeHouse)
                 .build();
     }
 
