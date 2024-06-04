@@ -25,8 +25,4 @@ public class PostQueryAdapter {
     public Page<Post> findAllByTreehouse(TreeHouse treehouse, Pageable pageable) {
         return postRepository.findAllByTreeHouse(treehouse, pageable);
     }
-
-    public Post findByIdWithLock(Long postId) {
-        return postRepository.findByIdWithLock(postId, LockModeType.PESSIMISTIC_WRITE).orElseThrow(() -> new PostException(GlobalErrorCode.POST_NOT_FOUND));
-    }
 }
