@@ -1,6 +1,5 @@
 package treehouse.server.api.post.business;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostCommandAdapter;
@@ -15,6 +15,8 @@ import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
+import treehouse.server.api.reaction.business.ReactionMapper;
+import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
@@ -23,6 +25,7 @@ import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
+import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
@@ -47,6 +50,8 @@ public class PostService {
     private final PostImageCommandAdapter postImageCommandAdapter;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
+
+    private final ReactionCommandAdapter reactionCommandAdapter;
 
     private final ReportCommandAdapter reportCommandAdapter;
 
@@ -181,5 +186,17 @@ public class PostService {
         Report report = ReportMapper.toPostReport(request, post, reporter, target);
 
         reportCommandAdapter.createReport(report);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void reactToPost(User user, Long treehouseId, Long postId, PostRequestDTO.reactToPost request) {
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Post post = postQueryAdapter.findByIdWithLock(postId);
+
+        Reaction reaction = ReactionMapper.toPostReaction(request, post, member);
+
+        reactionCommandAdapter.saveReaction(reaction);
     }
 }
