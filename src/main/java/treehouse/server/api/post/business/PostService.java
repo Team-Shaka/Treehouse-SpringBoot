@@ -193,7 +193,7 @@ public class PostService {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
-        Post post = postQueryAdapter.findByIdWithLock(postId);
+        Post post = postQueryAdapter.findById(postId);
 
         Reaction reaction = ReactionMapper.toPostReaction(request, post, member);
 

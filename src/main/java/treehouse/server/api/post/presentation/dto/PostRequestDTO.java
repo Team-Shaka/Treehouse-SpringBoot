@@ -67,7 +67,7 @@ public class PostRequestDTO {
     public static class reactToPost {
 
         @JsonProperty("reactionName")
-        @Schema(description = "반응 이름(이모지 기반 유니코드)", example = "👍")
+        @Schema(description = "반응 종류", example = "👍")
         @NotBlank(message = "반응 종류 또는 이름이 필요합니다.")
         private String reactionName;
     }

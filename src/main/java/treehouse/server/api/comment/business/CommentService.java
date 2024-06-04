@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.comment.implementation.CommentCommandAdapter;
 import treehouse.server.api.comment.implementation.CommentQueryAdapter;
@@ -13,6 +14,8 @@ import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
 import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
+import treehouse.server.api.reaction.business.ReactionMapper;
+import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.report.implementation.ReportQueryAdapter;
@@ -22,6 +25,7 @@ import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
+import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
@@ -49,6 +53,8 @@ public class CommentService {
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
     private final UserQueryAdapter userQueryAdapter;
+
+    private final ReactionCommandAdapter reactionCommandAdapter;
 
 
     public void reportComment(User user, CommentRequestDTO.reportComment reqeust, Long treehouseId, Long postId, Long commentId){
@@ -103,5 +109,17 @@ public class CommentService {
         Comment comment = commentQueryAdapter.getCommentById(commentId);
 
         commentCommandAdapter.deleteComment(comment);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void reactToComment(User user, Long treehouseId, Long commentId, CommentRequestDTO.reactToComment request) {
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Comment comment = commentQueryAdapter.getCommentById(commentId);
+
+        Reaction reaction = ReactionMapper.toCommentReaction(request, comment, member);
+
+        reactionCommandAdapter.saveReaction(reaction);
     }
 }
