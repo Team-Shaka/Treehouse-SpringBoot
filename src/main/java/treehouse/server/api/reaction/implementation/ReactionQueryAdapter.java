@@ -37,4 +37,20 @@ public class ReactionQueryAdapter {
 
         return exists;
     }
+
+    public List<Reaction> findAllByPost(Post post) {
+        return reactionRepository.findAllByTargetIdAndTargetType(post.getId(), TargetType.POST);
+    }
+
+    public List<Reaction> findAllByComment(Comment comment) {
+        return reactionRepository.findAllByTargetIdAndTargetType(comment.getId(), TargetType.COMMENT);
+    }
+
+    public Integer countReactionsByReactionNameAndPostId(String reactionName, Long postId) {
+        return reactionRepository.countReactionsByReactionNameAndTargetIdAndTargetType(reactionName, postId, TargetType.POST);
+    }
+
+    public Integer countReactionsByReactionNameAndCommentId(String reactionName, Long commentId) {
+        return reactionRepository.countReactionsByReactionNameAndTargetIdAndTargetType(reactionName, commentId, TargetType.COMMENT);
+    }
 }

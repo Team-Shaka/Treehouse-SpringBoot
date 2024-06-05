@@ -2,11 +2,14 @@ package treehouse.server.api.reaction.business;
 
 import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
+import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.reaction.TargetType;
+
+import java.util.List;
 
 public class ReactionMapper {
 
@@ -27,4 +30,13 @@ public class ReactionMapper {
                 .member(member)
                 .build();
     }
+
+    public static ReactionResponseDTO.getReaction toGetReaction(Reaction reaction, Integer reactionCount, Boolean isPushed) {
+        return ReactionResponseDTO.getReaction.builder()
+                .reactionName(reaction.getReactionName())
+                .reactionCount(reactionCount)
+                .isPushed(isPushed)
+                .build();
+    }
+
 }

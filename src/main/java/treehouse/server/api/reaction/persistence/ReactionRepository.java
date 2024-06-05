@@ -18,4 +18,9 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     List<Reaction> findAllByMemberAndTargetIdAndTargetType(Member member, Long targetId, TargetType targetType);
 
     void deleteByMemberAndTargetIdAndTargetTypeAndReactionName(Member member, Long targetId, TargetType targetType, String reactionName);
+
+    @Query("SELECT COUNT(r) FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.reactionName = :reactionName")
+    Integer countReactionsByReactionNameAndTargetIdAndTargetType(@Param("reactionName") String reactionName, @Param("targetId") Long targetId, @Param("targetType") TargetType targetType);
+
+    List<Reaction> findAllByTargetIdAndTargetType(Long id, TargetType targetType);
 }
