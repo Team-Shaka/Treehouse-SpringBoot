@@ -19,7 +19,7 @@ public class Reaction extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    private String reactionName; // 반응 이름(이모지 기반 유니코드)
+    private String reactionName; // 반응 이름(이모지)
 
     private Long targetId; // 반응 대상의 ID
 

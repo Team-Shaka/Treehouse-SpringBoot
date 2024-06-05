@@ -12,6 +12,4 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByTreeHouse(TreeHouse treehouse, Pageable pageable);
-
-    Optional<Post> findByIdWithLock(Long postId, LockModeType lockModeType);
 }

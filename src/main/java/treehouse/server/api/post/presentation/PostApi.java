@@ -104,13 +104,12 @@ public class PostApi {
 
     @PostMapping("/posts/{postId}/reactions")
     @Operation(summary = "게시글 반응 ✅ 🔑", description = "게시글에 감정표현을 남깁니다.")
-    public CommonResponse reactToPost(
+    public CommonResponse<String> reactToPost(
             @PathVariable(name = "treehouseId") Long treehouseId,
             @PathVariable(name = "postId") Long postId,
             @RequestBody @Validated PostRequestDTO.reactToPost request,
             @AuthMember @Parameter(hidden = true) User user
     ){
-        postService.reactToPost(user, treehouseId, postId, request);
-        return CommonResponse.onSuccess(null);
+        return CommonResponse.onSuccess(postService.reactToPost(user, treehouseId, postId, request));
     }
 }

@@ -76,7 +76,7 @@ public class CommentApi {
 
     @PostMapping("/{commentId}/reactions")
     @Operation(summary = "댓글 반응 API 🔑", description = "댓글에 감정표현을 남기는 API 입니다.")
-    public CommonResponse reactToComment(
+    public CommonResponse<String> reactToComment(
             @PathVariable(name = "treehouseId")Long treehouseId,
             @PathVariable(name = "postId")Long postId,
             @PathVariable(name = "commentId")Long commentId,
@@ -84,8 +84,7 @@ public class CommentApi {
             @RequestBody CommentRequestDTO.reactToComment request
     )
     {
-        commentService.reactToComment(user, treehouseId, commentId, request);
-        return CommonResponse.onSuccess(null);
+        return CommonResponse.onSuccess(commentService.reactToComment(user, treehouseId, commentId, request));
     }
 
 }
