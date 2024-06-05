@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
+import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PostResponseDTO {
         private String context;
         private List<String> pictureUrlList;
         private Integer commentCount;
-//        private List<ReactionResponseDto.getReaction> reactionList; Reaction 기능 개발 이후 적용
+        private List<ReactionResponseDTO.getReaction> reactionList;
         private String postedAt;
     }
 
