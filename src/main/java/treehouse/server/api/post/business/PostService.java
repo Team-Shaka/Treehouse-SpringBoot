@@ -17,6 +17,7 @@ import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.reaction.business.ReactionMapper;
 import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
+import treehouse.server.api.reaction.implementation.ReactionQueryAdapter;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
@@ -56,6 +57,7 @@ public class PostService {
     private final ReportCommandAdapter reportCommandAdapter;
 
     private final PresignedUrlLambdaClient presignedUrlLambdaClient;
+    private final ReactionQueryAdapter reactionQueryAdapter;
 
     /**
      * 게시글 상세조회
@@ -189,14 +191,20 @@ public class PostService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void reactToPost(User user, Long treehouseId, Long postId, PostRequestDTO.reactToPost request) {
+    public String reactToPost(User user, Long treehouseId, Long postId, PostRequestDTO.reactToPost request) {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Post post = postQueryAdapter.findById(postId);
+        Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, request.getReactionName());
+        if (isPushed) {
+            reactionCommandAdapter.deletePostReaction(member, post, request.getReactionName());
+            return request.getReactionName() + " is deleted";
+        }
 
         Reaction reaction = ReactionMapper.toPostReaction(request, post, member);
 
         reactionCommandAdapter.saveReaction(reaction);
+        return request.getReactionName() + " is saved";
     }
 }

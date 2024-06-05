@@ -16,6 +16,7 @@ import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.reaction.business.ReactionMapper;
 import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
+import treehouse.server.api.reaction.implementation.ReactionQueryAdapter;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
 import treehouse.server.api.report.implementation.ReportQueryAdapter;
@@ -55,6 +56,7 @@ public class CommentService {
     private final UserQueryAdapter userQueryAdapter;
 
     private final ReactionCommandAdapter reactionCommandAdapter;
+    private final ReactionQueryAdapter reactionQueryAdapter;
 
 
     public void reportComment(User user, CommentRequestDTO.reportComment reqeust, Long treehouseId, Long postId, Long commentId){
@@ -112,14 +114,21 @@ public class CommentService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void reactToComment(User user, Long treehouseId, Long commentId, CommentRequestDTO.reactToComment request) {
+    public String reactToComment(User user, Long treehouseId, Long commentId, CommentRequestDTO.reactToComment request) {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Comment comment = commentQueryAdapter.getCommentById(commentId);
 
+        Boolean isPushed = reactionQueryAdapter.existByMemberAndCommentAndReactionName(member, comment, request.getReactionName());
+        if (isPushed) {
+            reactionCommandAdapter.deleteCommentReaction(member, comment, request.getReactionName());
+            return request.getReactionName() + " is deleted";
+        }
+
         Reaction reaction = ReactionMapper.toCommentReaction(request, comment, member);
 
         reactionCommandAdapter.saveReaction(reaction);
+        return request.getReactionName() + " is saved";
     }
 }
