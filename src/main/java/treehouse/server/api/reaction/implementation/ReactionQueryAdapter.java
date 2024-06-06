@@ -18,24 +18,41 @@ public class ReactionQueryAdapter {
     private final ReactionRepository reactionRepository;
 
     public Boolean existByMemberAndPostAndReactionName(Member member, Post post, String reactionName) {
-        boolean exists = reactionRepository.existsByMemberAndTargetIdAndTargetTypeAndReactionName(member, post.getId(), TargetType.POST, reactionName);
+        //TODO: 현재 임시방편으로 모든 이모지 가져와 비교하는 형태. 추후 변경 필요
+        List<Reaction> reactions = reactionRepository.findAllByMemberAndTargetIdAndTargetType(member, post.getId(), TargetType.POST);
+        for (Reaction reaction : reactions) {
 
-        // Debugging: 결과 확인
-//        System.out.println("Exists in DB: " + exists);
-//
-//        List<Reaction> reactions = reactionRepository.findAllByMemberAndTargetIdAndTargetType(member, post.getId(), TargetType.POST);
-//        for (Reaction reaction : reactions) {
-//            System.out.println("Stored reactionName: [" + reaction.getReactionName() + "]");
-//            System.out.println("Comparison result: " + reactionName.equals(reaction.getReactionName()));
-//        }
+            if (reactionName.equals(reaction.getReactionName())) {
+                return true;
+            }
+        }
 
-        return exists;
+        return false;
+    }
+
+    private boolean compareCodePoints(String str1, String str2) {
+        if (str1.length() != str2.length()) {
+            return false;
+        }
+        for (int i = 0; i < str1.length(); i++) {
+            if (str1.codePointAt(i) != str2.codePointAt(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Boolean existByMemberAndCommentAndReactionName(Member member, Comment comment, String reactionName) {
-        boolean exists = reactionRepository.existsByMemberAndTargetIdAndTargetTypeAndReactionName(member, comment.getId(), TargetType.COMMENT, reactionName);
+        //TODO: 현재 임시방편으로 모든 이모지 가져와 비교하는 형태. 추후 변경 필요
+        List<Reaction> reactions = reactionRepository.findAllByMemberAndTargetIdAndTargetType(member, comment.getId(), TargetType.COMMENT);
+        for (Reaction reaction : reactions) {
 
-        return exists;
+            if (reactionName.equals(reaction.getReactionName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public List<Reaction> findAllByPost(Post post) {
