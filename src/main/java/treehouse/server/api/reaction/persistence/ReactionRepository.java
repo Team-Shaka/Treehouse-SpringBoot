@@ -12,8 +12,8 @@ import java.util.List;
 
 @Repository
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN TRUE ELSE FALSE END FROM Reaction r WHERE r.member = :member AND r.targetId = :targetId AND r.targetType = :targetType AND r.reactionName = :reactionName")
-    Boolean existsByMemberAndTargetIdAndTargetTypeAndReactionName(@Param("member") Member member, @Param("targetId") Long targetId, @Param("targetType") TargetType targetType, @Param("reactionName") String reactionName);
+
+    boolean existsByMemberAndTargetIdAndTargetTypeAndReactionName(Member member, Long targetId, TargetType targetType, String reactionName);
 
     List<Reaction> findAllByMemberAndTargetIdAndTargetType(Member member, Long targetId, TargetType targetType);
 
