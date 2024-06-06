@@ -9,7 +9,9 @@ import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.reaction.TargetType;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ReactionMapper {
 
@@ -36,6 +38,13 @@ public class ReactionMapper {
                 .reactionName(reaction.getReactionName())
                 .reactionCount(reactionCount)
                 .isPushed(isPushed)
+                .build();
+    }
+
+    public static ReactionResponseDTO.getReactionList toGetReactionList(Map<String, ReactionResponseDTO.getReaction> reactionMap) {
+        List<ReactionResponseDTO.getReaction> reactionList = new ArrayList<>(reactionMap.values());
+        return ReactionResponseDTO.getReactionList.builder()
+                .reactionList(reactionList)
                 .build();
     }
 

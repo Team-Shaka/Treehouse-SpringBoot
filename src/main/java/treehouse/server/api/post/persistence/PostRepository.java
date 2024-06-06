@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 
+import java.util.List;
 import java.util.Optional;
 
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByTreeHouse(TreeHouse treehouse, Pageable pageable);
+    List<Post> findAllByTreeHouse(TreeHouse treehouse, Pageable pageable);
 }

@@ -46,7 +46,7 @@ public class CommentApi {
             @AuthMember @Parameter(hidden = true) User user
     )
     {
-        return CommonResponse.onSuccess(commentService.getCommentResponseList(user, postId, page));
+        return CommonResponse.onSuccess(commentService.getCommentResponseList(user, treehouseId, postId, page));
     }
 
     @PostMapping("")

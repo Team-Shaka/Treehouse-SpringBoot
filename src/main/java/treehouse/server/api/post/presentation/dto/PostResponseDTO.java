@@ -23,7 +23,7 @@ public class PostResponseDTO {
         private String context;
         private List<String> pictureUrlList;
         private Integer commentCount;
-        private List<ReactionResponseDTO.getReaction> reactionList;
+        private ReactionResponseDTO.getReactionList reactionList;
         private String postedAt;
     }
 

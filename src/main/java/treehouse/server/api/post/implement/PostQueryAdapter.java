@@ -11,6 +11,8 @@ import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.PostException;
 
+import java.util.List;
+
 
 @Adapter
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class PostQueryAdapter {
         return postRepository.findById(postId).orElseThrow(() -> new PostException(GlobalErrorCode.POST_NOT_FOUND));
     }
 
-    public Page<Post> findAllByTreehouse(TreeHouse treehouse, Pageable pageable) {
+    public List<Post> findAllByTreehouse(TreeHouse treehouse, Pageable pageable) {
         return postRepository.findAllByTreeHouse(treehouse, pageable);
     }
 }

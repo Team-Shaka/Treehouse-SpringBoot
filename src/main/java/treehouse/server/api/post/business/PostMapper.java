@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostMapper {
 
-    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList, List<ReactionResponseDTO.getReaction> reactionList) {
+    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
         return PostResponseDTO.getPostDetails.builder()
                 .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
                 .postId(post.getId())
