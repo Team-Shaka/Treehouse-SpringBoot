@@ -21,6 +21,7 @@ import treehouse.server.api.reaction.implementation.ReactionQueryAdapter;
 import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
+import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
@@ -60,8 +61,10 @@ public class PostService {
     private final ReportCommandAdapter reportCommandAdapter;
 
     private final PresignedUrlLambdaClient presignedUrlLambdaClient;
+
     private final ReactionQueryAdapter reactionQueryAdapter;
 
+    private final ReportQueryAdapter reportQueryAdapter;
     /**
      * 게시글 상세조회
      *
@@ -82,22 +85,22 @@ public class PostService {
         List<String> postImageUrlList = postImageList.stream()
                 .map(PostImage::getImageUrl)
                 .toList();
-        List<Reaction> reactions = reactionQueryAdapter.findAllByPost(post);
-        Map<String, ReactionResponseDTO.getReaction> reactionMap = reactions.stream()
+        List<Reaction> reactions = reactionQueryAdapter.findAllByPost(post); // 게시글에 대한 모든 감정표현 조회
+        Map<String, ReactionResponseDTO.getReaction> reactionMap = reactions.stream() // 감정표현을 Map으로 변환
                 .collect(Collectors.toMap(
                         Reaction::getReactionName,
                         reaction -> {
-                            String reactionName = reaction.getReactionName();
-                            Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndPostId(reactionName, post.getId());
-                            Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, reactionName);
+                            String reactionName = reaction.getReactionName(); // 감정표현 이름(종류)
+                            Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndPostId(reactionName, post.getId()); // 감정표현 카운트
+                            Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, reactionName); // 감정표현이 현재 사용자에 의해 눌렸는지 여부
                             return ReactionMapper.toGetReaction(reaction, reactionCount, isPushed);
                         },
                         (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
                 ));
 
-        List<ReactionResponseDTO.getReaction> reactionDtos = new ArrayList<>(reactionMap.values());
+        ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
 
-        return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtos);
+        return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
@@ -141,9 +144,13 @@ public class PostService {
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
+        List<Post> postList = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
 
-        List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
+        List<Post> filteredPosts = postList.stream()
+                .filter(post -> !reportQueryAdapter.isReportedPost(post))
+                .collect(Collectors.toList());
+
+        List<PostResponseDTO.getPostDetails> postDtoList = filteredPosts.stream()
                 .map(post -> {
                     List<PostImage> postImageList = post.getPostImageList();
                     List<String> postImageUrlList= postImageList.stream()
@@ -162,12 +169,12 @@ public class PostService {
                                     (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
                             ));
 
-                    List<ReactionResponseDTO.getReaction> reactionDtos = new ArrayList<>(reactionMap.values());
-                    return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtos);
+                    ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
+                    return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
                 })
                 .collect(Collectors.toList());
 
-        return postDtos;
+        return postDtoList;
     }
 
     @Transactional
