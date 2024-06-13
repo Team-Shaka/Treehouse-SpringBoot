@@ -18,41 +18,13 @@ public class ReactionQueryAdapter {
     private final ReactionRepository reactionRepository;
 
     public Boolean existByMemberAndPostAndReactionName(Member member, Post post, String reactionName) {
-        //TODO: 현재 임시방편으로 모든 이모지 가져와 비교하는 형태. 추후 변경 필요
-        List<Reaction> reactions = reactionRepository.findAllByMemberAndTargetIdAndTargetType(member, post.getId(), TargetType.POST);
-        for (Reaction reaction : reactions) {
-
-            if (reactionName.equals(reaction.getReactionName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean compareCodePoints(String str1, String str2) {
-        if (str1.length() != str2.length()) {
-            return false;
-        }
-        for (int i = 0; i < str1.length(); i++) {
-            if (str1.codePointAt(i) != str2.codePointAt(i)) {
-                return false;
-            }
-        }
-        return true;
+        boolean isPushed = reactionRepository.existsByMemberAndTargetIdAndTargetTypeAndReactionName(member, post.getId(), TargetType.POST, reactionName);
+        return isPushed;
     }
 
     public Boolean existByMemberAndCommentAndReactionName(Member member, Comment comment, String reactionName) {
-        //TODO: 현재 임시방편으로 모든 이모지 가져와 비교하는 형태. 추후 변경 필요
-        List<Reaction> reactions = reactionRepository.findAllByMemberAndTargetIdAndTargetType(member, comment.getId(), TargetType.COMMENT);
-        for (Reaction reaction : reactions) {
-
-            if (reactionName.equals(reaction.getReactionName())) {
-                return true;
-            }
-        }
-
-        return false;
+        boolean isPushed = reactionRepository.existsByMemberAndTargetIdAndTargetTypeAndReactionName(member, comment.getId(), TargetType.COMMENT, reactionName);
+        return isPushed;
     }
 
     public List<Reaction> findAllByPost(Post post) {

@@ -236,7 +236,7 @@ public class PostService {
         reportCommandAdapter.createReport(report);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public String reactToPost(User user, Long treehouseId, Long postId, PostRequestDTO.reactToPost request) {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
