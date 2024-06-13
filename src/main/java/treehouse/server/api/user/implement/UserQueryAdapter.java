@@ -26,8 +26,8 @@ public class UserQueryAdapter {
         return userRepository.existsById(id);
     }
 
-    public Optional<User> findByPhoneNumber(String phone){
-        return userRepository.findByPhone(phone);
+    public User findByPhoneNumber(String phone){
+        return userRepository.findByPhone(phone).orElseThrow(()->new UserException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
     public User findById(Long id){
