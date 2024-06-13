@@ -78,6 +78,8 @@ jwt:
 
 cloud:
   aws:
+    lambda:
+      url : ${AWS_PRESIGNED_LAMBDA}
     s3:
       bucket: elasticbeanstalk-ap-northeast-2-851725177732
       #s3 bucket
@@ -89,13 +91,13 @@ cloud:
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
-      #aws access key, secret key
 
 naver-sms:
   accessKey: ${NAVER_SMS_ACCESSKEY}
   secretKey: ${NAVER_SMS_SECRET}
   serviceId: ${NAVER_SMS_SERVICEID}
   senderPhone: ${NAVER_SMS_PHONE}
+      #aws access key, secret key
 ---
 spring:
   application:
