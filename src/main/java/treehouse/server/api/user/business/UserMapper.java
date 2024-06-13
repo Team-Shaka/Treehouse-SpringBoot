@@ -8,6 +8,8 @@ import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
 import treehouse.server.global.entity.User.UserStatus;
 
+import java.util.List;
+
 @Component
 //@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -58,6 +60,15 @@ public class UserMapper {
         return UserResponseDTO.checkUserStatus.builder()
                 .isNewUser(isNewUser)
                 .isInvited(isInvited)
+                .build();
+    }
+
+    public static UserResponseDTO.loginMember toLogin(User user, String accessToken, String refreshToken, List<Long> treehouseIdList){
+        return UserResponseDTO.loginMember.builder()
+                .userId(user.getId())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .treehouseIdList(treehouseIdList)
                 .build();
     }
 }
