@@ -140,7 +140,7 @@ public class CommentService {
         commentCommandAdapter.deleteComment(comment);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public String reactToComment(User user, Long treehouseId, Long commentId, CommentRequestDTO.reactToComment request) {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
