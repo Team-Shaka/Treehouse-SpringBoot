@@ -2,6 +2,8 @@ package treehouse.server.api.user.presentation.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserResponseDTO {
 
@@ -56,5 +58,17 @@ public class UserResponseDTO {
 
         Boolean isNewUser;
         Boolean isInvited;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class loginMember {
+
+        private Long userId;
+        private String accessToken;
+        private String refreshToken;
+        private List<Long> treehouseIdList;
     }
 }
