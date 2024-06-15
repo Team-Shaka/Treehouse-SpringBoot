@@ -19,8 +19,7 @@ public class Reaction extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Enumerated(EnumType.STRING)
-    private ReactionType type; // 예: LIKE, DISLIKE 등
+    private String reactionName; // 반응 이름(이모지)
 
     private Long targetId; // 반응 대상의 ID
 

@@ -1,6 +1,5 @@
 package treehouse.server.api.post.business;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostCommandAdapter;
@@ -15,14 +15,20 @@ import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
+import treehouse.server.api.reaction.business.ReactionMapper;
+import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
+import treehouse.server.api.reaction.implementation.ReactionQueryAdapter;
+import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.api.report.business.ReportMapper;
 import treehouse.server.api.report.implementation.ReportCommandAdapter;
+import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
+import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
@@ -30,7 +36,9 @@ import treehouse.server.global.exception.ThrowClass.PostException;
 import treehouse.server.global.feign.client.PresignedUrlLambdaClient;
 import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,10 +56,15 @@ public class PostService {
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
 
+    private final ReactionCommandAdapter reactionCommandAdapter;
+
     private final ReportCommandAdapter reportCommandAdapter;
 
     private final PresignedUrlLambdaClient presignedUrlLambdaClient;
 
+    private final ReactionQueryAdapter reactionQueryAdapter;
+
+    private final ReportQueryAdapter reportQueryAdapter;
     /**
      * 게시글 상세조회
      *
@@ -62,12 +75,32 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public PostResponseDTO.getPostDetails getPostDetails(User user, Long postId, Long treehouseId) {
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
         Post post = postQueryAdapter.findById(postId);
+
         List<PostImage> postImageList = post.getPostImageList();
         List<String> postImageUrlList = postImageList.stream()
                 .map(PostImage::getImageUrl)
                 .toList();
-        return PostMapper.toGetPostDetails(post, postImageUrlList);
+        List<Reaction> reactions = reactionQueryAdapter.findAllByPost(post); // 게시글에 대한 모든 감정표현 조회
+        Map<String, ReactionResponseDTO.getReaction> reactionMap = reactions.stream() // 감정표현을 Map으로 변환
+                .collect(Collectors.toMap(
+                        Reaction::getReactionName,
+                        reaction -> {
+                            String reactionName = reaction.getReactionName(); // 감정표현 이름(종류)
+                            Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndPostId(reactionName, post.getId()); // 감정표현 카운트
+                            Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, reactionName); // 감정표현이 현재 사용자에 의해 눌렸는지 여부
+                            return ReactionMapper.toGetReaction(reaction, reactionCount, isPushed);
+                        },
+                        (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
+                ));
+
+        ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
+
+        return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
@@ -108,20 +141,40 @@ public class PostService {
         // TODO 신고한 게시물과 탈퇴 및 차단한 작성자의 게시물은 제외하는 로직 추가
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Post> postsPage = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
-        List<PostResponseDTO.getPostDetails> postDtos = postsPage.getContent().stream()
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Post> postList = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
+
+        List<Post> filteredPosts = postList.stream()
+                .filter(post -> !reportQueryAdapter.isReportedPost(post))
+                .collect(Collectors.toList());
+
+        List<PostResponseDTO.getPostDetails> postDtoList = filteredPosts.stream()
                 .map(post -> {
                     List<PostImage> postImageList = post.getPostImageList();
                     List<String> postImageUrlList= postImageList.stream()
                             .map(PostImage::getImageUrl)
                             .toList();
-                    return PostMapper.toGetPostDetails(post, postImageUrlList);
+                    List<Reaction> reactions = reactionQueryAdapter.findAllByPost(post);
+                    Map<String, ReactionResponseDTO.getReaction> reactionMap = reactions.stream()
+                            .collect(Collectors.toMap(
+                                    Reaction::getReactionName,
+                                    reaction -> {
+                                        String reactionName = reaction.getReactionName();
+                                        Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndPostId(reactionName, post.getId());
+                                        Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, reactionName);
+                                        return ReactionMapper.toGetReaction(reaction, reactionCount, isPushed);
+                                    },
+                                    (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
+                            ));
+
+                    ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
+                    return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
                 })
                 .collect(Collectors.toList());
 
-        return postDtos;
+        return postDtoList;
     }
 
     @Transactional
@@ -181,5 +234,23 @@ public class PostService {
         Report report = ReportMapper.toPostReport(request, post, reporter, target);
 
         reportCommandAdapter.createReport(report);
+    }
+
+    @Transactional
+    public String reactToPost(User user, Long treehouseId, Long postId, PostRequestDTO.reactToPost request) {
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Post post = postQueryAdapter.findById(postId);
+        Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, request.getReactionName());
+        if (isPushed) {
+            reactionCommandAdapter.deletePostReaction(member, post, request.getReactionName());
+            return request.getReactionName() + " is deleted";
+        }
+
+        Reaction reaction = ReactionMapper.toPostReaction(request, post, member);
+
+        reactionCommandAdapter.saveReaction(reaction);
+        return request.getReactionName() + " is saved";
     }
 }

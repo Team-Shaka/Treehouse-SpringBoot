@@ -1,29 +1,29 @@
 package treehouse.server.api.reaction.presentation.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReactionResponseDTO {
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class reactionSimpleResponseDTO{
-        String reactionName;
-        Long reactionCount;
-        boolean isPushed;
+    public static class getReaction {
+
+        private String reactionName;
+        private Integer reactionCount;
+        private Boolean isPushed;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class reactionSimpleListDTO{
-        List<reactionSimpleResponseDTO> simpleResponseDTOList;
+    public static class getReactionList {
+        private List<ReactionResponseDTO.getReaction> reactionList;
     }
+
 }

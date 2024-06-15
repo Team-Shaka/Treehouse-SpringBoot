@@ -19,7 +19,7 @@ public class CommentResponseDTO {
     public static class CommentInfoDto{
 
         MemberResponseDTO.getMemberProfile memberProfile;
-        ReactionResponseDTO.reactionSimpleResponseDTO reactionList;
+        ReactionResponseDTO.getReactionList reactionList;
         Long commentId;
         String context;
         String commentedAt;
