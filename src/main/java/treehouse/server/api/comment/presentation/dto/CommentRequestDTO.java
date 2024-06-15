@@ -26,4 +26,13 @@ public class CommentRequestDTO {
         // Comment 입력 조건에 따른 valid 조건 추가하기
         private String comment;
     }
+
+    @Getter
+    public static class reactToComment{
+
+        @JsonProperty("reactionName")
+        @Schema(description = "반응 종류", example = "👍")
+        @NotBlank(message = "반응 종류 또는 이름이 필요합니다.")
+        private String reactionName;
+    }
 }

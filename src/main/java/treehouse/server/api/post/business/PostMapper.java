@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
+import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.global.common.TimeFormatter;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
@@ -19,14 +20,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostMapper {
 
-    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList) {
+    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
         return PostResponseDTO.getPostDetails.builder()
                 .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
                 .postId(post.getId())
                 .context(post.getContent())
                 .pictureUrlList(postImageUrlList)
                 .commentCount(post.getCommentList().size())
-//                .reactionList() // Reaction 기능 개발 이후 수정
+                .reactionList(reactionList)
                 .postedAt(TimeFormatter.format(post.getCreatedAt()))
                 .build();
     }

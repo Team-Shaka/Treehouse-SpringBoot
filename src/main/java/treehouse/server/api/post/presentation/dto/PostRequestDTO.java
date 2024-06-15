@@ -62,4 +62,13 @@ public class PostRequestDTO {
         @NotNull(message = "작성자 멤버 아이디는 필수입니다.")
         private Long targetMemberId;
     }
+
+    @Getter
+    public static class reactToPost {
+
+        @JsonProperty("reactionName")
+        @Schema(description = "반응 종류", example = "👍")
+        @NotBlank(message = "반응 종류 또는 이름이 필요합니다.")
+        private String reactionName;
+    }
 }

@@ -46,7 +46,7 @@ public class CommentApi {
             @AuthMember @Parameter(hidden = true) User user
     )
     {
-        return CommonResponse.onSuccess(commentService.getCommentResponseList(user, postId, page));
+        return CommonResponse.onSuccess(commentService.getCommentResponseList(user, treehouseId, postId, page));
     }
 
     @PostMapping("")
@@ -72,6 +72,19 @@ public class CommentApi {
     {
         commentService.deleteComment(user,commentId,treehouseId,postId);
         return CommonResponse.onSuccess(null);
+    }
+
+    @PostMapping("/{commentId}/reactions")
+    @Operation(summary = "댓글 반응 API 🔑", description = "댓글에 감정표현을 남기는 API 입니다.")
+    public CommonResponse<String> reactToComment(
+            @PathVariable(name = "treehouseId")Long treehouseId,
+            @PathVariable(name = "postId")Long postId,
+            @PathVariable(name = "commentId")Long commentId,
+            @AuthMember @Parameter(hidden = true) User user,
+            @RequestBody CommentRequestDTO.reactToComment request
+    )
+    {
+        return CommonResponse.onSuccess(commentService.reactToComment(user, treehouseId, commentId, request));
     }
 
 }
