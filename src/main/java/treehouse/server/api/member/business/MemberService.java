@@ -24,7 +24,7 @@ public class MemberService {
     private final TreehouseQueryAdapter treehouseQueryAdapter;
 
     /**
-     * 회원가입
+     * 트리하우스에 가입
      * @param user
      * @param request
      * @return
@@ -32,10 +32,12 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO.registerMember register(User user, MemberRequestDTO.registerMember request){
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(request.getTreehouseId());
-        Member member = MemberMapper.toMember(user, request.getMemberName(),
-                                                request.getBio(), request.getProfileImageURL(), treeHouse);
+        Member member = MemberMapper.toMember(user, request, treeHouse);
         Member savedMember = memberCommandAdapter.register(member);
 
-        return MemberMapper.toRegister(request.getTreehouseId(), savedMember); // treehouseId는 관련 기능 구현 후 변경
+        user.addMember(savedMember); // User에 Member 추가
+        treeHouse.addMember(savedMember); // TreeHouse에 Member 추가
+
+        return MemberMapper.toRegister(savedMember);
     }
 }

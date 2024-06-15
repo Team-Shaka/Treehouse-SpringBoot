@@ -51,4 +51,7 @@ public class User extends BaseDateTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Member> memberList;
 
+    public void addMember(Member member) {
+        memberList.add(member);
+    }
 }
