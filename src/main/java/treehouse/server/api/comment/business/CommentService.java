@@ -154,8 +154,10 @@ public class CommentService {
         }
 
         Reaction reaction = ReactionMapper.toCommentReaction(request, comment, member);
+        Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
-        reactionCommandAdapter.saveReaction(reaction);
+        member.addReaction(savedReaction);
+
         return request.getReactionName() + " is saved";
     }
 }
