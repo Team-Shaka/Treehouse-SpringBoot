@@ -45,4 +45,12 @@ public class InvitationResponseDTO {
         private Long treehouseId;
 
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class createInvitation{
+        private Long invitationId;
+    }
 }

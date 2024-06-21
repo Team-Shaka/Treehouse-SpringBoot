@@ -46,4 +46,11 @@ public class InvitationApi {
         return CommonResponse.onSuccess(invitationService.decisionInvitation(user, request));
     }
 
+    @PostMapping("/invitation")
+    @Operation(summary = "초대하기 API \uD83D\uDD11✅ 🔑", description = "초대하기 API 입니다. 초대 후 문자나 카카오톡 보내는 것과 별개로 API 호출 부탁드립니닷")
+    public CommonResponse<InvitationResponseDTO.createInvitation> createInvitation(
+        @AuthMember @Parameter(hidden = true)User user, @RequestBody InvitationRequestDTO.createInvitation request
+    ){
+        return CommonResponse.onSuccess(invitationService.createInvitation(user,request));
+    }
 }
