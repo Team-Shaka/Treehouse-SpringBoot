@@ -242,6 +242,7 @@ public class PostService {
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Post post = postQueryAdapter.findById(postId);
+
         Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, request.getReactionName());
         if (isPushed) {
             reactionCommandAdapter.deletePostReaction(member, post, request.getReactionName());
@@ -249,8 +250,10 @@ public class PostService {
         }
 
         Reaction reaction = ReactionMapper.toPostReaction(request, post, member);
+        Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
-        reactionCommandAdapter.saveReaction(reaction);
+        member.addReaction(savedReaction);
+
         return request.getReactionName() + " is saved";
     }
 }
