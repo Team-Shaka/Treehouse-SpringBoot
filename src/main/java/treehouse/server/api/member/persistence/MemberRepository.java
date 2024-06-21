@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    public Optional<Member> findByUser(User user);
+    Optional<Member> findByUser(User user);
 
     Optional<Member> findByUserAndTreeHouse(User user, TreeHouse treehouse);
 }
