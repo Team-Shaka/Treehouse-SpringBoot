@@ -26,4 +26,8 @@ public class TreeHouse extends BaseDateTimeEntity {
 
     @OneToMany(mappedBy = "treeHouse")
     private List<Invitation> invitationList;
+
+    public void addMember(Member member) {
+        memberList.add(member);
+    }
 }

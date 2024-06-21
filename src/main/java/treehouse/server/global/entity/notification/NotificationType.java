@@ -1,5 +1,5 @@
 package treehouse.server.global.entity.notification;
 
 public enum NotificationType {
-    INVITATION, COMMENT, REACTION
+    INVITATION, COMMENT, REPLY, POST_REACTION, COMMENT_REACTION
 }
