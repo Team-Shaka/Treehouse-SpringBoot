@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InvitationMapper {
 
-    public InvitationResponseDTO.getInvitation toGetInvitation (Invitation invitation, List<String> treeMemberProfileImages) {
+    public static InvitationResponseDTO.getInvitation toGetInvitation (Invitation invitation, List<String> treeMemberProfileImages) {
         return InvitationResponseDTO.getInvitation.builder()
                 .invitationId(invitation.getId())
                 .treehouseName(invitation.getTreeHouse().getName())
@@ -30,26 +30,26 @@ public class InvitationMapper {
                 .treehouseMemberProfileImages(treeMemberProfileImages)
                 .build();
     }
-    public InvitationResponseDTO.getInvitations toGetInvitations(List<InvitationResponseDTO.getInvitation> invitationDtos) {
+    public static InvitationResponseDTO.getInvitations toGetInvitations(List<InvitationResponseDTO.getInvitation> invitationDtos) {
         return InvitationResponseDTO.getInvitations.builder()
                 .invitations(invitationDtos)
                 .build();
     }
 
-    public InvitationResponseDTO.myInvitationInfo toMyInvitationInfo(User user){
+    public static InvitationResponseDTO.myInvitationInfo toMyInvitationInfo(User user){
         return InvitationResponseDTO.myInvitationInfo.builder()
                 .availableInvitation(user.getInvitationCount())
                 .activeRate(user.getActiveRate())
                 .build();
     }
 
-    public InvitationResponseDTO.invitationAccept toInvitationResult(Long treeHouseId){
+    public static InvitationResponseDTO.invitationAccept toInvitationResult(Long treeHouseId){
         return InvitationResponseDTO.invitationAccept.builder()
                 .treehouseId(treeHouseId)
                 .build();
     }
 
-    public Invitation toInvitation(String phoneNumber, Member sender, User receiver, TreeHouse treeHouse){
+    public static Invitation toInvitation(String phoneNumber, Member sender, User receiver, TreeHouse treeHouse){
 
 
         LocalDateTime now = LocalDateTime.now();
@@ -66,7 +66,7 @@ public class InvitationMapper {
                 .build();
     }
 
-    public InvitationResponseDTO.createInvitation toCreateInvitationDTO (Invitation invitation){
+    public static InvitationResponseDTO.createInvitation toCreateInvitationDTO (Invitation invitation){
         return InvitationResponseDTO.createInvitation.builder()
                 .invitationId(invitation.getId())
                 .build();
