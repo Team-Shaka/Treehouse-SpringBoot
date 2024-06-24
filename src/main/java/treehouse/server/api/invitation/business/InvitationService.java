@@ -29,7 +29,6 @@ public class InvitationService {
     private final InvitationQueryAdapter invitationQueryAdapter;
 
     private final InvitationCommandAdapter invitationCommandAdapter;
-    private final InvitationMapper invitationMapper;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
 
@@ -53,14 +52,14 @@ public class InvitationService {
                             .map(Member::getProfileImageUrl)
                             .limit(treeMemberRandomProfileSize)
                             .toList();
-                    return invitationMapper.toGetInvitation(invitation, randomProfileImages);
+                    return InvitationMapper.toGetInvitation(invitation, randomProfileImages);
                 })
                 .collect(Collectors.toList());
-        return invitationMapper.toGetInvitations(invitationDtos);
+        return InvitationMapper.toGetInvitations(invitationDtos);
     }
 
     public InvitationResponseDTO.myInvitationInfo getMyInvitationInfo(User user){
-        return invitationMapper.toMyInvitationInfo(user);
+        return InvitationMapper.toMyInvitationInfo(user);
     }
 
     @Transactional
@@ -82,11 +81,11 @@ public class InvitationService {
         }
         // 초대장 만들어서 저장하기
 
-        Invitation invitation = invitationCommandAdapter.saveInvitation(invitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
+        Invitation invitation = invitationCommandAdapter.saveInvitation(InvitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
 
         // 리턴하기
 
-        return invitationMapper.toCreateInvitationDTO(invitation);
+        return InvitationMapper.toCreateInvitationDTO(invitation);
     }
 
     @Transactional
@@ -96,6 +95,6 @@ public class InvitationService {
         if (request.isAcceptDecision()==true) {
             treehouseId = 1L; // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
         }
-        return invitationMapper.toInvitationResult(treehouseId);
+        return InvitationMapper.toInvitationResult(treehouseId);
     }
 }
