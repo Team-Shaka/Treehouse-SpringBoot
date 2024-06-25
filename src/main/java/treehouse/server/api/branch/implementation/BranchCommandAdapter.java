@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import treehouse.server.api.branch.persistence.BranchRepository;
 import treehouse.server.global.annotations.Adapter;
+import treehouse.server.global.entity.branch.Branch;
 
 @Adapter
 @RequiredArgsConstructor
@@ -11,4 +12,8 @@ import treehouse.server.global.annotations.Adapter;
 public class BranchCommandAdapter {
 
     private final BranchRepository branchRepository;
+
+    public void createBranch(Branch branch) {
+        branchRepository.save(branch);
+    }
 }

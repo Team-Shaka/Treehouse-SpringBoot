@@ -47,8 +47,8 @@ public enum GlobalErrorCode implements BaseErrorCode{
     DUPLICATE_PHONE_NUMBER(CONFLICT, "USER409_1", "중복된 전화번호가 존재합니다."),
 
     // MEMBER + 404 Not Found - 찾을 수 없음
-    PROFILE_NOT_FOUND(NOT_FOUND, "MEMBER404_1", "존재하지 않는 프로필입니다."),
-    AVAILABLE_PROFILE_NOT_FOUND(NOT_FOUND, "MEMBER404_2", "현재 선택된 프로필이 없습니다."),
+    MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER404_1", "존재하지 않는 멤버입니다."),
+    AVAILABLE_PROFILE_NOT_FOUND(NOT_FOUND, "MEMBER404_2", "현재 선택된 멤버 정보가 없습니다."),
 
     // TREEHOUSE + 404 Not Found - 찾을 수 없음
     TREEHOUSE_NOT_FOUND(NOT_FOUND, "TREEHOUSE404_1", "존재하지 않는 트리입니다."),
