@@ -8,10 +8,14 @@ import treehouse.server.api.invitation.implement.InvitationCommandAdapter;
 import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
 import treehouse.server.api.invitation.presentation.dto.InvitationResponseDTO;
+import treehouse.server.api.member.implementation.MemberQueryAdapter;
+import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
+import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+import treehouse.server.global.exception.ThrowClass.UserException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +29,13 @@ public class InvitationService {
     private final InvitationQueryAdapter invitationQueryAdapter;
 
     private final InvitationCommandAdapter invitationCommandAdapter;
-    private final InvitationMapper invitationMapper;
+
+    private final TreehouseQueryAdapter treehouseQueryAdapter;
+
+    private final MemberQueryAdapter memberQueryAdapter;
+
+    private final UserQueryAdapter userQueryAdapter;
+
     private static final Integer treeMemberRandomProfileSize = 3;
 
 
@@ -42,14 +52,40 @@ public class InvitationService {
                             .map(Member::getProfileImageUrl)
                             .limit(treeMemberRandomProfileSize)
                             .toList();
-                    return invitationMapper.toGetInvitation(invitation, randomProfileImages);
+                    return InvitationMapper.toGetInvitation(invitation, randomProfileImages);
                 })
                 .collect(Collectors.toList());
-        return invitationMapper.toGetInvitations(invitationDtos);
+        return InvitationMapper.toGetInvitations(invitationDtos);
     }
 
     public InvitationResponseDTO.myInvitationInfo getMyInvitationInfo(User user){
-        return invitationMapper.toMyInvitationInfo(user);
+        return InvitationMapper.toMyInvitationInfo(user);
+    }
+
+    @Transactional
+    public InvitationResponseDTO.createInvitation createInvitation(User user, InvitationRequestDTO.createInvitation request){
+
+        // 트리 찾기
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(request.getTreehouseId());
+        // 초대 멤버 찾기
+        Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+        // 초대 대상이 가입된 사람인지 찾기
+
+        User receiverUser = null;
+
+        try {
+            receiverUser = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber());
+        }
+        catch (UserException e){
+            // 뭐 안함
+        }
+        // 초대장 만들어서 저장하기
+
+        Invitation invitation = invitationCommandAdapter.saveInvitation(InvitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
+
+        // 리턴하기
+
+        return InvitationMapper.toCreateInvitationDTO(invitation);
     }
 
     @Transactional
@@ -59,6 +95,6 @@ public class InvitationService {
         if (request.isAcceptDecision()==true) {
             treehouseId = 1L; // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
         }
-        return invitationMapper.toInvitationResult(treehouseId);
+        return InvitationMapper.toInvitationResult(treehouseId);
     }
 }
