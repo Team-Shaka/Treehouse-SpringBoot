@@ -17,6 +17,7 @@ public class NotificationResponseDTO {
         private String profileImageUrl;
         private String userName;
         private String receivedTime;
+        private Long treehouseId;
         private String treehouseName;
         private Boolean isChecked;
         private Long targetId;
