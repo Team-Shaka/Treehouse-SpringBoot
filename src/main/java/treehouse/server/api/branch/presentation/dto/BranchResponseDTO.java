@@ -50,4 +50,13 @@ public class BranchResponseDTO {
         private Long startId; // 시작 노드의 memberId
         private Long endId; // 끝 노드의 memberId
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getCompleteBranchView {
+        private List<NodeDTO> nodes;
+        private List<LinkDTO> links;
+    }
 }

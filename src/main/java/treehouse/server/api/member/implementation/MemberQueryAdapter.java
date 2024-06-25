@@ -20,6 +20,10 @@ public class MemberQueryAdapter {
     }
 
     public Member findByUserAndTreehouse(User user, TreeHouse treehouse) {
-        return memberRepository.findByUserAndTreeHouse(user, treehouse).orElseThrow(() -> new MemberException(GlobalErrorCode.USER_NOT_FOUND));
+        return memberRepository.findByUserAndTreeHouse(user, treehouse).orElseThrow(() -> new MemberException(GlobalErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberException(GlobalErrorCode.MEMBER_NOT_FOUND));
     }
 }

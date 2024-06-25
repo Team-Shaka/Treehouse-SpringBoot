@@ -16,7 +16,7 @@ public class BranchQueryAdapter {
 
     private final BranchRepository branchRepository;
 
-    public List<Branch> findAllByTreehouse(TreeHouse treeHouse) {
+    public List<Branch> findAllByTreeHouse(TreeHouse treeHouse) {
         return branchRepository.findAllByTreeHouse(treeHouse);
     }
 }
