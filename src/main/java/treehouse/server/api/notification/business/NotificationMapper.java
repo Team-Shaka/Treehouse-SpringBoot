@@ -17,6 +17,7 @@ public class NotificationMapper {
                 .profileImageUrl(notification.getSender().getProfileImageUrl())
                 .userName(notification.getSender().getName())
                 .receivedTime(String.valueOf(notification.getReceivedTime()))
+                .treehouseId(notification.getSender().getTreeHouse().getId())
                 .treehouseName(notification.getSender().getTreeHouse().getName())
                 .isChecked(notification.isChecked())
                 .targetId(notification.getTargetId())
