@@ -6,11 +6,10 @@ import treehouse.server.api.post.presentation.dto.PostRequestDTO;
 import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
-import treehouse.server.global.common.TimeFormatter;
+import treehouse.server.global.common.util.TimeFormatter;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
-import treehouse.server.global.entity.report.Report;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.feign.dto.PresignedUrlDTO;
 
