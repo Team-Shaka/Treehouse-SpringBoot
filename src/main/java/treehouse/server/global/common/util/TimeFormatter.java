@@ -1,4 +1,4 @@
-package treehouse.server.global.common;
+package treehouse.server.global.common.util;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
