@@ -24,7 +24,7 @@ public class CommentRequestDTO {
     @Getter
     public static class createComment{
         // Comment 입력 조건에 따른 valid 조건 추가하기
-        private String comment;
+        private String context;
     }
 
     @Getter
