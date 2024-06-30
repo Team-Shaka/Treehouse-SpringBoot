@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.comment.implementation.CommentCommandAdapter;
 import treehouse.server.api.comment.implementation.CommentQueryAdapter;
@@ -33,10 +32,8 @@ import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.CommentException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,7 +125,7 @@ public class CommentService {
         Post post = postQueryAdapter.findById(postId);
         Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
-        Comment comment = CommentMapper.toComment(writer, post, request.getComment());
+        Comment comment = CommentMapper.toComment(writer, post, request.getContext());
         Long commentId = commentCommandAdapter.createComment(comment).getId();
         return CommentMapper.toIdResponseDto(commentId);
     }
