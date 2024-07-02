@@ -12,4 +12,11 @@ public class MemberRequestDTO {
         private String bio;
         private String profileImageURL;
     }
+
+    @Getter
+    public static class updateProfile {
+        private String memberName;
+        private String bio;
+        private String profileImageURL;
+    }
 }
