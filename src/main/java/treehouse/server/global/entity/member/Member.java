@@ -54,4 +54,10 @@ public class Member extends BaseDateTimeEntity {
     public void addReaction(Reaction reaction) {
         reactionList.add(reaction);
     }
+
+    public void updateMember(String name, String bio, String profileImageUrl) {
+        this.name = name;
+        this.bio = bio;
+        this.profileImageUrl = profileImageUrl;
+    }
 }

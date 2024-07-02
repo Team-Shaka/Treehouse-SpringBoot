@@ -18,10 +18,33 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class getMemberProfile {
+    public static class getWriterProfile {
         private Long memberId;
         private String memberName;
         private String memberProfileImageUrl;
         private Integer memberBranch;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getProfile {
+        private Long memberId;
+        private String memberName;
+        private String userName;
+        private Integer closestMemberCount;
+        private Integer treehouseCount;
+        private Integer fromMe;
+        private String profileImageUrl;
+        private String bio;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class updateProfile {
+        private Long memberId;
     }
 }

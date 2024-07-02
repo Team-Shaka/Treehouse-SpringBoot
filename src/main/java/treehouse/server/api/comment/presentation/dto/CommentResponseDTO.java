@@ -18,7 +18,7 @@ public class CommentResponseDTO {
     @AllArgsConstructor
     public static class CommentInfoDto{
 
-        MemberResponseDTO.getMemberProfile memberProfile;
+        MemberResponseDTO.getWriterProfile memberProfile;
         ReactionResponseDTO.getReactionList reactionList;
         Long commentId;
         String context;
