@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import treehouse.server.api.member.business.MemberService;
 import treehouse.server.api.member.presentation.dto.MemberRequestDTO;
 import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
@@ -22,17 +19,35 @@ import treehouse.server.global.security.handler.annotation.AuthMember;
 @Slf4j
 @Validated
 @Tag(name = "Member API", description = "트리하우스 멤버 관련 API 입니다. 트리하우스 멤버 가입, 탈퇴 등의 API가 포함됩니다.")
-@RequestMapping("/members")
 public class MemberApi {
 
     private final MemberService memberService;
 
-    @PostMapping("/register")
+    @PostMapping("/members/register")
     @Operation(summary = "트리하우스 회원가입 \uD83D\uDD11✅", description = "트리하우스 멤버로 가입합니다.")
     public CommonResponse<MemberResponseDTO.registerMember> registerTreehouseMember(
             @RequestBody final MemberRequestDTO.registerMember request,
             @AuthMember @Parameter(hidden = true) User user
     ){
         return CommonResponse.onSuccess(memberService.register(user, request));
+    }
+
+    @GetMapping("/treehouses/{treehouseId}/profiles/myProfile")
+    @Operation(summary = "내 프로필 조회 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 내 프로필을 조회합니다.")
+    public CommonResponse<MemberResponseDTO.getProfile> getMyProfile(
+            @PathVariable final Long treehouseId,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(memberService.getMyProfile(user, treehouseId));
+    }
+
+    @PatchMapping("/treehouses/{treehouseId}/profiles/myProfile")
+    @Operation(summary = "내 프로필 수정 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 내 프로필을 수정합니다.")
+    public CommonResponse<MemberResponseDTO.updateProfile> updateProfile(
+            @PathVariable final Long treehouseId,
+            @RequestBody final MemberRequestDTO.updateProfile request,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(memberService.updateProfile(user, treehouseId, request));
     }
 }
