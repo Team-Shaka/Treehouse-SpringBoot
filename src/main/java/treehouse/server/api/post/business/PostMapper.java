@@ -21,7 +21,7 @@ public class PostMapper {
 
     public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
         return PostResponseDTO.getPostDetails.builder()
-                .memberProfile(MemberMapper.toGetMemberProfile(post.getWriter()))
+                .memberProfile(MemberMapper.toGetWriterProfile(post.getWriter()))
                 .postId(post.getId())
                 .context(post.getContent())
                 .pictureUrlList(postImageUrlList)
