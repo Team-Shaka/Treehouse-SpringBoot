@@ -61,6 +61,19 @@ public class CommentApi {
         return CommonResponse.onSuccess(commentService.createComment(user, treehouseId, postId, request));
     }
 
+    @PostMapping("/{commentId}")
+    @Operation(summary = "대댓글 작성 API 🔑", description = "특정 Comment에 대해서 대댓글을 작성하는 API 입니다.")
+    public CommonResponse<CommentResponseDTO.CommentIdResponseDto> createReply(
+            @PathVariable(name = "treehouseId")Long treehouseId,
+            @PathVariable(name = "postId")Long postId,
+            @PathVariable(name = "commentId")Long commentId,
+            @AuthMember @Parameter(hidden = true) User user,
+            @RequestBody CommentRequestDTO.createComment request
+    )
+    {
+        return CommonResponse.onSuccess(commentService.createReply(user, treehouseId, postId, commentId, request));
+    }
+
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제 API 🔑", description = "댓글을 삭제하는 API 입니다.")
     public CommonResponse deleteComment(
