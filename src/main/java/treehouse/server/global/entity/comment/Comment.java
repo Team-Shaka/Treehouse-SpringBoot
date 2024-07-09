@@ -25,4 +25,11 @@ public class  Comment extends BaseDateTimeEntity {
     @JoinColumn(name = "postId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
+
+    @JoinColumn(name = "parentId")
+    private Long parentId;
+
+    @JoinColumn(name = "type")
+    @Enumerated(EnumType.STRING)
+    private CommentType type;
 }
