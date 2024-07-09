@@ -22,8 +22,22 @@ public class CommentResponseDTO {
         ReactionResponseDTO.getReactionList reactionList;
         Long commentId;
         String context;
+        List<ReplyInfoDto> replyList;
         String commentedAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ReplyInfoDto{
+        MemberResponseDTO.getWriterProfile memberProfile;
+        ReactionResponseDTO.getReactionList reactionList;
+        Long commentId;
+        String context;
+        String commentedAt;
+    }
+
 
     @Builder
     @Getter
