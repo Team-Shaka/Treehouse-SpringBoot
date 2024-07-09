@@ -4,6 +4,7 @@ import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.global.entity.comment.Comment;
+import treehouse.server.global.entity.comment.CommentType;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 
@@ -42,11 +43,13 @@ public class CommentMapper {
                 .build();
     }
 
-    public static Comment toComment(Member writer, Post post, String content) {
+    public static Comment toComment(Member writer, Post post, String content, CommentType type, Long parentId) {
         return Comment.builder()
                 .writer(writer)
                 .post(post)
                 .content(content)
+                .type(type)
+                .parentId(parentId)
                 .build();
     }
 

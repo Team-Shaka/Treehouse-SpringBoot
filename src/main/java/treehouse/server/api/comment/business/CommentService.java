@@ -24,6 +24,7 @@ import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.comment.Comment;
+import treehouse.server.global.entity.comment.CommentType;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.reaction.Reaction;
@@ -161,9 +162,20 @@ public class CommentService {
         Post post = postQueryAdapter.findById(postId);
         Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
-        Comment comment = CommentMapper.toComment(writer, post, request.getContext());
+        Comment comment = CommentMapper.toComment(writer, post, request.getContext(), CommentType.PARENT, -1L);
         Long commentId = commentCommandAdapter.createComment(comment).getId();
         return CommentMapper.toIdResponseDto(commentId);
+    }
+
+    public CommentResponseDTO.CommentIdResponseDto createReply(User user, Long treehouseId, Long postId, Long parentId, CommentRequestDTO.createComment request){
+
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Post post = postQueryAdapter.findById(postId);
+        Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+
+        Comment comment = CommentMapper.toComment(writer, post, request.getContext(), CommentType.CHILD, parentId);
+        Long replyId = commentCommandAdapter.createComment(comment).getId();
+        return CommentMapper.toIdResponseDto(replyId);
     }
 
     public void deleteComment(User user, Long treehouseId, Long postId, Long commentId) {
