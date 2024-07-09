@@ -87,12 +87,16 @@ public class CommentService {
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
+//        List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
+        List<Comment> commentListByPostId = commentQueryAdapter.getParentCommentListByPostId(postId, pageable);
 
+        log.error("PO size : {}", commentListByPostId.size());
         // 신고된 댓글을 필터링
         List<Comment> filteredComments = commentListByPostId.stream()
                 .filter(comment -> !reportQueryAdapter.isReportedComment(comment))
                 .collect(Collectors.toList());
+
+        log.error("size : {}", filteredComments.size());
 
         // 각 댓글마다 reactionList를 생성
         List<CommentResponseDTO.CommentInfoDto> commentInfoDtoList = filteredComments.stream()
@@ -111,9 +115,41 @@ public class CommentService {
                             ));
                     ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
 
-                    return CommentMapper.toCommentInfoDto(comment, reactionDtoList);
+                    // 여기서 comment 에 대한 reply 목록을 조회해서 List<ReplyInfoDto> 를 만든 다음, mapper에 매개변수로 넣고, mapper 코드 업데이트 하자.
+
+                    // 1. queryAdapter 에 parentId 가지고 childList 조회하는 메서드 만들기
+                    List<Comment> childCommentList = commentQueryAdapter.getChildCommentListByPostIdAndParentId(postId, comment.getId(), pageable);
+
+                    // 2. mapper 에 childList를 각각 comment 에서 ReplyInfoDto 로 바꾸는 메서드 만들기
+                    // 각 답글마다 reactionList를 생성
+                    List<CommentResponseDTO.ReplyInfoDto> replyInfoDtoList = childCommentList.stream()
+                            .map(reply -> {
+                                List<Reaction> replyReactions = reactionQueryAdapter.findAllByComment(reply);
+                                Map<String, ReactionResponseDTO.getReaction> replyReactionMap = replyReactions.stream()
+                                        .collect(Collectors.toMap(
+                                                Reaction::getReactionName,
+                                                reaction -> {
+                                                    String reactionName = reaction.getReactionName();
+                                                    Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndCommentId(reactionName, reply.getId());
+                                                    Boolean isPushed = reactionQueryAdapter.existByMemberAndCommentAndReactionName(member, reply, reactionName);
+                                                    return ReactionMapper.toGetReaction(reaction, reactionCount, isPushed);
+                                                },
+                                                (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
+                                        ));
+                                ReactionResponseDTO.getReactionList replyReactionDtoList = ReactionMapper.toGetReactionList(replyReactionMap);
+
+                                return CommentMapper.toReplyInfoDto(reply, replyReactionDtoList);
+                            })
+                            .collect(Collectors.toList());
+
+
+                    // 3. mapper 에 이렇게 만든 childList 를 포함해서 최종 응답 형태인 CommentList 로 바꾸는 메서드 만들고 호출하기
+
+                    return CommentMapper.toCommentInfoDto(comment, reactionDtoList,replyInfoDtoList);
                 })
                 .collect(Collectors.toList());
+
+        log.error("commentListDto size : {}", commentListByPostId.size());
 
         CommentResponseDTO.CommentListDto commentListDto = CommentMapper.toCommentListDto(commentInfoDtoList);
         return commentListDto;

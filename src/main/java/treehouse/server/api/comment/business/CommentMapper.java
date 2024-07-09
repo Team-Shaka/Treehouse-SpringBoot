@@ -12,8 +12,21 @@ import java.util.List;
 public class CommentMapper {
 
 
-    public static CommentResponseDTO.CommentInfoDto toCommentInfoDto(Comment comment, ReactionResponseDTO.getReactionList reactionList) {
+    public static CommentResponseDTO.CommentInfoDto toCommentInfoDto(Comment comment, ReactionResponseDTO.getReactionList reactionList,
+                                                                     List<CommentResponseDTO.ReplyInfoDto> replyInfoDtoList) {
         return CommentResponseDTO.CommentInfoDto.builder()
+                .commentedAt(comment.getCreatedAt().toString())
+                .commentId(comment.getId())
+                .context(comment.getContent())
+                .reactionList(reactionList)
+                .replyList(replyInfoDtoList)
+                .memberProfile(MemberMapper.toGetWriterProfile(comment.getWriter()))
+                .build();
+
+    }
+
+    public static CommentResponseDTO.ReplyInfoDto toReplyInfoDto(Comment comment, ReactionResponseDTO.getReactionList reactionList) {
+        return CommentResponseDTO.ReplyInfoDto.builder()
                 .commentedAt(comment.getCreatedAt().toString())
                 .commentId(comment.getId())
                 .context(comment.getContent())
