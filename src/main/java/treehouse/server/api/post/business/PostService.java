@@ -177,6 +177,44 @@ public class PostService {
         return postDtoList;
     }
 
+    public PostResponseDTO.getMemberPostList getMemberPosts(User user, Long targetMemberId, Long treehouseId, int page) {
+
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+        Member targetMember = memberQueryAdapter.findById(targetMemberId);
+
+        List<Post> postListByMember = postQueryAdapter.findAllByTreeHouseAndWriter(treehouse, targetMember, pageable);
+
+
+        List<PostResponseDTO.getOnlyPostDetail> postDtoList = postListByMember.stream()
+                .map(post -> {
+                    List<PostImage> postImageList = post.getPostImageList();
+                    List<String> postImageUrlList= postImageList.stream()
+                            .map(PostImage::getImageUrl)
+                            .toList();
+                    List<Reaction> reactions = reactionQueryAdapter.findAllByPost(post);
+                    Map<String, ReactionResponseDTO.getReaction> reactionMap = reactions.stream()
+                            .collect(Collectors.toMap(
+                                    Reaction::getReactionName,
+                                    reaction -> {
+                                        String reactionName = reaction.getReactionName();
+                                        Integer reactionCount = reactionQueryAdapter.countReactionsByReactionNameAndPostId(reactionName, post.getId());
+                                        Boolean isPushed = reactionQueryAdapter.existByMemberAndPostAndReactionName(member, post, reactionName);
+                                        return ReactionMapper.toGetReaction(reaction, reactionCount, isPushed);
+                                    },
+                                    (existing, replacement) -> existing // 중복되는 경우 기존 값을 사용
+                            ));
+
+                    ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
+                    return PostMapper.toGetOnlyPostDetails(post, postImageUrlList, reactionDtoList);
+                })
+                .collect(Collectors.toList());
+
+        return PostMapper.toGetMemberPostList(targetMember, postDtoList);
+    }
+
+
     @Transactional
     public PostResponseDTO.updatePostResult updatePost(User user, Long treehouseId, Long postId, PostRequestDTO.updatePost request) {
         //TODO 현재 로그인 한 사용자가 게시글 작성자인지 확인하는 로직 개선
