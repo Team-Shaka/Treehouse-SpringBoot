@@ -38,12 +38,12 @@ public class MemberMapper {
                 .build();
     }
 
-    public static MemberResponseDTO.getWriterProfile toGetWriterProfile(Member member) {
+    public static MemberResponseDTO.getWriterProfile toGetWriterProfile(Member member, Member writer, List<Branch> branches) {
         return MemberResponseDTO.getWriterProfile.builder()
-                .memberId(member.getId())
-                .memberName(member.getName())
-                .memberProfileImageUrl(member.getProfileImageUrl())
-                .memberBranch(3) // Branch 기능 개발 이후 변경 예정
+                .memberId(writer.getId())
+                .memberName(writer.getName())
+                .memberProfileImageUrl(writer.getProfileImageUrl())
+                .memberBranch(BranchUtil.calculateBranchDegree(branches, member.getId(), writer.getId()))
                 .build();
     }
 
