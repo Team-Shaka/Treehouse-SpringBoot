@@ -71,6 +71,9 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // COMMENT + 403 Forbidden - 금지됨
     COMMENT_SELF_REPORT(FORBIDDEN, "COMMENT403_1", "자신의 댓글은 신고할 수 없습니다."),
 
+    // COMMENT + 403 Forbidden
+    COMMENT_DELETE_FORBIDDEN(FORBIDDEN, "COMMENT403_2", "자신이 작성한 게시글에 대한 댓글이나 자신이 작성한 댓글만 삭제 가능합니다."),
+
     // REPLY + 404 Not Found - 찾을 수 없음
     REPLY_NOT_FOUND(NOT_FOUND, "REPLY404_1", "존재하지 않는 답글입니다."),
 
