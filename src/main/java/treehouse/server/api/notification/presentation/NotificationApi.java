@@ -24,7 +24,7 @@ public class NotificationApi {
     private final NotificationService notificationService;
 
     @GetMapping("/users/notifications")
-    @Operation(summary = "알림 조회 \uD83D\uDD11✅", description = "사용자의 알림을 조회합니다.")
+    @Operation(summary = "알림 조회 \uD83D\uDD11🔑 ✅", description = "사용자의 알림을 조회합니다.")
     public CommonResponse<NotificationResponseDTO.getNotifications> getNotifications(
             @AuthMember @Parameter(hidden = true) User user
     ){
