@@ -169,6 +169,9 @@ public class CommentService {
 
     public CommentResponseDTO.CommentIdResponseDto createReply(User user, Long treehouseId, Long postId, Long parentId, CommentRequestDTO.createComment request){
 
+        if(commentQueryAdapter.getCommentById(parentId).getParentId()!=-1L){
+            throw new CommentException(GlobalErrorCode.REPLY_CREATE_BAD_REQUEST);
+        }
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Post post = postQueryAdapter.findById(postId);
         Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
@@ -181,8 +184,13 @@ public class CommentService {
     public void deleteComment(User user, Long treehouseId, Long postId, Long commentId) {
 
         Comment comment = commentQueryAdapter.getCommentById(commentId);
+        Member loginMember = memberQueryAdapter.findByUserAndTreehouse(user, treehouseQueryAdapter.getTreehouseById(treehouseId));
+        Member commentWriter = commentQueryAdapter.getCommentById(commentId).getWriter();
+        Member postWriter = postQueryAdapter.findById(postId).getWriter();
 
-        commentCommandAdapter.deleteComment(comment);
+        if (loginMember.getId() == commentWriter.getId() || loginMember.getId() == postWriter.getId()) {
+            commentCommandAdapter.deleteComment(comment);
+        } else throw new CommentException(GlobalErrorCode.COMMENT_DELETE_FORBIDDEN);
     }
 
     @Transactional
