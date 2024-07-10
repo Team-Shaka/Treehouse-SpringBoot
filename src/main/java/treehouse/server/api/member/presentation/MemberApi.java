@@ -27,7 +27,7 @@ public class MemberApi {
     private final PostService postService;
 
     @PostMapping("/members/register")
-    @Operation(summary = "트리하우스 회원가입 \uD83D\uDD11✅", description = "트리하우스 멤버로 가입합니다.")
+    @Operation(summary = "트리하우스 회원가입 \uD83D\uDD11 🔑 ✅", description = "트리하우스 멤버로 가입합니다.")
     public CommonResponse<MemberResponseDTO.registerMember> registerTreehouseMember(
             @RequestBody final MemberRequestDTO.registerMember request,
             @AuthMember @Parameter(hidden = true) User user
@@ -36,7 +36,7 @@ public class MemberApi {
     }
 
     @GetMapping("/treehouses/{treehouseId}/profiles/myProfile")
-    @Operation(summary = "내 프로필 조회 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 내 프로필을 조회합니다.")
+    @Operation(summary = "내 프로필 조회 \uD83D\uDC64 🔑 ✅", description = "특정 트리하우스에서 내 프로필을 조회합니다.")
     public CommonResponse<MemberResponseDTO.getProfile> getMyProfile(
             @PathVariable final Long treehouseId,
             @AuthMember @Parameter(hidden = true) User user
@@ -45,7 +45,7 @@ public class MemberApi {
     }
 
     @GetMapping("/treehouses/{treehouseId}/profiles/{memberId}")
-    @Operation(summary = "멤버 프로필 조회 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 특정 멤버의 프로필을 조회합니다.")
+    @Operation(summary = "멤버 프로필 조회 \uD83D\uDC64 🔑 ✅", description = "특정 트리하우스에서 특정 멤버의 프로필을 조회합니다.")
     public CommonResponse<MemberResponseDTO.getProfile> getMemberProfile(
             @PathVariable(name = "treehouseId") Long treehouseId,
             @PathVariable(name = "memberId") Long memberId,
@@ -56,7 +56,7 @@ public class MemberApi {
 
 
     @PatchMapping("/treehouses/{treehouseId}/profiles/myProfile")
-    @Operation(summary = "내 프로필 수정 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 내 프로필을 수정합니다.")
+    @Operation(summary = "내 프로필 수정 \uD83D\uDC64 🔑 ✅", description = "특정 트리하우스에서 내 프로필을 수정합니다.")
     public CommonResponse<MemberResponseDTO.updateProfile> updateProfile(
             @PathVariable final Long treehouseId,
             @RequestBody final MemberRequestDTO.updateProfile request,
@@ -66,7 +66,7 @@ public class MemberApi {
     }
 
     @GetMapping("/treehouses/{treehouseId}/profiles/{memberId}/posts")
-    @Operation(summary = "멤버가 작성한 게시글 조회 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 특정 멤버가 작성한 게시글 목록을 조회합니다.")
+    @Operation(summary = "멤버가 작성한 게시글 조회 \uD83D\uDC64 🔑 ✅", description = "특정 트리하우스에서 특정 멤버가 작성한 게시글 목록을 조회합니다.")
     public CommonResponse<PostResponseDTO.getMemberPostList> getPosts(
             @PathVariable(name = "treehouseId") Long treehouseId,
             @PathVariable(name = "memberId") Long memberId,
