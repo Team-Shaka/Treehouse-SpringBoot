@@ -54,6 +54,16 @@ public class MemberService {
         return MemberMapper.toGetProfile(branches, member, member);
     }
 
+    public MemberResponseDTO.getProfile getMemberProfile(User user, Long memberId, Long treehouseId){
+        TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse);
+        Member targetMember = memberQueryAdapter.findById(memberId);
+        List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treeHouse); // 트리하우스 내 모든 브랜치 조회
+        return MemberMapper.toGetMemberProfile(branches, member, targetMember);
+    }
+
+
+
     @Transactional
     public MemberResponseDTO.updateProfile updateProfile(User user, Long treehouseId, MemberRequestDTO.updateProfile request){
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
