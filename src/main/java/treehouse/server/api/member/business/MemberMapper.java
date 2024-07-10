@@ -60,6 +60,19 @@ public class MemberMapper {
                 .build();
     }
 
+    public static MemberResponseDTO.getProfile toGetMemberProfile(List<Branch> branches, Member member, Member targetMember) {
+        return MemberResponseDTO.getProfile.builder()
+                .memberId(targetMember.getId())
+                .memberName(targetMember.getName())
+                .userName(targetMember.getUser().getName())
+                .closestMemberCount(BranchUtil.countClosestMembers(branches, targetMember.getId())) // ClosestMember 기능 개발 이후 변경 예정
+                .treehouseCount(targetMember.getUser().getMemberList().size()) // TreehouseCount 기능 개발 이후 변경 예정
+                .fromMe(BranchUtil.calculateBranchDegree(branches, member.getId(), targetMember.getId()))
+                .profileImageUrl(targetMember.getProfileImageUrl())
+                .bio(targetMember.getBio())
+                .build();
+    }
+
     public static MemberResponseDTO.updateProfile toUpdateProfile(Member member) {
         return MemberResponseDTO.updateProfile.builder()
                 .memberId(member.getId())

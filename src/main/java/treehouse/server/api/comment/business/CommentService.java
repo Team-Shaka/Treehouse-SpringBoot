@@ -116,13 +116,8 @@ public class CommentService {
                             ));
                     ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
 
-                    // 여기서 comment 에 대한 reply 목록을 조회해서 List<ReplyInfoDto> 를 만든 다음, mapper에 매개변수로 넣고, mapper 코드 업데이트 하자.
-
-                    // 1. queryAdapter 에 parentId 가지고 childList 조회하는 메서드 만들기
                     List<Comment> childCommentList = commentQueryAdapter.getChildCommentListByPostIdAndParentId(postId, comment.getId(), pageable);
 
-                    // 2. mapper 에 childList를 각각 comment 에서 ReplyInfoDto 로 바꾸는 메서드 만들기
-                    // 각 답글마다 reactionList를 생성
                     List<CommentResponseDTO.ReplyInfoDto> replyInfoDtoList = childCommentList.stream()
                             .map(reply -> {
                                 List<Reaction> replyReactions = reactionQueryAdapter.findAllByComment(reply);
@@ -142,9 +137,6 @@ public class CommentService {
                                 return CommentMapper.toReplyInfoDto(reply, replyReactionDtoList);
                             })
                             .collect(Collectors.toList());
-
-
-                    // 3. mapper 에 이렇게 만든 childList 를 포함해서 최종 응답 형태인 CommentList 로 바꾸는 메서드 만들고 호출하기
 
                     return CommentMapper.toCommentInfoDto(comment, reactionDtoList,replyInfoDtoList);
                 })
