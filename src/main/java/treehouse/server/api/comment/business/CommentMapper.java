@@ -3,6 +3,7 @@ package treehouse.server.api.comment.business;
 import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
+import treehouse.server.global.common.util.TimeFormatter;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.comment.CommentType;
 import treehouse.server.global.entity.member.Member;
@@ -16,7 +17,7 @@ public class CommentMapper {
     public static CommentResponseDTO.CommentInfoDto toCommentInfoDto(Comment comment, ReactionResponseDTO.getReactionList reactionList,
                                                                      List<CommentResponseDTO.ReplyInfoDto> replyInfoDtoList) {
         return CommentResponseDTO.CommentInfoDto.builder()
-                .commentedAt(comment.getCreatedAt().toString())
+                .commentedAt(TimeFormatter.format(comment.getCreatedAt()))
                 .commentId(comment.getId())
                 .context(comment.getContent())
                 .reactionList(reactionList)
@@ -28,7 +29,7 @@ public class CommentMapper {
 
     public static CommentResponseDTO.ReplyInfoDto toReplyInfoDto(Comment comment, ReactionResponseDTO.getReactionList reactionList) {
         return CommentResponseDTO.ReplyInfoDto.builder()
-                .commentedAt(comment.getCreatedAt().toString())
+                .commentedAt(TimeFormatter.format(comment.getCreatedAt()))
                 .commentId(comment.getId())
                 .context(comment.getContent())
                 .reactionList(reactionList)
