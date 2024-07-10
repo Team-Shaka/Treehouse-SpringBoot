@@ -83,7 +83,7 @@ public class CommentApi {
             @AuthMember @Parameter(hidden = true) User user
     )
     {
-        commentService.deleteComment(user,commentId,treehouseId,postId);
+        commentService.deleteComment(user,treehouseId,postId, commentId);
         return CommonResponse.onSuccess(null);
     }
 
