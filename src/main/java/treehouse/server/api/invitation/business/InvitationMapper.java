@@ -23,6 +23,7 @@ public class InvitationMapper {
     public static InvitationResponseDTO.getInvitation toGetInvitation (Invitation invitation, List<String> treeMemberProfileImages) {
         return InvitationResponseDTO.getInvitation.builder()
                 .invitationId(invitation.getId())
+                .treehouseId(invitation.getTreeHouse().getId())
                 .treehouseName(invitation.getTreeHouse().getName())
                 .senderName(invitation.getSender().getName())
                 .senderProfileImageUrl(invitation.getSender().getProfileImageUrl())
@@ -63,6 +64,7 @@ public class InvitationMapper {
                 .phone(phoneNumber)
                 .expiredAt(sevenDaysLater)
                 .status(InvitationStatus.PENDING)
+                .treeHouse(treeHouse)
                 .build();
     }
 

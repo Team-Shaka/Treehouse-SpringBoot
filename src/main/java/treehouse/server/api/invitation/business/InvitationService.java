@@ -15,6 +15,8 @@ import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+import treehouse.server.global.exception.GlobalErrorCode;
+import treehouse.server.global.exception.ThrowClass.InvitationException;
 import treehouse.server.global.exception.ThrowClass.UserException;
 
 import java.util.List;
@@ -64,7 +66,6 @@ public class InvitationService {
 
     @Transactional
     public InvitationResponseDTO.createInvitation createInvitation(User user, InvitationRequestDTO.createInvitation request){
-
         // 트리 찾기
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(request.getTreehouseId());
         // 초대 멤버 찾기
@@ -92,8 +93,10 @@ public class InvitationService {
     public InvitationResponseDTO.invitationAccept decisionInvitation(User user, InvitationRequestDTO.invitationAcceptDecision request){
         // 해당 User 에게 온 초대장인지 검증하는 로직 추가
         Long treehouseId = 0L;
+        Invitation invitation = invitationQueryAdapter.findById(request.getInvitationId());
+
         if (request.isAcceptDecision()==true) {
-            treehouseId = 1L; // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
+            treehouseId = invitation.getTreeHouse().getId(); // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
         }
         return InvitationMapper.toInvitationResult(treehouseId);
     }
