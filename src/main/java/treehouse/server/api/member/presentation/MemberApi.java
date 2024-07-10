@@ -41,6 +41,17 @@ public class MemberApi {
         return CommonResponse.onSuccess(memberService.getMyProfile(user, treehouseId));
     }
 
+    @GetMapping("/treehouses/{treehouseId}/profiles/{memberId}")
+    @Operation(summary = "멤버 프로필 조회 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 특정 멤버의 프로필을 조회합니다.")
+    public CommonResponse<MemberResponseDTO.getProfile> getMemberProfile(
+            @PathVariable(name = "treehouseId") Long treehouseId,
+            @PathVariable(name = "memberId") Long memberId,
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(memberService.getMemberProfile(user, memberId, treehouseId));
+    }
+
+
     @PatchMapping("/treehouses/{treehouseId}/profiles/myProfile")
     @Operation(summary = "내 프로필 수정 \uD83D\uDC64 ✅", description = "특정 트리하우스에서 내 프로필을 수정합니다.")
     public CommonResponse<MemberResponseDTO.updateProfile> updateProfile(
