@@ -23,6 +23,7 @@ public class Invitation extends BaseDateTimeEntity {
     private String phone;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private InvitationStatus status;
 
     private LocalDateTime expiredAt; //초대장 만료일자
