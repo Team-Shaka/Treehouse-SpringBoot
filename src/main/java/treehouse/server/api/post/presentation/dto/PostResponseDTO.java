@@ -31,6 +31,28 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class getOnlyPostDetail {
+        private Long postId;
+        private String context;
+        private List<String> pictureUrlList;
+        private Integer commentCount;
+        private ReactionResponseDTO.getReactionList reactionList;
+        private String postedAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getMemberPostList {
+        private MemberResponseDTO.getWriterProfile memberProfile;
+        List<getOnlyPostDetail> postList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class createPostResult{
 
         @Schema(description = "생성 된 포스트 ID", example = "1")

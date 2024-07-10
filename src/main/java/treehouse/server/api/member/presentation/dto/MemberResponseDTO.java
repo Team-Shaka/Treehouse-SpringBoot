@@ -47,4 +47,5 @@ public class MemberResponseDTO {
     public static class updateProfile {
         private Long memberId;
     }
+
 }

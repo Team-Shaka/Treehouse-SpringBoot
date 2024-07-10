@@ -31,6 +31,24 @@ public class PostMapper {
                 .build();
     }
 
+    public static PostResponseDTO.getOnlyPostDetail toGetOnlyPostDetails(Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
+        return PostResponseDTO.getOnlyPostDetail.builder()
+                .postId(post.getId())
+                .context(post.getContent())
+                .pictureUrlList(postImageUrlList)
+                .commentCount(post.getCommentList().size())
+                .reactionList(reactionList)
+                .postedAt(TimeFormatter.format(post.getCreatedAt()))
+                .build();
+    }
+
+    public static PostResponseDTO.getMemberPostList toGetMemberPostList(Member targetMember, List<PostResponseDTO.getOnlyPostDetail> onlyPostDetailList) {
+        return PostResponseDTO.getMemberPostList.builder()
+                .memberProfile(MemberMapper.toGetWriterProfile(targetMember))
+                .postList(onlyPostDetailList)
+                .build();
+    }
+
     public static Post toPost(PostRequestDTO.createPost request, Member member, TreeHouse treeHouse){
         return Post.builder()
                 .content(request.getContext())
