@@ -65,14 +65,17 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // POST + 404 Not Found - 찾을 수 없음
     POST_NOT_FOUND(NOT_FOUND, "POST404_1", "존재하지 않는 게시글입니다."),
 
-    // COMMENT + 404 Not Found - 찾을 수 없음
-    COMMENT_NOT_FOUND(NOT_FOUND, "COMMENT404_1", "존재하지 않는 댓글입니다."),
-
     // COMMENT + 403 Forbidden - 금지됨
     COMMENT_SELF_REPORT(FORBIDDEN, "COMMENT403_1", "자신의 댓글은 신고할 수 없습니다."),
 
     // COMMENT + 403 Forbidden
     COMMENT_DELETE_FORBIDDEN(FORBIDDEN, "COMMENT403_2", "자신이 작성한 게시글에 대한 댓글이나 자신이 작성한 댓글만 삭제 가능합니다."),
+
+    // COMMENT + 404 Not Found - 찾을 수 없음
+    COMMENT_NOT_FOUND(NOT_FOUND, "COMMENT404_1", "존재하지 않는 댓글입니다."),
+
+    // REPLY + 400 Bad Request - 잘못된 요청
+    REPLY_CREATE_BAD_REQUEST(BAD_REQUEST, "REPLY400_1", "댓글에 대해서만 대댓글 작성 가능합니다."),
 
     // REPLY + 404 Not Found - 찾을 수 없음
     REPLY_NOT_FOUND(NOT_FOUND, "REPLY404_1", "존재하지 않는 답글입니다."),

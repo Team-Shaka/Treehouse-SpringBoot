@@ -169,6 +169,9 @@ public class CommentService {
 
     public CommentResponseDTO.CommentIdResponseDto createReply(User user, Long treehouseId, Long postId, Long parentId, CommentRequestDTO.createComment request){
 
+        if(commentQueryAdapter.getCommentById(parentId).getParentId()!=-1L){
+            throw new CommentException(GlobalErrorCode.REPLY_CREATE_BAD_REQUEST);
+        }
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Post post = postQueryAdapter.findById(postId);
         Member writer = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
