@@ -181,8 +181,13 @@ public class CommentService {
     public void deleteComment(User user, Long treehouseId, Long postId, Long commentId) {
 
         Comment comment = commentQueryAdapter.getCommentById(commentId);
+        Member loginMember = memberQueryAdapter.findByUserAndTreehouse(user, treehouseQueryAdapter.getTreehouseById(treehouseId));
+        Member commentWriter = commentQueryAdapter.getCommentById(commentId).getWriter();
+        Member postWriter = postQueryAdapter.findById(postId).getWriter();
 
-        commentCommandAdapter.deleteComment(comment);
+        if (loginMember.getId() == commentWriter.getId() || loginMember.getId() == postWriter.getId()) {
+            commentCommandAdapter.deleteComment(comment);
+        } else throw new CommentException(GlobalErrorCode.COMMENT_DELETE_FORBIDDEN);
     }
 
     @Transactional
