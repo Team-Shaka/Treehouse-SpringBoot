@@ -37,7 +37,7 @@ public class CommentApi {
         return CommonResponse.onSuccess(null);
     }
 
-    @Operation(summary = "댓글 목록 조회 API 🔑", description = "댓글 목록을 조회하는 API 입니다.")
+    @Operation(summary = "댓글 목록 조회 API 🔑 ✅", description = "댓글 목록을 조회하는 API 입니다.")
     @GetMapping()
     public CommonResponse<CommentResponseDTO.CommentListDto> getComments(
             @PathVariable(name = "treehouseId") Long treehouseId,
@@ -50,7 +50,7 @@ public class CommentApi {
     }
 
     @PostMapping("")
-    @Operation(summary = "댓글 작성 API 🔑", description = "특정 Post에 대해서 댓글을 작성하는 API 입니다.")
+    @Operation(summary = "댓글 작성 API 🔑 ✅", description = "특정 Post에 대해서 댓글을 작성하는 API 입니다.")
     public CommonResponse<CommentResponseDTO.CommentIdResponseDto> createComment(
             @PathVariable(name = "treehouseId")Long treehouseId,
             @PathVariable(name = "postId")Long postId,
@@ -62,7 +62,7 @@ public class CommentApi {
     }
 
     @PostMapping("/{commentId}")
-    @Operation(summary = "대댓글 작성 API 🔑", description = "특정 Comment에 대해서 대댓글을 작성하는 API 입니다.")
+    @Operation(summary = "대댓글 작성 API 🔑 ✅", description = "특정 Comment에 대해서 대댓글을 작성하는 API 입니다.")
     public CommonResponse<CommentResponseDTO.CommentIdResponseDto> createReply(
             @PathVariable(name = "treehouseId")Long treehouseId,
             @PathVariable(name = "postId")Long postId,
@@ -75,7 +75,7 @@ public class CommentApi {
     }
 
     @DeleteMapping("/{commentId}")
-    @Operation(summary = "댓글 삭제 API 🔑", description = "댓글을 삭제하는 API 입니다.")
+    @Operation(summary = "댓글 삭제 API 🔑 ✅", description = "댓글을 삭제하는 API 입니다.")
     public CommonResponse deleteComment(
             @PathVariable(name = "treehouseId")Long treehouseId,
             @PathVariable(name = "postId")Long postId,
@@ -88,7 +88,7 @@ public class CommentApi {
     }
 
     @PostMapping("/{commentId}/reactions")
-    @Operation(summary = "댓글 반응 API 🔑", description = "댓글에 감정표현을 남기는 API 입니다.")
+    @Operation(summary = "댓글 반응 API 🔑 ✅", description = "댓글에 감정표현을 남기는 API 입니다.")
     public CommonResponse<String> reactToComment(
             @PathVariable(name = "treehouseId")Long treehouseId,
             @PathVariable(name = "postId")Long postId,
