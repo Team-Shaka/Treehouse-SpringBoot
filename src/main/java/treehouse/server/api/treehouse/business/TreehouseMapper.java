@@ -20,4 +20,13 @@ public class TreehouseMapper {
                 .treehouseId(treehouse.getId())
                 .build();
     }
+
+    public static TreehouseResponseDTO.getTreehouseDetails toGetTreehouseDetails(TreeHouse treehouse) {
+        return TreehouseResponseDTO.getTreehouseDetails.builder()
+                .treehouseId(treehouse.getId())
+                .treehouseName(treehouse.getName())
+                .treehouseSize(treehouse.getMemberList().size())
+                .treehouseImageUrl(null) //TODO: 이미지 URL 설정
+                .build();
+    }
 }

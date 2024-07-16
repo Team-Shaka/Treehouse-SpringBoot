@@ -13,6 +13,7 @@ public class InvitationResponseDTO {
     @AllArgsConstructor
     public static class getInvitation {
         private Long invitationId;
+        private Long treehouseId;
         private String treehouseName;
         private String senderName;
         private String senderProfileImageUrl;

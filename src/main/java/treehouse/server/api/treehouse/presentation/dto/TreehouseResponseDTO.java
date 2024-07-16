@@ -13,4 +13,16 @@ public class TreehouseResponseDTO {
 
         private Long treehouseId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getTreehouseDetails {
+
+        private Long treehouseId;
+        private String treehouseName;
+        private Integer treehouseSize;
+        private String treehouseImageUrl;
+    }
 }

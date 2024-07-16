@@ -7,6 +7,7 @@ import treehouse.server.api.post.presentation.dto.PostResponseDTO;
 import treehouse.server.api.member.business.MemberMapper;
 import treehouse.server.api.reaction.presentation.dto.ReactionResponseDTO;
 import treehouse.server.global.common.util.TimeFormatter;
+import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
@@ -19,9 +20,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostMapper {
 
-    public static PostResponseDTO.getPostDetails toGetPostDetails(Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
+    public static PostResponseDTO.getPostDetails toGetPostDetails(Member member, List<Branch> branches, Post post, List<String> postImageUrlList, ReactionResponseDTO.getReactionList reactionList) {
         return PostResponseDTO.getPostDetails.builder()
-                .memberProfile(MemberMapper.toGetWriterProfile(post.getWriter()))
+                .memberProfile(MemberMapper.toGetWriterProfile(member, post.getWriter(), branches))
                 .postId(post.getId())
                 .context(post.getContent())
                 .pictureUrlList(postImageUrlList)
@@ -42,9 +43,9 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostResponseDTO.getMemberPostList toGetMemberPostList(Member targetMember, List<PostResponseDTO.getOnlyPostDetail> onlyPostDetailList) {
+    public static PostResponseDTO.getMemberPostList toGetMemberPostList(Member member, Member targetMember, List<PostResponseDTO.getOnlyPostDetail> onlyPostDetailList, List<Branch> branches) {
         return PostResponseDTO.getMemberPostList.builder()
-                .memberProfile(MemberMapper.toGetWriterProfile(targetMember))
+                .memberProfile(MemberMapper.toGetWriterProfile(member, targetMember, branches))
                 .postList(onlyPostDetailList)
                 .build();
     }
