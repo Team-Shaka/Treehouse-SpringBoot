@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.branch.implementation.BranchQueryAdapter;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
 import treehouse.server.api.post.implement.PostCommandAdapter;
 import treehouse.server.api.post.implement.PostImageCommandAdapter;
@@ -25,6 +26,7 @@ import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
@@ -65,6 +67,9 @@ public class PostService {
     private final ReactionQueryAdapter reactionQueryAdapter;
 
     private final ReportQueryAdapter reportQueryAdapter;
+
+    private final BranchQueryAdapter branchQueryAdapter;
+
     /**
      * 게시글 상세조회
      *
@@ -100,7 +105,8 @@ public class PostService {
 
         ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
 
-        return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
+        List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treehouse); // 트리하우스 내 모든 브랜치 조회
+        return PostMapper.toGetPostDetails(member, branches, post, postImageUrlList, reactionDtoList);
     }
 
     public PostResponseDTO.createPostResult createPost(User user, PostRequestDTO.createPost request, Long treehouseId) {
@@ -142,6 +148,7 @@ public class PostService {
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+        List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treehouse);
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Post> postList = postQueryAdapter.findAllByTreehouse(treehouse, pageable);
@@ -170,7 +177,7 @@ public class PostService {
                             ));
 
                     ReactionResponseDTO.getReactionList reactionDtoList = ReactionMapper.toGetReactionList(reactionMap);
-                    return PostMapper.toGetPostDetails(post, postImageUrlList, reactionDtoList);
+                    return PostMapper.toGetPostDetails(member, branches, post, postImageUrlList, reactionDtoList);
                 })
                 .collect(Collectors.toList());
 
@@ -183,6 +190,7 @@ public class PostService {
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
         Member targetMember = memberQueryAdapter.findById(targetMemberId);
+        List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treehouse);
 
         List<Post> postListByMember = postQueryAdapter.findAllByTreeHouseAndWriter(treehouse, targetMember, pageable);
 
@@ -211,7 +219,7 @@ public class PostService {
                 })
                 .collect(Collectors.toList());
 
-        return PostMapper.toGetMemberPostList(targetMember, postDtoList);
+        return PostMapper.toGetMemberPostList(member, targetMember, postDtoList, branches);
     }
 
 

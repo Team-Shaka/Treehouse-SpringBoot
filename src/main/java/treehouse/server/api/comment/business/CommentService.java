@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.branch.implementation.BranchQueryAdapter;
 import treehouse.server.api.comment.implementation.CommentCommandAdapter;
 import treehouse.server.api.comment.implementation.CommentQueryAdapter;
 import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
@@ -23,6 +24,7 @@ import treehouse.server.api.report.implementation.ReportQueryAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.comment.CommentType;
 import treehouse.server.global.entity.member.Member;
@@ -59,6 +61,8 @@ public class CommentService {
     private final ReactionCommandAdapter reactionCommandAdapter;
     private final ReactionQueryAdapter reactionQueryAdapter;
 
+    private final BranchQueryAdapter branchQueryAdapter;
+
 
     public void reportComment(User user, CommentRequestDTO.reportComment request, Long treehouseId, Long postId, Long commentId){
 
@@ -86,6 +90,7 @@ public class CommentService {
 
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
+        List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treehouse);
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
 //        List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
@@ -134,11 +139,11 @@ public class CommentService {
                                         ));
                                 ReactionResponseDTO.getReactionList replyReactionDtoList = ReactionMapper.toGetReactionList(replyReactionMap);
 
-                                return CommentMapper.toReplyInfoDto(reply, replyReactionDtoList);
+                                return CommentMapper.toReplyInfoDto(member, branches, reply, replyReactionDtoList);
                             })
                             .collect(Collectors.toList());
 
-                    return CommentMapper.toCommentInfoDto(comment, reactionDtoList,replyInfoDtoList);
+                    return CommentMapper.toCommentInfoDto(member, branches, comment, reactionDtoList,replyInfoDtoList);
                 })
                 .collect(Collectors.toList());
 
