@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import treehouse.server.api.treehouse.business.TreehouseService;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseRequestDTO;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseResponseDTO;
@@ -30,5 +27,13 @@ public class TreehouseApi {
             @RequestBody TreehouseRequestDTO.createTreehouse request
     ) {
         return CommonResponse.onSuccess(treehouseService.createTreehouse(request));
+    }
+
+    @GetMapping("/{treehouseId}")
+    @Operation(summary = "트리하우스 조회 🔑", description = "트리하우스 정보를 조회합니다.")
+    public CommonResponse<TreehouseResponseDTO.getTreehouseDetails> getTreehouseDetails(
+            @PathVariable Long treehouseId
+    ) {
+        return CommonResponse.onSuccess(treehouseService.getTreehouseDetails(treehouseId));
     }
 }
