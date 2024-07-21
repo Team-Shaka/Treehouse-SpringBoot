@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.branch.implementation.BranchQueryAdapter;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
+import treehouse.server.api.notification.business.NotificationService;
+import treehouse.server.api.notification.presentation.dto.NotificationRequestDTO;
 import treehouse.server.api.post.implement.PostCommandAdapter;
 import treehouse.server.api.post.implement.PostImageCommandAdapter;
 import treehouse.server.api.post.implement.PostQueryAdapter;
@@ -28,6 +30,7 @@ import treehouse.server.global.constants.Consts;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.member.Member;
+import treehouse.server.global.entity.notification.NotificationType;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.post.PostImage;
 import treehouse.server.global.entity.reaction.Reaction;
@@ -69,6 +72,8 @@ public class PostService {
     private final ReportQueryAdapter reportQueryAdapter;
 
     private final BranchQueryAdapter branchQueryAdapter;
+
+    private final NotificationService notificationService;
 
     /**
      * 게시글 상세조회
@@ -299,6 +304,13 @@ public class PostService {
         Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
         member.addReaction(savedReaction);
+
+        //알림 생성
+        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+        notificationRequest.setReceiverId(post.getWriter().getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setTargetId(post.getId());
+        notificationRequest.setType(NotificationType.POST_REACTION); // 알림 타입 설정 (예시)
+        notificationService.createNotification(user, treehouseId, notificationRequest, savedReaction.getReactionName());
 
         return request.getReactionName() + " is saved";
     }
