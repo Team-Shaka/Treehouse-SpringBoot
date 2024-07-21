@@ -13,6 +13,8 @@ import treehouse.server.api.comment.implementation.CommentQueryAdapter;
 import treehouse.server.api.comment.presentation.dto.CommentRequestDTO;
 import treehouse.server.api.comment.presentation.dto.CommentResponseDTO;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
+import treehouse.server.api.notification.business.NotificationService;
+import treehouse.server.api.notification.presentation.dto.NotificationRequestDTO;
 import treehouse.server.api.post.implement.PostQueryAdapter;
 import treehouse.server.api.reaction.business.ReactionMapper;
 import treehouse.server.api.reaction.implementation.ReactionCommandAdapter;
@@ -28,6 +30,7 @@ import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.comment.Comment;
 import treehouse.server.global.entity.comment.CommentType;
 import treehouse.server.global.entity.member.Member;
+import treehouse.server.global.entity.notification.NotificationType;
 import treehouse.server.global.entity.post.Post;
 import treehouse.server.global.entity.reaction.Reaction;
 import treehouse.server.global.entity.report.Report;
@@ -62,6 +65,8 @@ public class CommentService {
     private final ReactionQueryAdapter reactionQueryAdapter;
 
     private final BranchQueryAdapter branchQueryAdapter;
+
+    private final NotificationService notificationService;
 
 
     public void reportComment(User user, CommentRequestDTO.reportComment request, Long treehouseId, Long postId, Long commentId){
@@ -161,6 +166,14 @@ public class CommentService {
 
         Comment comment = CommentMapper.toComment(writer, post, request.getContext(), CommentType.PARENT, -1L);
         Long commentId = commentCommandAdapter.createComment(comment).getId();
+
+        //알림 생성
+        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+        notificationRequest.setReceiverId(post.getWriter().getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setTargetId(post.getId());
+        notificationRequest.setType(NotificationType.COMMENT); // 알림 타입 설정 (예시)
+        notificationService.createNotification(user, treehouseId, notificationRequest, null);
+
         return CommentMapper.toIdResponseDto(commentId);
     }
 
@@ -175,6 +188,13 @@ public class CommentService {
 
         Comment comment = CommentMapper.toComment(writer, post, request.getContext(), CommentType.CHILD, parentId);
         Long replyId = commentCommandAdapter.createComment(comment).getId();
+        //알림 생성
+        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+        notificationRequest.setReceiverId(comment.getWriter().getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setTargetId(comment.getId());
+        notificationRequest.setType(NotificationType.REPLY); // 알림 타입 설정 (예시)
+        notificationService.createNotification(user, treehouseId, notificationRequest, null);
+
         return CommentMapper.toIdResponseDto(replyId);
     }
 
@@ -207,6 +227,13 @@ public class CommentService {
         Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
         member.addReaction(savedReaction);
+
+        //알림 생성
+        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+        notificationRequest.setReceiverId(comment.getWriter().getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setTargetId(comment.getId());
+        notificationRequest.setType(NotificationType.COMMENT_REACTION); // 알림 타입 설정 (예시)
+        notificationService.createNotification(user, treehouseId, notificationRequest, savedReaction.getReactionName());
 
         return request.getReactionName() + " is saved";
     }

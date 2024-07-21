@@ -4,11 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.member.implementation.MemberQueryAdapter;
+import treehouse.server.api.notification.implement.NotificationCommandAdapter;
 import treehouse.server.api.notification.implement.NotificationQueryAdapter;
+import treehouse.server.api.notification.presentation.dto.NotificationRequestDTO;
 import treehouse.server.api.notification.presentation.dto.NotificationResponseDTO;
+import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.notification.Notification;
+import treehouse.server.global.entity.treeHouse.TreeHouse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +23,28 @@ import java.util.stream.Collectors;
 @Slf4j
 public class NotificationService {
 
+    private final NotificationCommandAdapter notificationCommandAdapter;
     private final NotificationQueryAdapter notificationQueryAdapter;
+
+    private final MemberQueryAdapter memberQueryAdapter;
+
+    private final TreehouseQueryAdapter treehouseQueryAdapter;
+
+    /**
+     * 알림 생성하는 로직
+     * @param user
+     * @return
+     */
+
+    @Transactional
+    public void createNotification(User user, Long treehouseId, NotificationRequestDTO.createNotification request, String reactionName) {
+        TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
+        Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse);
+        Member receiver = memberQueryAdapter.findById(request.getReceiverId());
+
+        Notification notification = NotificationMapper.toNotification(sender, receiver, request, reactionName);
+        notificationCommandAdapter.createNotification(notification);
+    }
 
     /**
      * 사용자의 알림을 조회하는 로직
@@ -39,5 +65,17 @@ public class NotificationService {
                 })
                 .collect(Collectors.toList());
         return NotificationMapper.toGetNotifications(notificationDtos);
+    }
+
+    /**
+     * 사용자의 알림을 읽음 처리하는 로직
+     * @param user
+     * @return
+     */
+    @Transactional
+    public NotificationResponseDTO.readNotification readNotification(User user, Long notificationId){
+        Notification notification = notificationQueryAdapter.findById(notificationId);
+        notificationCommandAdapter.readNotification(notification);
+        return NotificationMapper.toReadNotification(notification);
     }
 }
