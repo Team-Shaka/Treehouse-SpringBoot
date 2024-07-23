@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import treehouse.server.api.notification.business.NotificationService;
 import treehouse.server.api.notification.presentation.dto.NotificationResponseDTO;
@@ -29,5 +31,14 @@ public class NotificationApi {
             @AuthMember @Parameter(hidden = true) User user
     ){
         return CommonResponse.onSuccess(notificationService.getNotifications(user));
+    }
+
+    @PostMapping("/users/notifications/{notificationId}")
+    @Operation(summary = "알림 확인 🔑 ✅", description = "사용자의 알림을 확인하여 '읽음' 상태로 변경합니다.")
+    public CommonResponse<NotificationResponseDTO.readNotification> readNotification(
+            @AuthMember @Parameter(hidden = true) User user,
+            @PathVariable Long notificationId
+    ){
+        return CommonResponse.onSuccess(notificationService.readNotification(user, notificationId));
     }
 }

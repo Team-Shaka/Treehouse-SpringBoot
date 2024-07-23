@@ -9,11 +9,14 @@ import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
 import treehouse.server.api.invitation.presentation.dto.InvitationResponseDTO;
 import treehouse.server.api.member.implementation.MemberQueryAdapter;
+import treehouse.server.api.notification.business.NotificationService;
+import treehouse.server.api.notification.presentation.dto.NotificationRequestDTO;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
+import treehouse.server.global.entity.notification.NotificationType;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.InvitationException;
@@ -37,6 +40,8 @@ public class InvitationService {
     private final MemberQueryAdapter memberQueryAdapter;
 
     private final UserQueryAdapter userQueryAdapter;
+
+    private final NotificationService notificationService;
 
     private static final Integer treeMemberRandomProfileSize = 3;
 
@@ -83,6 +88,13 @@ public class InvitationService {
         // 초대장 만들어서 저장하기
 
         Invitation invitation = invitationCommandAdapter.saveInvitation(InvitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
+
+        //알림 생성
+        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+        notificationRequest.setReceiverId(receiverUser.getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setTargetId(invitation.getId());
+        notificationRequest.setType(NotificationType.INVITATION); // 알림 타입 설정 (예시)
+        notificationService.createNotification(user, invitation.getTreeHouse().getId(), notificationRequest, null);
 
         // 리턴하기
 
