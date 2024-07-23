@@ -1,10 +1,7 @@
 package treehouse.server.global.entity.notification;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 
@@ -23,6 +20,8 @@ public class Notification extends BaseDateTimeEntity {
     private String title;
 
     private String body;
+
+    @Setter
     private boolean isChecked;
 
     @Enumerated(EnumType.STRING)
