@@ -66,6 +66,7 @@ public class UserMapper {
     public static UserResponseDTO.loginMember toLogin(User user, String accessToken, String refreshToken, List<Long> treehouseIdList){
         return UserResponseDTO.loginMember.builder()
                 .userId(user.getId())
+                .userName(user.getName())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .treehouseIdList(treehouseIdList)

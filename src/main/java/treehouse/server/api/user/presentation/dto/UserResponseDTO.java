@@ -67,6 +67,7 @@ public class UserResponseDTO {
     public static class loginMember {
 
         private Long userId;
+        private String userName;
         private String accessToken;
         private String refreshToken;
         private List<Long> treehouseIdList;
