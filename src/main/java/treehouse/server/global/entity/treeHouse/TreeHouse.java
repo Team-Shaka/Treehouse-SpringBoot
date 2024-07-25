@@ -21,6 +21,8 @@ public class TreeHouse extends BaseDateTimeEntity {
 
     private String name;
 
+    private String treehouseImageUrl;
+
     @OneToMany(mappedBy = "treeHouse")
     private List<Member> memberList;
 

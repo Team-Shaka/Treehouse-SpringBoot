@@ -6,6 +6,8 @@ import treehouse.server.api.treehouse.presentation.dto.TreehouseRequestDTO;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseResponseDTO;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TreehouseMapper {
 
@@ -26,7 +28,13 @@ public class TreehouseMapper {
                 .treehouseId(treehouse.getId())
                 .treehouseName(treehouse.getName())
                 .treehouseSize(treehouse.getMemberList().size())
-                .treehouseImageUrl(null) //TODO: 이미지 URL 설정
+                .treehouseImageUrl(treehouse.getTreehouseImageUrl())
+                .build();
+    }
+
+    public static TreehouseResponseDTO.getTreehouses toGetTreehouses(List<TreehouseResponseDTO.getTreehouseDetails> treehouseDtos) {
+        return TreehouseResponseDTO.getTreehouses.builder()
+                .treehouses(treehouseDtos)
                 .build();
     }
 }
