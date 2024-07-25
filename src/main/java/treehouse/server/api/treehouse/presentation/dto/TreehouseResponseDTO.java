@@ -2,6 +2,8 @@ package treehouse.server.api.treehouse.presentation.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TreehouseResponseDTO {
 
@@ -24,5 +26,13 @@ public class TreehouseResponseDTO {
         private String treehouseName;
         private Integer treehouseSize;
         private String treehouseImageUrl;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getTreehouses {
+        List<getTreehouseDetails> treehouses;
     }
 }

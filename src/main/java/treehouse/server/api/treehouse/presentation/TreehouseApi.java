@@ -1,6 +1,7 @@
 package treehouse.server.api.treehouse.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import treehouse.server.api.treehouse.business.TreehouseService;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseRequestDTO;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseResponseDTO;
 import treehouse.server.global.common.CommonResponse;
+import treehouse.server.global.entity.User.User;
+import treehouse.server.global.security.handler.annotation.AuthMember;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,5 +38,13 @@ public class TreehouseApi {
             @PathVariable Long treehouseId
     ) {
         return CommonResponse.onSuccess(treehouseService.getTreehouseDetails(treehouseId));
+    }
+
+    @GetMapping
+    @Operation(summary = "내 트리하우스 조회 🔑", description = "내가 가입한 트리하우스 목록을 조회합니다.")
+    public CommonResponse<TreehouseResponseDTO.getTreehouses> getTreehouses(
+            @AuthMember @Parameter(hidden = true) User user
+    ) {
+        return CommonResponse.onSuccess(treehouseService.getTreehouses(user));
     }
 }

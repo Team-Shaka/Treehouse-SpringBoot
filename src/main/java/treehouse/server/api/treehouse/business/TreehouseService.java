@@ -9,7 +9,11 @@ import treehouse.server.api.treehouse.implementation.TreehouseCommandAdapter;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseRequestDTO;
 import treehouse.server.api.treehouse.presentation.dto.TreehouseResponseDTO;
+import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +39,15 @@ public class TreehouseService {
         return TreehouseMapper.toGetTreehouseDetails(treehouse);
     }
 
+    public TreehouseResponseDTO.getTreehouses getTreehouses(User user) {
+        List<Member> memberList = user.getMemberList();
+
+        List<TreehouseResponseDTO.getTreehouseDetails> treehouseDtos = memberList.stream()
+                .map(Member::getTreeHouse)
+                .map(TreehouseMapper::toGetTreehouseDetails)
+                .toList();
+
+        return TreehouseMapper.toGetTreehouses(treehouseDtos);
+    }
 
 }
