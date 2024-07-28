@@ -67,6 +67,7 @@ public class UserMapper {
         return UserResponseDTO.loginMember.builder()
                 .userId(user.getId())
                 .userName(user.getName())
+                .profileImageUrl(user.getProfileImageUrl())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .treehouseIdList(treehouseIdList)
