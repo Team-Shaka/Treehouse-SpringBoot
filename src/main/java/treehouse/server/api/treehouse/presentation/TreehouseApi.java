@@ -3,6 +3,7 @@ package treehouse.server.api.treehouse.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ public class TreehouseApi {
     @PostMapping
     @Operation(summary = "트리하우스 생성 🔑", description = "트리하우스를 생성합니다.")
     public CommonResponse<TreehouseResponseDTO.createTreehouse> createTreehouse(
-            @RequestBody TreehouseRequestDTO.createTreehouse request
+            @Valid @RequestBody TreehouseRequestDTO.createTreehouse request
     ) {
         return CommonResponse.onSuccess(treehouseService.createTreehouse(request));
     }
