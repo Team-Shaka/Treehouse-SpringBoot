@@ -11,6 +11,7 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     public static class registerMember {
         private Long userId;
+        private Long memberId;
         private Long treehouseId;
     }
 
