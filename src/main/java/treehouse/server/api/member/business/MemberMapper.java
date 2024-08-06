@@ -34,6 +34,7 @@ public class MemberMapper {
     public static MemberResponseDTO.registerMember toRegister(Member member) {
         return MemberResponseDTO.registerMember.builder()
                 .userId(member.getUser().getId())
+                .memberId(member.getId())
                 .treehouseId(member.getTreeHouse().getId())
                 .build();
     }
