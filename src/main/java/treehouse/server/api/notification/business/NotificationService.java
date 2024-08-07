@@ -15,6 +15,7 @@ import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.notification.Notification;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,7 @@ public class NotificationService {
         List<Notification> notifications = members.stream()
                 .map(Member::getNotificationList)
                 .flatMap(List::stream)
+                .sorted(Comparator.comparing(Notification::getCreatedAt).reversed()) // createdAt 기준으로 내림차순 정렬
                 .toList();
 
         List<NotificationResponseDTO.getNotification> notificationDtos = notifications.stream()
