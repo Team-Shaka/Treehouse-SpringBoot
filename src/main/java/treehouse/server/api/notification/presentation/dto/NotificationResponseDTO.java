@@ -13,6 +13,7 @@ public class NotificationResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class getNotification {
+        private Long notificationId;
         private NotificationType type;
         private String title;
         private String body;

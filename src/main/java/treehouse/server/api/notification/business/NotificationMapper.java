@@ -31,6 +31,7 @@ public class NotificationMapper {
 
     public static NotificationResponseDTO.getNotification toGetNotification(Notification notification, User user) {
         return NotificationResponseDTO.getNotification.builder()
+                .notificationId(notification.getId())
                 .type(notification.getType())
                 .profileImageUrl(notification.getSender().getProfileImageUrl())
                 .userName(notification.getSender().getName())
