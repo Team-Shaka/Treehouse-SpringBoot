@@ -36,6 +36,8 @@ spring:
   config:
     activate:
       on-profile: "dev"
+  jackson:
+    time-zone: Asia/Seoul
   datasource:
     username: ${aws.db.username}
     password: ${aws.db.password}
