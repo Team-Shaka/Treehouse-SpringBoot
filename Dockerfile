@@ -7,6 +7,10 @@ COPY ${JAR_FILE} app.jar
 
 # 최종 이미지 생성
 FROM eclipse-temurin:17-jdk
+
+# 시간대 설정 추가
+ENV TZ=Asia/Seoul
+
 COPY --from=0 app.jar app.jar
 
 # 애플리케이션 실행 스크립트 추가
