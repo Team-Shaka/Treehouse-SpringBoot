@@ -20,10 +20,10 @@ public class NotificationUtil {
         titleMap.put(NotificationType.COMMENT_REACTION, "댓글 반응 알림");
 
         bodyMap.put(NotificationType.COMMENT, (sender, targetId, reactionName) -> "님이 댓글을 남겼습니다.");
-        bodyMap.put(NotificationType.REPLY, (sender, targetId, reactionName) -> sender.getName() + "님이 답글을 남겼습니다.");
-        bodyMap.put(NotificationType.INVITATION, (sender, targetId, reactionName) -> sender.getName() + "님이 트리하우스에 초대했습니다.");
-        bodyMap.put(NotificationType.POST_REACTION, (sender, targetId, reactionName) -> sender.getName() + "님이 게시글에 " + reactionName + "을(를) 눌렀습니다.");
-        bodyMap.put(NotificationType.COMMENT_REACTION, (sender, targetId, reactionName) -> sender.getName() + "님이 댓글에 " + reactionName + "을(를) 눌렀습니다.");
+        bodyMap.put(NotificationType.REPLY, (sender, targetId, reactionName) -> "님이 답글을 남겼습니다.");
+        bodyMap.put(NotificationType.INVITATION, (sender, targetId, reactionName) -> "님이 트리하우스에 초대했습니다.");
+        bodyMap.put(NotificationType.POST_REACTION, (sender, targetId, reactionName) -> "님이 게시글에 " + reactionName + "을(를) 눌렀습니다.");
+        bodyMap.put(NotificationType.COMMENT_REACTION, (sender, targetId, reactionName) -> "님이 댓글에 " + reactionName + "을(를) 눌렀습니다.");
     }
 
     public static String getTitle(NotificationType type) {
