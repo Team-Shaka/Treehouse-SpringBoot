@@ -50,4 +50,8 @@ public class TreehouseService {
         return TreehouseMapper.toGetTreehouses(treehouseDtos);
     }
 
+    public TreehouseResponseDTO.checkTreehouseName checkTreehouseName(TreehouseRequestDTO.checkTreehouseName request) {
+        boolean isAvailable = treehouseQueryAdapter.isTreehouseNameAvailable(request.getTreehouseName());
+        return TreehouseMapper.toCheckTreehouseName(isAvailable);
+    }
 }

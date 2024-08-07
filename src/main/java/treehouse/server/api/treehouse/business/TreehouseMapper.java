@@ -37,4 +37,10 @@ public class TreehouseMapper {
                 .treehouses(treehouseDtos)
                 .build();
     }
+
+    public static TreehouseResponseDTO.checkTreehouseName toCheckTreehouseName(boolean isAvailable) {
+        return TreehouseResponseDTO.checkTreehouseName.builder()
+                .isAvailable(isAvailable)
+                .build();
+    }
 }
