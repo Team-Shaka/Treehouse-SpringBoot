@@ -48,4 +48,12 @@ public class TreehouseApi {
     ) {
         return CommonResponse.onSuccess(treehouseService.getTreehouses(user));
     }
+
+    @GetMapping("/checkName")
+    @Operation(summary = "트리하우스 이름 중복 확인 🔑", description = "트리하우스 이름 중복을 확인합니다.")
+    public CommonResponse<TreehouseResponseDTO.checkTreehouseName> checkTreehouseName(
+            @RequestBody TreehouseRequestDTO.checkTreehouseName request
+    ) {
+        return CommonResponse.onSuccess(treehouseService.checkTreehouseName(request));
+    }
 }

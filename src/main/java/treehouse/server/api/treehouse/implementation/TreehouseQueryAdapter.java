@@ -19,4 +19,8 @@ public class TreehouseQueryAdapter {
     public TreeHouse getTreehouseById(Long treehouseId){
         return treehouseRepository.findById(treehouseId).orElseThrow(()->new TreehouseException(GlobalErrorCode.TREEHOUSE_NOT_FOUND));
     }
+
+    public boolean isTreehouseNameAvailable(String name) {
+        return !treehouseRepository.existsByName(name);
+    }
 }
