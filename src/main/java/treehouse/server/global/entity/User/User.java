@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 
@@ -47,6 +48,8 @@ public class User extends BaseDateTimeEntity {
     //  - 만약 특정 User가 특정 Tree에 들어간 적이 있는지 알아야 한다면
     private LocalDateTime inactivatedAt; //탈퇴일자
 
+    @ColumnDefault("false")
+    private boolean pushAgree;
 
     @OneToMany(mappedBy = "user")
     private List<Member> memberList;
@@ -54,4 +57,10 @@ public class User extends BaseDateTimeEntity {
     public void addMember(Member member) {
         memberList.add(member);
     }
+
+    public boolean updatePushAgree(boolean pushAgree){
+        this.pushAgree=pushAgree;
+        return this.pushAgree;
+    }
+
 }
