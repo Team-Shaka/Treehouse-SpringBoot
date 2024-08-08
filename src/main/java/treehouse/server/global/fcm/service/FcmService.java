@@ -33,7 +33,7 @@ public class FcmService {
                 .setNotification(
                         Notification.builder()
                                 .setTitle("TreeHouse FCM 테스트")
-                                .setBody("테스트 성공했나요??")
+                                .setBody("TreeHouse 메시지를 성공적으로 수신하였습니당")
                                 .build())
                 .build();
         try {
@@ -43,6 +43,7 @@ public class FcmService {
             throw new FcmException(GlobalErrorCode.FCM_SEND_MESSAGE_ERROR);
         }
     }
+
 
     public void sendFcmMessage(User receiver, String title, String body) {
         if (receiver.isPushAgree() == false) {

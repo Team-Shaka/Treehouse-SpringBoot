@@ -146,6 +146,10 @@ jwt:
   access-token-validity-in-seconds: 2000000 # 30 m
   refresh-token-validity-in-seconds: 3000000 # 14 d
 
+firebase:
+  admin-sdk: firebase-adminsdk-keyfile.json
+
+
 cloud:
   aws:
     lambda:
