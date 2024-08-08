@@ -75,7 +75,8 @@ jwt:
   authorities-key: authoritiesKey
   access-token-validity-in-seconds: 180000 # 3 min
   refresh-token-validity-in-seconds: 600000 # 5 min
-
+firebase:
+  admin-sdk: firebase-adminsdk-keyfile.json
 
 
 cloud:
