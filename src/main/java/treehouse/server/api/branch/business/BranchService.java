@@ -40,6 +40,7 @@ public class BranchService {
      * @param targetMemberId
      * @return BranchResponseDTO.getMemberBranchView
      */
+
     public BranchResponseDTO.getMemberBranchView getMemberBranchView(User user, Long treehouseId, Long targetMemberId) {
 
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
@@ -65,6 +66,7 @@ public class BranchService {
         return BranchMapper.toBranchView(nodes, links, rootId, targetMemberId);
 
     }
+
 
     public BranchResponseDTO.getCompleteBranchView getCompleteBranchView(User user, Long treehouseId) {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);

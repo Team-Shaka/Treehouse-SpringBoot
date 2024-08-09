@@ -26,6 +26,7 @@ public class TreehouseRequestDTO {
         private String treeholeName;
     }
 
+
     @Getter
     public static class checkTreehouseName{
 

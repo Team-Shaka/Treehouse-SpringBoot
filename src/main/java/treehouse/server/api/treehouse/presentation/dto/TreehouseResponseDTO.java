@@ -36,6 +36,7 @@ public class TreehouseResponseDTO {
         List<getTreehouseDetails> treehouses;
     }
 
+
     @Builder
     @Getter
     @NoArgsConstructor

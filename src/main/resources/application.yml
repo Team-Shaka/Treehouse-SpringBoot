@@ -75,8 +75,9 @@ jwt:
   authorities-key: authoritiesKey
   access-token-validity-in-seconds: 180000 # 3 min
   refresh-token-validity-in-seconds: 600000 # 5 min
-
-
+firebase:
+#  admin-sdk: firebase/firebase-adminsdk-keyfile.json
+  admin-sdk: ${FCM_KEY}
 
 cloud:
   aws:
@@ -144,6 +145,10 @@ jwt:
   authorities-key: authoritiesKey
   access-token-validity-in-seconds: 2000000 # 30 m
   refresh-token-validity-in-seconds: 3000000 # 14 d
+
+firebase:
+#  admin-sdk: firebase/firebase-adminsdk-keyfile.json
+  admin-sdk: ${FCM_KEY}
 
 cloud:
   aws:
