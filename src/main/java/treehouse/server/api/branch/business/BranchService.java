@@ -40,7 +40,7 @@ public class BranchService {
      * @param targetMemberId
      * @return BranchResponseDTO.getMemberBranchView
      */
-    @Transactional(readOnly = true)
+
     public BranchResponseDTO.getMemberBranchView getMemberBranchView(User user, Long treehouseId, Long targetMemberId) {
 
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
@@ -67,7 +67,7 @@ public class BranchService {
 
     }
 
-    @Transactional(readOnly = true)
+
     public BranchResponseDTO.getCompleteBranchView getCompleteBranchView(User user, Long treehouseId) {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treeHouse); // 트리하우스 내 모든 브랜치 조회

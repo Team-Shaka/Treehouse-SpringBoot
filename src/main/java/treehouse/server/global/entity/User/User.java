@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 
@@ -50,6 +51,7 @@ public class User extends BaseDateTimeEntity {
 
     @ColumnDefault("false")
     private boolean pushAgree;
+
 
     @OneToMany(mappedBy = "user")
     private List<Member> memberList;

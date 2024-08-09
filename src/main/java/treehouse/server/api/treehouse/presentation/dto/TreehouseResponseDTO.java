@@ -35,4 +35,13 @@ public class TreehouseResponseDTO {
     public static class getTreehouses {
         List<getTreehouseDetails> treehouses;
     }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class checkTreehouseName {
+        private Boolean isAvailable;
+    }
 }

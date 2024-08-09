@@ -150,7 +150,6 @@ firebase:
 #  admin-sdk: firebase/firebase-adminsdk-keyfile.json
   admin-sdk: ${FCM_KEY}
 
-
 cloud:
   aws:
     lambda:

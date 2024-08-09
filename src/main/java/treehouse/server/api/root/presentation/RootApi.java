@@ -27,6 +27,7 @@ public class RootApi {
 
     private final FcmService fcmService;
 
+
     @GetMapping("/health")
     public String healthCheck(){
         return "I'm healthy!";
@@ -39,5 +40,4 @@ public class RootApi {
         fcmService.testFCMService(fcmToken.getFcmToken());
         return CommonResponse.onSuccess("FCM 테스트 성공!");
     }
-
 }

@@ -25,4 +25,15 @@ public class TreehouseRequestDTO {
         @NotBlank(message = "트리 홀 이름이 필요합니다.")
         private String treeholeName;
     }
+
+
+    @Getter
+    public static class checkTreehouseName{
+
+        @JsonProperty("treehouseName")
+        @Schema(description = "트리하우스 이름", example = "Team Shaka")
+        @NotBlank(message = "트리하우스 이름이 필요합니다.")
+        @Size(min = 2, max = 20, message = "트리하우스 이름은 최소 2자, 최대 20자여야 합니다.")
+        private String treehouseName;
+    }
 }

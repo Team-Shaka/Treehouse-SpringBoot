@@ -102,7 +102,6 @@ public enum GlobalErrorCode implements BaseErrorCode{
     FCM_ACCESS_TOKEN_REQUEST_ERROR(INTERNAL_SERVER_ERROR, "FCM500_2", "서버 에러, FCM 서버에 AccessToken 요청할 때 에러 발생."),
     FCM_SEND_MESSAGE_ERROR(INTERNAL_SERVER_ERROR, "FCM500_3", "서버 에러, FCM 서버에 메시지를 전송할 때 에러 발생. FcmToken이 유효한지 확인해주세요.");
 
-
     ;
 
 
