@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import org.hibernate.annotations.SQLDelete;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET inactivated_at = NOW(), status = 'WITHDRAWAL' WHERE id = ?")
 public class User extends BaseDateTimeEntity {
 
     @Id
@@ -31,6 +33,7 @@ public class User extends BaseDateTimeEntity {
 
     private String profileImageUrl; //프로필 이미지
 
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     @Enumerated(EnumType.STRING)

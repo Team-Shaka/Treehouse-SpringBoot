@@ -6,6 +6,7 @@ import treehouse.server.api.branch.business.BranchUtil;
 import treehouse.server.api.member.presentation.dto.MemberRequestDTO;
 import treehouse.server.api.member.presentation.dto.MemberResponseDTO;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.User.UserStatus;
 import treehouse.server.global.entity.branch.Branch;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
@@ -40,9 +41,13 @@ public class MemberMapper {
     }
 
     public static MemberResponseDTO.getWriterProfile toGetWriterProfile(Member member, Member writer, List<Branch> branches) {
+        String writerName = writer.getName();
+        if (writer.getUser().getStatus() == UserStatus.WITHDRAWAL) {
+            writerName = "탈퇴한 회원";
+        }
         return MemberResponseDTO.getWriterProfile.builder()
                 .memberId(writer.getId())
-                .memberName(writer.getName())
+                .memberName(writerName)
                 .memberProfileImageUrl(writer.getProfileImageUrl())
                 .memberBranch(BranchUtil.calculateBranchDegree(branches, member.getId(), writer.getId()))
                 .build();

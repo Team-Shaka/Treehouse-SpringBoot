@@ -17,6 +17,7 @@ public class UserMapper {
 
     private final UserService userService;
     private static UserService staticUserService;
+
     @PostConstruct
     public void init(){
         this.staticUserService = this.userService;
@@ -71,6 +72,12 @@ public class UserMapper {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .treehouseIdList(treehouseIdList)
+                .build();
+    }
+
+    public static UserResponseDTO.withdraw toWithdraw(User user) {
+        return UserResponseDTO.withdraw.builder()
+                .userId(user.getId())
                 .build();
     }
 }

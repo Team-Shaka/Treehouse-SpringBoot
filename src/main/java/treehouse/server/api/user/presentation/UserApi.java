@@ -1,18 +1,18 @@
 package treehouse.server.api.user.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import treehouse.server.api.user.business.UserService;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.common.CommonResponse;
+import treehouse.server.global.entity.User.User;
+import treehouse.server.global.security.handler.annotation.AuthMember;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,5 +62,13 @@ public class UserApi {
             @RequestBody final UserRequestDTO.checkUserStatus request
     ){
         return CommonResponse.onSuccess(userService.checkUserStatus(request));
+    }
+
+    @DeleteMapping("/withdraw")
+    @Operation(summary = "회원탈퇴 🔑✅", description = "회원탈퇴를 진행합니다.")
+    public CommonResponse<UserResponseDTO.withdraw> withdraw(
+            @AuthMember @Parameter(hidden = true) User user
+    ){
+        return CommonResponse.onSuccess(userService.withdraw(user));
     }
 }

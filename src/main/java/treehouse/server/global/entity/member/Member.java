@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.comment.Comment;
