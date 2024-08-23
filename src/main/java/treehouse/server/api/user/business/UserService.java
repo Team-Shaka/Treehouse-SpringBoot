@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.user.implement.UserCommandAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
+import treehouse.server.api.user.persistence.UserRepository;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.User;
@@ -36,6 +37,7 @@ public class UserService {
     private final RedisService redisService;
 
     private final InvitationQueryAdapter invitationQueryAdapter;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public UserResponseDTO.checkName checkName(UserRequestDTO.checkName request){
@@ -87,5 +89,12 @@ public class UserService {
         Boolean isInvited = invitationQueryAdapter.existByPhoneNumber(request.getPhoneNumber());
 
         return UserMapper.toCheckUserStatus(isNewUser, isInvited);
+    }
+
+    @Transactional
+    public UserResponseDTO.withdraw withdraw(User user) {
+        userCommandAdapter.withdraw(user);
+
+        return UserMapper.toWithdraw(user);
     }
 }

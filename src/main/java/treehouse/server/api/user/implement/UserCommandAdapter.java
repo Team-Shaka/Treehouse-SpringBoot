@@ -47,4 +47,8 @@ public class UserCommandAdapter {
                 .refreshToken(newRefreshToken.getRefreshToken())
                 .build();
     }
+
+    public void withdraw(User user) {
+        userRepository.delete(user);
+    }
 }

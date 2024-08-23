@@ -73,4 +73,12 @@ public class UserResponseDTO {
         private String refreshToken;
         private List<Long> treehouseIdList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class withdraw {
+        private Long userId;
+    }
 }
