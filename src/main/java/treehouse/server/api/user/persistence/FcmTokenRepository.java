@@ -16,5 +16,5 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
 
     boolean existsByUserAndToken(User user, String token);
 
-    List<FcmToken> findAllByUser(User user);
+    List<FcmToken> findAllByUserAndPushAllowed(User user, boolean pushAllowed);
 }

@@ -71,4 +71,16 @@ public class UserApi {
     ){
         return CommonResponse.onSuccess(userService.withdraw(user));
     }
+
+    @PostMapping("/push-agree")
+    @Operation(summary = "푸시 알림 동의 API 🔑✅️", description = "푸시 알림 동의 API입니다.")
+    public CommonResponse<UserResponseDTO.pushAgree> pushAgree(
+            @AuthMember @Parameter(hidden = true) User user,
+            UserRequestDTO.pushAgreeDto request
+    ){
+        return CommonResponse.onSuccess(userService.updatePushAgree(user,request));
+    }
+
+
+
 }

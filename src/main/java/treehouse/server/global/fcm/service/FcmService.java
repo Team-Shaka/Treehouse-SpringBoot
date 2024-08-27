@@ -14,6 +14,7 @@ import treehouse.server.global.entity.User.FcmToken;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.FcmException;
+import treehouse.server.global.fcm.dto.FCMDto;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class FcmService {
             return;
         }
 
-        List<FcmToken> fcmTokenList = fcmTokenRepository.findAllByUser(receiver);
+        List<FcmToken> fcmTokenList = fcmTokenRepository.findAllByUserAndPushAllowed(receiver, true);
         if (fcmTokenList.isEmpty()) {
             return;
         }

@@ -3,6 +3,7 @@ package treehouse.server.api.user.business;
 import jakarta.annotation.PostConstruct;
 import lombok.*;
 import org.springframework.stereotype.Component;
+import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
@@ -78,6 +79,13 @@ public class UserMapper {
     public static UserResponseDTO.withdraw toWithdraw(User user) {
         return UserResponseDTO.withdraw.builder()
                 .userId(user.getId())
+                .build();
+    }
+
+    public static UserResponseDTO.pushAgree toPushAgree(User user, UserRequestDTO.pushAgreeDto request) {
+        return UserResponseDTO.pushAgree.builder()
+                .userId(user.getId())
+                .isPushAgree(request.isPushAgree())
                 .build();
     }
 }

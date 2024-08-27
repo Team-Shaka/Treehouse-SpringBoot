@@ -2,10 +2,7 @@ package treehouse.server.api.user.presentation.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 public class UserRequestDTO {
@@ -63,5 +60,10 @@ public class UserRequestDTO {
     @Getter
     public static class checkUserStatus {
         private String phoneNumber;
+    }
+
+    @Getter
+    public static class pushAgreeDto{
+        boolean pushAgree;
     }
 }

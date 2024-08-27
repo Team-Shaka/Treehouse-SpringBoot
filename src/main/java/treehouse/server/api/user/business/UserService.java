@@ -97,4 +97,10 @@ public class UserService {
 
         return UserMapper.toWithdraw(user);
     }
+
+    @Transactional
+    public UserResponseDTO.pushAgree updatePushAgree(User user, UserRequestDTO.pushAgreeDto request){
+        boolean pushAgree = user.updatePushAgree(request.isPushAgree());
+        return UserMapper.toPushAgree(user, request);
+    }
 }
