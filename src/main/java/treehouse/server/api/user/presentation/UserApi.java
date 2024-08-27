@@ -12,6 +12,8 @@ import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.common.CommonResponse;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.fcm.dto.FCMDto;
+import treehouse.server.global.fcm.service.FcmService;
 import treehouse.server.global.security.handler.annotation.AuthMember;
 
 @RestController
@@ -23,6 +25,7 @@ import treehouse.server.global.security.handler.annotation.AuthMember;
 public class UserApi {
 
     private final UserService userService;
+    private final FcmService fcmService;
 
     @PostMapping("/checkName")
     @Operation(summary = "아이디 중복 체크 ✅", description = "서비스에서 사용할 유저이름을 중복 체크합니다.")
@@ -69,6 +72,26 @@ public class UserApi {
     public CommonResponse<UserResponseDTO.withdraw> withdraw(
             @AuthMember @Parameter(hidden = true) User user
     ){
+        fcmService.deleteAllFcmToken(user);
         return CommonResponse.onSuccess(userService.withdraw(user));
+    }
+
+    @PostMapping("/push-agree")
+    @Operation(summary = "푸시 알림 동의 API 🔑✅️", description = "푸시 알림 동의 API입니다.")
+    public CommonResponse<UserResponseDTO.pushAgree> pushAgree(
+            @AuthMember @Parameter(hidden = true) User user,
+            @RequestBody UserRequestDTO.pushAgreeDto request
+    ){
+        return CommonResponse.onSuccess(userService.updatePushAgree(user,request));
+    }
+
+
+    @PostMapping("/fcm-token")
+    @Operation(summary = "FCM 토큰 저장 API 🔑✅️", description = "FCM 토큰 저장 API입니다.")
+    public CommonResponse<UserResponseDTO.saveFcmToken> saveFcmToken(
+            @AuthMember @Parameter(hidden = true) User user,
+            @RequestBody FCMDto.saveFcmTokenDto request
+            ){
+        return CommonResponse.onSuccess(fcmService.saveFcmToken(user,request));
     }
 }

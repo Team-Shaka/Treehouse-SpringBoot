@@ -9,11 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.user.business.UserMapper;
 import treehouse.server.api.user.persistence.FcmTokenRepository;
+import treehouse.server.api.user.presentation.dto.UserResponseDTO;
 import treehouse.server.global.entity.User.FcmToken;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.FcmException;
+import treehouse.server.global.fcm.dto.FCMDto;
 
 import java.util.List;
 
@@ -42,6 +45,23 @@ public class FcmService {
         }catch (FirebaseMessagingException e){
             throw new FcmException(GlobalErrorCode.FCM_SEND_MESSAGE_ERROR);
         }
+    }
+
+    @Transactional(readOnly = false)
+    public UserResponseDTO.saveFcmToken saveFcmToken(User user, FCMDto.saveFcmTokenDto request) {
+        boolean isSuccess = false;
+        logger.error("토큰 값 : {}",request.getFcmToken());
+        if (fcmTokenRepository.existsByUserAndToken(user, request.getFcmToken())) {
+            throw new FcmException(GlobalErrorCode.FCM_ALREADY_EXISTS_TOKEN);
+        }else{
+            fcmTokenRepository.save(FcmToken.builder()
+                    .user(user)
+                    .token(request.getFcmToken())
+                    .build()
+            );
+            isSuccess = true;
+        }
+        return UserMapper.toSaveFcmToken(user, isSuccess);
     }
 
 
@@ -75,5 +95,10 @@ public class FcmService {
         }
 
 
+    }
+
+    @Transactional
+    public void deleteAllFcmToken(User user) {
+        fcmTokenRepository.deleteAllByUser(user);
     }
 }

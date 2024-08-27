@@ -81,4 +81,22 @@ public class UserResponseDTO {
     public static class withdraw {
         private Long userId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class pushAgree {
+        private Long userId;
+        private boolean isPushAgree;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class saveFcmToken {
+        private Long userId;
+        private boolean isSaveFcmToken;
+    }
 }

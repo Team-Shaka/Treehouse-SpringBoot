@@ -10,10 +10,12 @@ import treehouse.server.api.notification.implement.NotificationQueryAdapter;
 import treehouse.server.api.notification.presentation.dto.NotificationRequestDTO;
 import treehouse.server.api.notification.presentation.dto.NotificationResponseDTO;
 import treehouse.server.api.treehouse.implementation.TreehouseQueryAdapter;
+import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.notification.Notification;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
+import treehouse.server.global.fcm.service.FcmService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +33,8 @@ public class NotificationService {
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
 
+    private final FcmService fcmService;
+
     /**
      * 알림 생성하는 로직
      * @param user
@@ -42,8 +46,9 @@ public class NotificationService {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse);
         Member receiver = memberQueryAdapter.findById(request.getReceiverId());
-
         Notification notification = NotificationMapper.toNotification(sender, receiver, request, reactionName);
+
+        fcmService.sendFcmMessage(receiver.getUser(), notification.getTitle(), notification.getBody());
         notificationCommandAdapter.createNotification(notification);
     }
 
