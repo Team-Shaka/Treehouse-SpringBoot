@@ -90,4 +90,13 @@ public class UserResponseDTO {
         private Long userId;
         private boolean isPushAgree;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class saveFcmToken {
+        private Long userId;
+        private boolean isSaveFcmToken;
+    }
 }

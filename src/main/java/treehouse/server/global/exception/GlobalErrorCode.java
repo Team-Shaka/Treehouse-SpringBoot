@@ -99,8 +99,9 @@ public enum GlobalErrorCode implements BaseErrorCode{
     PHONE_AUTH_WRONG(BAD_REQUEST, "NCP400_2", "잘못된 인증 번호 입니다."),
     PHONE_AUTH_TIMEOUT(BAD_REQUEST, "NCP400_3", "인증 시간이 초과되었습니다."),
 
+    FCM_ALREADY_EXISTS_TOKEN(BAD_REQUEST, "FCM400_1", "이미 저장되어 있는 FCM 토큰입니다."),
     FCM_ACCESS_TOKEN_REQUEST_ERROR(INTERNAL_SERVER_ERROR, "FCM500_2", "서버 에러, FCM 서버에 AccessToken 요청할 때 에러 발생."),
-    FCM_SEND_MESSAGE_ERROR(INTERNAL_SERVER_ERROR, "FCM500_3", "서버 에러, FCM 서버에 메시지를 전송할 때 에러 발생. FcmToken이 유효한지 확인해주세요.");
+    FCM_SEND_MESSAGE_ERROR(INTERNAL_SERVER_ERROR    , "FCM500_3", "서버 에러, FCM 서버에 메시지를 전송할 때 에러 발생. FcmToken이 유효한지 확인해주세요.");
 
     ;
 

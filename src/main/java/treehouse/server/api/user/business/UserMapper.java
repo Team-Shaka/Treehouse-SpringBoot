@@ -88,4 +88,11 @@ public class UserMapper {
                 .isPushAgree(request.isPushAgree())
                 .build();
     }
+
+    public static UserResponseDTO.saveFcmToken toSaveFcmToken(User user, boolean isSuccess) {
+        return UserResponseDTO.saveFcmToken.builder()
+                .userId(user.getId())
+                .isSaveFcmToken(isSuccess)
+                .build();
+    }
 }
