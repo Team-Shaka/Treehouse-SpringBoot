@@ -96,4 +96,9 @@ public class FcmService {
 
 
     }
+
+    @Transactional
+    public void deleteAllFcmToken(User user) {
+        fcmTokenRepository.deleteAllByUser(user);
+    }
 }

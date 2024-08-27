@@ -16,6 +16,7 @@ import treehouse.server.global.entity.redis.RefreshToken;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.AuthException;
 import treehouse.server.global.exception.ThrowClass.GeneralException;
+import treehouse.server.global.fcm.service.FcmService;
 import treehouse.server.global.redis.service.RedisService;
 import treehouse.server.global.security.jwt.dto.TokenDTO;
 import treehouse.server.global.security.provider.TokenProvider;
@@ -38,6 +39,8 @@ public class UserService {
 
     private final InvitationQueryAdapter invitationQueryAdapter;
     private final UserRepository userRepository;
+
+    private final FcmService fcmService;
 
     @Transactional(readOnly = true)
     public UserResponseDTO.checkName checkName(UserRequestDTO.checkName request){

@@ -72,6 +72,7 @@ public class UserApi {
     public CommonResponse<UserResponseDTO.withdraw> withdraw(
             @AuthMember @Parameter(hidden = true) User user
     ){
+        fcmService.deleteAllFcmToken(user);
         return CommonResponse.onSuccess(userService.withdraw(user));
     }
 
