@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
+import treehouse.server.global.entity.notification.Notification;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,6 +59,9 @@ public class User extends BaseDateTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Member> memberList;
+
+    @OneToMany(mappedBy = "receiver")
+    List<Notification> notificationList;
 
     public void addMember(Member member) {
         memberList.add(member);

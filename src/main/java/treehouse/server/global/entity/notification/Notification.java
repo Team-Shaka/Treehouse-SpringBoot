@@ -2,6 +2,7 @@ package treehouse.server.global.entity.notification;
 
 import jakarta.persistence.*;
 import lombok.*;
+import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.common.BaseDateTimeEntity;
 import treehouse.server.global.entity.member.Member;
 
@@ -33,7 +34,7 @@ public class Notification extends BaseDateTimeEntity {
 
     @JoinColumn(name = "receiverId")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member receiver;
+    private User receiver;
 
     private Long targetId;
     private LocalDateTime receivedTime;
