@@ -9,6 +9,7 @@ import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
 import treehouse.server.global.entity.User.UserStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -40,6 +41,7 @@ public class UserMapper {
                 .phone(phone)
                 .role(UserRole.USER)
                 .status(UserStatus.ACTIVE)
+                .notificationList(new ArrayList<>())
                 .build();
     }
 

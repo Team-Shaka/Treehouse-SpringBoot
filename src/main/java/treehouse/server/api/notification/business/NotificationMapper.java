@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NotificationMapper {
 
-    public static Notification toNotification(Member sender, Member receiver, NotificationRequestDTO.createNotification request, String reactionName) {
+    public static Notification toNotification(Member sender, User receiver, NotificationRequestDTO.createNotification request, String reactionName) {
 
         return Notification.builder()
                 .sender(sender)
