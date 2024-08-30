@@ -66,9 +66,6 @@ public class FcmService {
 
 
     public void sendFcmMessage(User receiver, String title, String body) {
-        if (receiver.isPushAgree() == false) {
-            return;
-        }
 
         List<FcmToken> fcmTokenList = fcmTokenRepository.findAllByUser(receiver);
         if (fcmTokenList.isEmpty()) {
