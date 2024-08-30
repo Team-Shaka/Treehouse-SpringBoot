@@ -46,9 +46,9 @@ public class NotificationService {
     public void createNotification(User user, Long treehouseId, NotificationRequestDTO.createNotification request, String reactionName) {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse);
-        User receiver = userQueryAdapter.findById(request.getReceiverId());
+        User receiver = userQueryAdapter.findByIdOptional(request.getReceiverId()).orElse(null);
         Notification notification = NotificationMapper.toNotification(sender, receiver, request, reactionName);
-        if(user.isPushAgree()) {
+        if(user.isPushAgree() && receiver != null) {
             fcmService.sendFcmMessage(receiver, notification.getTitle(), notification.getBody());
         }
         notificationCommandAdapter.createNotification(notification);

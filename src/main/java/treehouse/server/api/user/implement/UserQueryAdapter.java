@@ -30,8 +30,16 @@ public class UserQueryAdapter {
         return userRepository.findByPhone(phone).orElseThrow(()->new UserException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
+    public Optional<User> findByPhoneNumberOptional(String phone){
+        return userRepository.findByPhone(phone);
+    }
+
     public User findById(Long id){
         return userRepository.findById(id).orElseThrow(()->new UserException(GlobalErrorCode.USER_NOT_FOUND));
+    }
+
+    public Optional<User> findByIdOptional(Long id){
+        return userRepository.findById(id);
     }
 
     public Optional<User> optionalUserFindById(Long id){
