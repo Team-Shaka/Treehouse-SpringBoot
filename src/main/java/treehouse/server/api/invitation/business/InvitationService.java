@@ -77,25 +77,20 @@ public class InvitationService {
         Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
         // 초대 대상이 가입된 사람인지 찾기
 
-        User receiverUser = null;
+        User receiverUser = userQueryAdapter.findByPhoneNumberOptional(request.getPhoneNumber()).orElse(null);
 
-        try {
-            receiverUser = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber());
-        }
-        catch (UserException e){
-            // 뭐 안함
-        }
         // 초대장 만들어서 저장하기
 
         Invitation invitation = invitationCommandAdapter.saveInvitation(InvitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
 
         //알림 생성
-        NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
-        notificationRequest.setReceiverId(receiverUser.getId()); // 여기서 receiver 설정 (예시)
-        notificationRequest.setTargetId(invitation.getId());
-        notificationRequest.setType(NotificationType.INVITATION); // 알림 타입 설정 (예시)
-        notificationService.createNotification(user, invitation.getTreeHouse().getId(), notificationRequest, null);
-
+        if (receiverUser != null) {
+            NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
+            notificationRequest.setReceiverId(receiverUser.getId()); // 여기서 receiver 설정 (예시)
+            notificationRequest.setTargetId(invitation.getId());
+            notificationRequest.setType(NotificationType.INVITATION); // 알림 타입 설정 (예시)
+            notificationService.createNotification(user, invitation.getTreeHouse().getId(), notificationRequest, null);
+        }
         // 리턴하기
 
         return InvitationMapper.toCreateInvitationDTO(invitation);
