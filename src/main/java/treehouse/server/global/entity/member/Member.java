@@ -40,8 +40,6 @@ public class Member extends BaseDateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private TreeHouse treeHouse;
 
-    @OneToMany(mappedBy = "receiver")
-    List<Notification> notificationList;
 
     @OneToMany(mappedBy = "writer")
     List<Comment> commentList;

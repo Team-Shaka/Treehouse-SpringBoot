@@ -25,7 +25,6 @@ public class MemberMapper {
                 .bio(request.getBio())
                 .profileImageUrl(request.getProfileImageURL())
                 .treeHouse(treeHouse)
-                .notificationList(new ArrayList<>())
                 .commentList(new ArrayList<>())
                 .invitationList(new ArrayList<>())
                 .reactionList(new ArrayList<>())

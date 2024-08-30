@@ -30,6 +30,7 @@ public class NotificationService {
     private final NotificationQueryAdapter notificationQueryAdapter;
 
     private final MemberQueryAdapter memberQueryAdapter;
+    private final UserQueryAdapter userQueryAdapter;
 
     private final TreehouseQueryAdapter treehouseQueryAdapter;
 
@@ -45,11 +46,12 @@ public class NotificationService {
     public void createNotification(User user, Long treehouseId, NotificationRequestDTO.createNotification request, String reactionName) {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse);
-        Member receiver = memberQueryAdapter.findById(request.getReceiverId());
+        User receiver = userQueryAdapter.findByIdOptional(request.getReceiverId()).orElse(null);
         Notification notification = NotificationMapper.toNotification(sender, receiver, request, reactionName);
 
         if(receiver.getUser().isPushAgree()) {
             fcmService.sendFcmMessage(receiver.getUser(), notification.getTitle(), notification.getBody());
+
         }
         notificationCommandAdapter.createNotification(notification);
     }
@@ -62,11 +64,7 @@ public class NotificationService {
     @Transactional(readOnly = true)
     public NotificationResponseDTO.getNotifications getNotifications(User user){ //@AuthMember로 들어온 User 객체
         List<Member> members = user.getMemberList(); // 사용자의 Member(가입된 트리하우스 프로필) 목록 조회
-        List<Notification> notifications = members.stream()
-                .map(Member::getNotificationList)
-                .flatMap(List::stream)
-                .sorted(Comparator.comparing(Notification::getCreatedAt).reversed()) // createdAt 기준으로 내림차순 정렬
-                .toList();
+        List<Notification> notifications = user.getNotificationList(); // 사용자의 알림 목록 조회
 
         List<NotificationResponseDTO.getNotification> notificationDtos = notifications.stream()
                 .map(notification -> {
