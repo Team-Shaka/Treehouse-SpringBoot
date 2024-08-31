@@ -7,6 +7,7 @@ import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
 import treehouse.server.global.annotations.Adapter;
 import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
+import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.InvitationException;
 import treehouse.server.global.exception.ThrowClass.UserException;
@@ -31,5 +32,9 @@ public class InvitationQueryAdapter {
     public Invitation findById(Long invitationId) {
         return invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
+    }
+
+    public Boolean existByPhoneAndTreehouse(String phoneNumber, TreeHouse treehouse) {
+        return invitationRepository.existsByPhoneAndTreeHouse(phoneNumber, treehouse);
     }
 }

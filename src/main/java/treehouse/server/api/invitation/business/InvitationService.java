@@ -71,17 +71,29 @@ public class InvitationService {
 
     @Transactional
     public InvitationResponseDTO.createInvitation createInvitation(User user, InvitationRequestDTO.createInvitation request){
+        // 남아있는 초대장이 있는지 확인
+        if (user.getInvitationCount() <= 0) {
+            throw new InvitationException(GlobalErrorCode.INVITATION_COUNT_ZERO);
+        }
+
         // 트리 찾기
         TreeHouse treehouse = treehouseQueryAdapter.getTreehouseById(request.getTreehouseId());
         // 초대 멤버 찾기
         Member sender = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
         // 초대 대상이 가입된 사람인지 찾기
-
         User receiverUser = userQueryAdapter.findByPhoneNumberOptional(request.getPhoneNumber()).orElse(null);
+
+        //동일한 초대장이 이미 존재하는지 확인하기
+        if (invitationQueryAdapter.existByPhoneAndTreehouse(request.getPhoneNumber(), treehouse)) {
+            throw new InvitationException(GlobalErrorCode.INVITATION_ALREADY_EXIST);
+        }
 
         // 초대장 만들어서 저장하기
 
         Invitation invitation = invitationCommandAdapter.saveInvitation(InvitationMapper.toInvitation(request.getPhoneNumber(), sender, receiverUser, treehouse));
+
+        // 초대자의 잔여 초대장 개수 차감
+        user.reduceInvitationCount();
 
         //알림 생성
         if (receiverUser != null) {

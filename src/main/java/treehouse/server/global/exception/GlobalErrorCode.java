@@ -53,8 +53,14 @@ public enum GlobalErrorCode implements BaseErrorCode{
     // TREEHOUSE + 404 Not Found - 찾을 수 없음
     TREEHOUSE_NOT_FOUND(NOT_FOUND, "TREEHOUSE404_1", "존재하지 않는 트리입니다."),
 
+    // INVITATION + 400 Bad Request - 잘못된 요청
+    INVITATION_COUNT_ZERO(BAD_REQUEST, "INVITATION400_1", "사용 가능한 초대장 개수가 0입니다."),
+
     // INVITATION + 404 Not Found - 찾을 수 없음
     INVITATION_NOT_FOUND(NOT_FOUND, "INVITATION404_1", "존재하지 않는 초대장입니다."),
+
+    // INVITATION + 409 CONFLICT : Resource 를 찾을 수 없음
+    INVITATION_ALREADY_EXIST(CONFLICT, "INVITATION409_1", "이미 존재하는 초대장입니다."),
 
     // POST + 401 Unauthorized - 권한 없음
     POST_UNAUTHORIZED(UNAUTHORIZED, "POST401_1", "게시글 수정 및 삭제 권한이 없습니다."),
@@ -101,7 +107,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
 
     FCM_ALREADY_EXISTS_TOKEN(BAD_REQUEST, "FCM400_1", "이미 저장되어 있는 FCM 토큰입니다."),
     FCM_ACCESS_TOKEN_REQUEST_ERROR(INTERNAL_SERVER_ERROR, "FCM500_2", "서버 에러, FCM 서버에 AccessToken 요청할 때 에러 발생."),
-    FCM_SEND_MESSAGE_ERROR(INTERNAL_SERVER_ERROR    , "FCM500_3", "서버 에러, FCM 서버에 메시지를 전송할 때 에러 발생. FcmToken이 유효한지 확인해주세요.");
+    FCM_SEND_MESSAGE_ERROR(INTERNAL_SERVER_ERROR    , "FCM500_3", "서버 에러, FCM 서버에 메시지를 전송할 때 에러 발생. FcmToken이 유효한지 확인해주세요."), ;
 
     ;
 

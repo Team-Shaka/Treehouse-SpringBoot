@@ -72,4 +72,7 @@ public class User extends BaseDateTimeEntity {
         return this.pushAgree;
     }
 
+    public void reduceInvitationCount() {
+        this.invitationCount--;
+    }
 }
