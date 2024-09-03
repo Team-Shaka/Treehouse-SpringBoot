@@ -1,5 +1,6 @@
 package treehouse.server.api.invitation.implement;
 
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.invitation.persistence.InvitationRepository;
@@ -36,5 +37,10 @@ public class InvitationQueryAdapter {
 
     public Boolean existByPhoneAndTreehouse(String phoneNumber, TreeHouse treehouse) {
         return invitationRepository.existsByPhoneAndTreeHouse(phoneNumber, treehouse);
+    }
+
+    public Invitation findByReceiverAndTreeHouse(User user, TreeHouse treeHouse) {
+        return invitationRepository.findByReceiverAndTreeHouse(user, treeHouse)
+                .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
     }
 }
