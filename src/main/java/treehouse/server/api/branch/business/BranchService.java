@@ -35,19 +35,17 @@ public class BranchService {
 
     /**
      * 트리하우스 내 두 멤버 사이의 가장 짧은 거리를 계산하여 브랜치 뷰를 반환합니다.
-     * @param user
      * @param treehouseId
+     * @param sourceMemberId
      * @param targetMemberId
      * @return BranchResponseDTO.getMemberBranchView
      */
 
-    public BranchResponseDTO.getMemberBranchView getMemberBranchView(User user, Long treehouseId, Long targetMemberId) {
+    public BranchResponseDTO.getMemberBranchView getMemberBranchView(Long treehouseId, Long sourceMemberId, Long targetMemberId) {
 
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treeHouse); // 트리하우스 내 모든 브랜치 조회
-        Member member = memberQueryAdapter.findByUserAndTreehouse(user, treeHouse); // 현재 로그인한 트리하우스 멤버
-        Long rootId = member.getId(); // 현재 로그인한 트리하우스 멤버의 ID
-        BranchResponseDTO.ShortestPathResult shortestPathResult = BranchUtil.findShortestDistance(branches, rootId, targetMemberId); // 최단 거리 계산
+        BranchResponseDTO.ShortestPathResult shortestPathResult = BranchUtil.findShortestDistance(branches, sourceMemberId, targetMemberId); // 최단 거리 계산
 
         // 최단 거리 결과를 이용해 브랜치 뷰 생성
         // Node 정보 생성
@@ -63,12 +61,12 @@ public class BranchService {
         }
 
         // 브랜치 뷰 생성
-        return BranchMapper.toBranchView(nodes, links, rootId, targetMemberId);
+        return BranchMapper.toBranchView(nodes, links, sourceMemberId, targetMemberId);
 
     }
 
 
-    public BranchResponseDTO.getCompleteBranchView getCompleteBranchView(User user, Long treehouseId) {
+    public BranchResponseDTO.getCompleteBranchView getCompleteBranchView(Long treehouseId) {
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
         List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treeHouse); // 트리하우스 내 모든 브랜치 조회
         Set<Long> memberIds = new HashSet<>();

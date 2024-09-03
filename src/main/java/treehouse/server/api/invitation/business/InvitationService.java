@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.branch.business.BranchService;
 import treehouse.server.api.invitation.implement.InvitationCommandAdapter;
 import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
@@ -116,6 +117,8 @@ public class InvitationService {
 
         if (request.isAcceptDecision()==true) {
             treehouseId = invitation.getTreeHouse().getId(); // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
+            // 초대장 수락
+
         }
         return InvitationMapper.toInvitationResult(treehouseId);
     }

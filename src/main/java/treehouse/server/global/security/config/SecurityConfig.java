@@ -72,6 +72,7 @@ public class SecurityConfig {
                         authorize -> {
 //                            authorize.requestMatchers("/swagger-ui/**").permitAll();
                             authorize.requestMatchers("/users/**").permitAll();
+                            authorize.requestMatchers("/treehouses/{treehouseId}/branches/**").permitAll();
                             authorize.anyRequest().authenticated();
                         })
                 .exceptionHandling(

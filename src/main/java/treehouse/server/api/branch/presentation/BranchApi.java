@@ -25,20 +25,19 @@ public class BranchApi {
     @GetMapping
     public CommonResponse<BranchResponseDTO.getMemberBranchView> getMemberBranchView(
             @PathVariable(name = "treehouseId") Long treehouseId,
-            @RequestParam(name = "targetMemberId") Long targetMemberId,
-            @AuthMember @Parameter(hidden = true) User user
+            @RequestParam(name = "sourceMemberId") Long sourceMemberId,
+            @RequestParam(name = "targetMemberId") Long targetMemberId
     )
     {
-        return CommonResponse.onSuccess(branchService.getMemberBranchView(user, treehouseId, targetMemberId));
+        return CommonResponse.onSuccess(branchService.getMemberBranchView(treehouseId, sourceMemberId, targetMemberId));
     }
 
     @Operation(summary = "트리하우스 전체 브랜치 뷰 API 🔑", description = "트리하우스 내 모든 멤버 사이의 브랜치 뷰를 반환합니다.")
     @GetMapping("/complete")
     public CommonResponse<BranchResponseDTO.getCompleteBranchView> getCompleteBranchView(
-            @PathVariable(name = "treehouseId") Long treehouseId,
-            @AuthMember @Parameter(hidden = true) User user
+            @PathVariable(name = "treehouseId") Long treehouseId
     )
     {
-        return CommonResponse.onSuccess(branchService.getCompleteBranchView(user, treehouseId));
+        return CommonResponse.onSuccess(branchService.getCompleteBranchView(treehouseId));
     }
 }
