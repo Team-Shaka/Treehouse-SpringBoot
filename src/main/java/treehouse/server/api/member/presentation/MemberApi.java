@@ -35,6 +35,16 @@ public class MemberApi {
         return CommonResponse.onSuccess(memberService.register(user, request));
     }
 
+    @PostMapping("/founder/register")
+    @Operation(summary = "트리하우스 창립자 가입 🔑 ✅", description = "트리하우스 창립자로 가입합니다.")
+    public CommonResponse<MemberResponseDTO.registerMember> registerFounder(
+            @RequestBody final MemberRequestDTO.registerMember request,
+            @AuthMember @Parameter(hidden = true) User user
+    ) {
+        return CommonResponse.onSuccess(memberService.registerFounder(user, request));
+    }
+
+
     @GetMapping("/treehouses/{treehouseId}/profiles/myProfile")
     @Operation(summary = "내 프로필 조회 🔑 ✅", description = "특정 트리하우스에서 내 프로필을 조회합니다.")
     public CommonResponse<MemberResponseDTO.getProfile> getMyProfile(
