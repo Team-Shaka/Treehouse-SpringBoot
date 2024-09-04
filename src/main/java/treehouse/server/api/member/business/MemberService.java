@@ -56,6 +56,24 @@ public class MemberService {
         return MemberMapper.toRegister(savedMember);
     }
 
+    /**
+     * 트리하우스 창립자로 가입
+     * @param user
+     * @param request
+     * @return
+     */
+    @Transactional
+    public MemberResponseDTO.registerMember registerFounder(User user, MemberRequestDTO.registerMember request) {
+        TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(request.getTreehouseId());
+        Member member = MemberMapper.toMember(user, request, treeHouse);
+        Member savedMember = memberCommandAdapter.register(member);
+
+        user.addMember(savedMember); // User에 Member 추가
+        treeHouse.addMember(savedMember); // TreeHouse에 Member 추가
+
+        return MemberMapper.toRegister(savedMember);
+    }
+
     @Transactional(readOnly = true)
     public MemberResponseDTO.getProfile getMyProfile(User user, Long treehouseId){
         TreeHouse treeHouse = treehouseQueryAdapter.getTreehouseById(treehouseId);
@@ -81,4 +99,6 @@ public class MemberService {
         member.updateMember(request.getMemberName(), request.getBio(), request.getProfileImageURL());
         return MemberMapper.toUpdateProfile(member);
     }
+
+
 }
