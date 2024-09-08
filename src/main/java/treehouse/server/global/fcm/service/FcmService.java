@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,11 @@ import treehouse.server.global.exception.ThrowClass.FcmException;
 import treehouse.server.global.fcm.dto.FCMDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 public class FcmService {
     Logger logger = LoggerFactory.getLogger(FcmService.class);
 
@@ -49,17 +51,20 @@ public class FcmService {
 
     @Transactional(readOnly = false)
     public UserResponseDTO.saveFcmToken saveFcmToken(User user, FCMDto.saveFcmTokenDto request) {
-        boolean isSuccess = false;
-        logger.error("토큰 값 : {}",request.getFcmToken());
-        if (fcmTokenRepository.existsByUserAndToken(user, request.getFcmToken())) {
-            throw new FcmException(GlobalErrorCode.FCM_ALREADY_EXISTS_TOKEN);
-        }else{
+        boolean isSuccess = true;
+        logger.info("토큰 값 : {}", request.getFcmToken());
+
+
+        // 한 user 당 가장 최신의 fcm token 값 하나만 db 에 저장하도록 수정
+        if (fcmTokenRepository.existsByUser(user)) {
+            FcmToken fcmToken = fcmTokenRepository.findByUser(user).orElseThrow(() -> new FcmException(GlobalErrorCode.FCM_TOKEN_NOT_EXISTS));
+            fcmToken.update(request.getFcmToken());
+        } else {
             fcmTokenRepository.save(FcmToken.builder()
                     .user(user)
                     .token(request.getFcmToken())
                     .build()
             );
-            isSuccess = true;
         }
         return UserMapper.toSaveFcmToken(user, isSuccess);
     }
@@ -67,30 +72,27 @@ public class FcmService {
 
     public void sendFcmMessage(User receiver, String title, String body) {
 
-        List<FcmToken> fcmTokenList = fcmTokenRepository.findAllByUser(receiver);
-        if (fcmTokenList.isEmpty()) {
-            return;
-        }
+        FcmToken fcmToken = fcmTokenRepository.findByUser(receiver).orElseThrow(() -> new FcmException(GlobalErrorCode.FCM_TOKEN_NOT_EXISTS));
 
-        for (FcmToken fcmToken : fcmTokenList) {
-            String token = fcmToken.getToken();
-            logger.info("전송하고자 하는 FCM 토큰 값 : " + token);
-            Message message = Message.builder()
-                    .setToken(token)
-                    .setNotification(
-                            Notification.builder()
-                                    .setTitle(title)
-                                    .setBody(body)
-                                    .build())
-                    .build();
-            try {
-                String response = FirebaseMessaging.getInstance().send(message);
-                logger.info("the response of request FCM : {}",response);
-            } catch (FirebaseMessagingException e) {
-                throw new FcmException(GlobalErrorCode.FCM_SEND_MESSAGE_ERROR);
-            }
-        }
+        String token = fcmToken.getToken();
+        logger.info("전송하고자 하는 FCM 토큰 값 : " + token);
 
+        Message message = Message.builder()
+                .setToken(token)
+                .setNotification(
+                        Notification.builder()
+                                .setTitle(title)
+                                .setBody(body)
+                                .build())
+                .build();
+
+        try {
+            String response = FirebaseMessaging.getInstance().send(message);
+            logger.info("the response of request FCM : {}",response);
+        } catch (FirebaseMessagingException e) {
+            logger.error("FCM 푸시 알림 전송 실패, 이유 : {}", e.getMessage());
+            throw new FcmException(GlobalErrorCode.FCM_SEND_MESSAGE_ERROR);
+        }
 
     }
 
@@ -98,4 +100,5 @@ public class FcmService {
     public void deleteAllFcmToken(User user) {
         fcmTokenRepository.deleteAllByUser(user);
     }
+
 }
