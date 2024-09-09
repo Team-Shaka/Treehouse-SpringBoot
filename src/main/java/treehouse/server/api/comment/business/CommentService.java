@@ -169,7 +169,7 @@ public class CommentService {
 
         //알림 생성
         NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
-        notificationRequest.setReceiverId(post.getWriter().getId()); // 여기서 receiver 설정 (예시)
+        notificationRequest.setReceiverId(post.getWriter().getUser().getId()); // 여기서 receiver 설정 (예시)
         notificationRequest.setTargetId(post.getId());
         notificationRequest.setType(NotificationType.COMMENT); // 알림 타입 설정 (예시)
         notificationService.createNotification(user, treehouseId, notificationRequest, null);
