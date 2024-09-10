@@ -49,8 +49,12 @@ public class NotificationService {
         User receiver = userQueryAdapter.findByIdOptional(request.getReceiverId()).orElse(null);
         Notification notification = NotificationMapper.toNotification(sender, receiver, request, reactionName);
 
+        StringBuilder sb = new StringBuilder();
+        sb.append(sender.getName()).append(notification.getBody());
+        String fcmMsgBody = sb.toString();
+
         if(receiver.isPushAgree()) {
-            fcmService.sendFcmMessage(receiver, notification.getTitle(), notification.getBody());
+            fcmService.sendFcmMessage(receiver, notification.getTitle(), fcmMsgBody);
 
         }
         notificationCommandAdapter.createNotification(notification);
