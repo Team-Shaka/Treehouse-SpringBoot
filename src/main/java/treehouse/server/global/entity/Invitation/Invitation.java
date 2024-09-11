@@ -34,7 +34,9 @@ public class Invitation extends BaseDateTimeEntity {
 
     @JoinColumn(name = "receiverId")
     @ManyToOne(fetch = FetchType.LAZY)
+    @Setter
     private User receiver;
+
     @JoinColumn(name = "treeId")
     @ManyToOne(fetch = FetchType.LAZY)
     private TreeHouse treeHouse;

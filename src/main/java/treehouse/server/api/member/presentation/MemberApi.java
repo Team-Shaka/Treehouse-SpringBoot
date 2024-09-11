@@ -3,6 +3,7 @@ package treehouse.server.api.member.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,7 @@ public class MemberApi {
     @PostMapping("/members/register")
     @Operation(summary = "트리하우스 회원가입 🔑 ✅", description = "트리하우스 멤버로 가입합니다.")
     public CommonResponse<MemberResponseDTO.registerMember> registerTreehouseMember(
-            @RequestBody final MemberRequestDTO.registerMember request,
+            @RequestBody @Valid final MemberRequestDTO.registerMember request,
             @AuthMember @Parameter(hidden = true) User user
     ) {
         return CommonResponse.onSuccess(memberService.register(user, request));

@@ -16,7 +16,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
 
     Boolean existsByPhone(String phoneNumber);
 
-    Boolean existsByPhoneAndTreeHouse(String phoneNumber, TreeHouse treehouse);
+    Boolean existsByPhoneAndTreeHouse(String phone, TreeHouse treehouse);
 
     Optional<Invitation> findByReceiverAndTreeHouse(User user, TreeHouse treeHouse);
 }
