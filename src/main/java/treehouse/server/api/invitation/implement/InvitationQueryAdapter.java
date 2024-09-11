@@ -43,4 +43,8 @@ public class InvitationQueryAdapter {
         return invitationRepository.findByReceiverAndTreeHouse(user, treeHouse)
                 .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
     }
+
+    public Invitation findByPhoneAndTreeHouse(String phone, TreeHouse treeHouse) {
+        return invitationRepository.findByPhoneAndTreeHouse(phone, treeHouse);
+    }
 }

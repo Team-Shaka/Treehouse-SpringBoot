@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import treehouse.server.api.invitation.implement.InvitationCommandAdapter;
 import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.user.implement.UserCommandAdapter;
 import treehouse.server.api.user.implement.UserQueryAdapter;
 import treehouse.server.api.user.persistence.UserRepository;
 import treehouse.server.api.user.presentation.dto.UserRequestDTO;
 import treehouse.server.api.user.presentation.dto.UserResponseDTO;
+import treehouse.server.global.entity.Invitation.Invitation;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.redis.RefreshToken;
@@ -37,6 +39,7 @@ public class UserService {
 
     private final RedisService redisService;
 
+    private final InvitationCommandAdapter invitationCommandAdapter;
     private final InvitationQueryAdapter invitationQueryAdapter;
     private final UserRepository userRepository;
 
@@ -56,6 +59,11 @@ public class UserService {
     public UserResponseDTO.registerUser register(UserRequestDTO.registerUser request){
         User user = UserMapper.toUser(request.getUserName(), request.getPhoneNumber());
         User savedUser = userCommandAdapter.register(user);
+        List<Invitation> receivedInvitations = invitationQueryAdapter.findAllByPhone(request.getPhoneNumber());
+        receivedInvitations.forEach(invitation -> {
+            invitation.setReceiver(savedUser);
+            invitationCommandAdapter.saveInvitation(invitation);
+        });
         TokenDTO loginResult = userCommandAdapter.login(savedUser);
 
         return UserMapper.toRegister(savedUser,loginResult.getAccessToken(), loginResult.getRefreshToken());

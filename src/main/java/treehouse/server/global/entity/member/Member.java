@@ -26,6 +26,8 @@ public class Member extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name; //트리에서 사용할 닉네임
 
     private String bio; //자기소개
