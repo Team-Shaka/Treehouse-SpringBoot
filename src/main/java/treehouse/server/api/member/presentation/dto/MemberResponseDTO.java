@@ -34,6 +34,7 @@ public class MemberResponseDTO {
         private Long memberId;
         private String memberName;
         private String userName;
+        private String phone;
         private Integer closestMemberCount;
         private Integer treehouseCount;
         private Integer fromMe;
