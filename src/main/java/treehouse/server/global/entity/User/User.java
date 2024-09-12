@@ -27,8 +27,10 @@ public class User extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String phone;
+
     private String name; //고유 문자열 아이디(인스타그램 st.)
     private String bio;
 
