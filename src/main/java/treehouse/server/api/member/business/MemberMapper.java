@@ -57,6 +57,7 @@ public class MemberMapper {
                 .memberId(member.getId())
                 .memberName(member.getName())
                 .userName(member.getUser().getName())
+                .phone(member.getUser().getPhone())
                 .closestMemberCount(BranchUtil.countClosestMembers(branches, targetMember.getId())) // ClosestMember 기능 개발 이후 변경 예정
                 .treehouseCount(member.getUser().getMemberList().size()) // TreehouseCount 기능 개발 이후 변경 예정
                 .fromMe(BranchUtil.calculateBranchDegree(branches, member.getId(), targetMember.getId()))
