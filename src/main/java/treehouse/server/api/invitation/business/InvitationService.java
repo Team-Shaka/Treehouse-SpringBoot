@@ -118,7 +118,7 @@ public class InvitationService {
         if (request.isAcceptDecision()==true) {
             treehouseId = invitation.getTreeHouse().getId(); // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
             // 초대장 수락
-
+            invitationCommandAdapter.acceptInvitation(invitation);
         }
         return InvitationMapper.toInvitationResult(treehouseId);
     }
