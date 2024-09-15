@@ -1,20 +1,16 @@
 package treehouse.server.api.invitation.implement;
 
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import treehouse.server.api.invitation.persistence.InvitationRepository;
-import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
 import treehouse.server.global.annotations.Adapter;
 import treehouse.server.global.entity.Invitation.Invitation;
+import treehouse.server.global.entity.Invitation.InvitationStatus;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.InvitationException;
-import treehouse.server.global.exception.ThrowClass.UserException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Adapter
 @RequiredArgsConstructor
@@ -23,7 +19,8 @@ public class InvitationQueryAdapter {
     private final InvitationRepository invitationRepository;
 
     public List<Invitation> findAllByPhone(String phone) {
-        return invitationRepository.findAllByPhone(phone);
+        return invitationRepository.findAllByPhone(phone)
+                .stream().filter(invitation -> invitation.getStatus().equals(InvitationStatus.PENDING)).toList();
     }
 
     public Boolean existByPhoneNumber(String phoneNumber) {
@@ -39,12 +36,13 @@ public class InvitationQueryAdapter {
         return invitationRepository.existsByPhoneAndTreeHouse(phoneNumber, treehouse);
     }
 
-    public Invitation findByReceiverAndTreeHouse(User user, TreeHouse treeHouse) {
-        return invitationRepository.findByReceiverAndTreeHouse(user, treeHouse)
-                .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
-    }
-
     public Invitation findByPhoneAndTreeHouse(String phone, TreeHouse treeHouse) {
         return invitationRepository.findByPhoneAndTreeHouse(phone, treeHouse);
+    }
+
+    public Invitation findAcceptedInvitation(User user, TreeHouse treeHouse) {
+        return invitationRepository.findByReceiverAndTreeHouse(user, treeHouse)
+                .filter(invitation -> invitation.getStatus().equals(InvitationStatus.ACCEPTED))
+                .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
     }
 }

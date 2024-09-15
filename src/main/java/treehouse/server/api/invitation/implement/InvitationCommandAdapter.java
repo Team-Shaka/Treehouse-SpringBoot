@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import treehouse.server.api.invitation.persistence.InvitationRepository;
 import treehouse.server.global.annotations.Adapter;
 import treehouse.server.global.entity.Invitation.Invitation;
+import treehouse.server.global.entity.Invitation.InvitationStatus;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
 import treehouse.server.global.entity.redis.RefreshToken;
@@ -27,4 +28,12 @@ public class InvitationCommandAdapter {
         return invitationRepository.save(invitation);
     }
 
+    public void deleteInvitation(Invitation invitation){
+        invitationRepository.delete(invitation);
+    }
+
+    public void acceptInvitation(Invitation invitation) {
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+        invitationRepository.save(invitation);
+    }
 }
