@@ -97,7 +97,7 @@ public class CommentService {
         Member member = memberQueryAdapter.findByUserAndTreehouse(user, treehouse);
         List<Branch> branches = branchQueryAdapter.findAllByTreeHouse(treehouse);
 
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "createdAt"));
 //        List<Comment> commentListByPostId = commentQueryAdapter.getCommentListByPostId(postId, pageable);
         List<Comment> commentListByPostId = commentQueryAdapter.getParentCommentListByPostId(postId, pageable);
 
