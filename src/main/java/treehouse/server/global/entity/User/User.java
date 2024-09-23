@@ -47,6 +47,8 @@ public class User extends BaseDateTimeEntity {
     private Integer activeRate = 0; //활동량
     @Builder.Default
     private Integer invitationCount = 3; //남아있는 초대장의 개수
+    @Builder.Default
+    private Integer invitationCreatedCount = 0; //초대장 생성 횟수
 
 
     // 탈퇴일자 필요한지 확인하기
@@ -76,5 +78,15 @@ public class User extends BaseDateTimeEntity {
 
     public void reduceInvitationCount() {
         this.invitationCount--;
+        this.invitationCreatedCount++; // 초대장 생성 횟수 증가
+        checkAndIncreaseInvitationCount(); // 3회마다 invitationCount 증가
+    }
+
+    // 초대 횟수가 3번째일 때만 invitationCount 1 증가
+    private void checkAndIncreaseInvitationCount() {
+        if (this.invitationCreatedCount == 3) {
+            this.invitationCount++;  // 3번째일 때만 증가
+            this.invitationCreatedCount = 0; // 카운트 초기화
+        }
     }
 }

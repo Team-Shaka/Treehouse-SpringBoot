@@ -14,7 +14,9 @@ public class UserRequestDTO {
 
     @Getter
     public static class registerUser {
+        @NotBlank(message = "전화번호를 입력해주세요.")
         private String phoneNumber;
+        @NotBlank(message = "유저이름(고유)을 입력해주세요.")
         private String userName;
     }
 
