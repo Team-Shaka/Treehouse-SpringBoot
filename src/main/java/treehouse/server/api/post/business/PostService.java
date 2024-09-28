@@ -123,6 +123,10 @@ public class PostService {
         List<PostImage> postImageList = PostMapper.toPostImageList(request);
         postImageList.forEach(postImage -> postImage.setPost(post));
         postImageCommandAdapter.savePostImageList(postImageList);
+
+        // 활동량 증가
+        user.increaseActiveRate(5);
+
         return PostMapper.toCreatePostResult(postCommandAdapter.savePost(post));
     }
 
@@ -304,6 +308,9 @@ public class PostService {
         Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
         member.addReaction(savedReaction);
+
+        // 활동량 증가
+        user.increaseActiveRate(1);
 
         //알림 생성
         NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();

@@ -89,4 +89,18 @@ public class User extends BaseDateTimeEntity {
             this.invitationCreatedCount = 0; // 카운트 초기화
         }
     }
+
+    public void increaseActiveRate(int rate) {
+        this.activeRate += rate;
+        checkAndIncreaseInvitationCountByActiveRate(); // activeRate가 100 단위일 때 invitationCount 증가
+    }
+
+    // activeRate가 100 단위일 때 invitationCount 증가
+    private void checkAndIncreaseInvitationCountByActiveRate() {
+        if (this.activeRate >= 100) {
+            int additionalInvitations = this.activeRate / 100; // 100 단위마다 초대장 증가
+            this.invitationCount += additionalInvitations; // 초대장 증가
+            this.activeRate = this.activeRate % 100; // 남은 activeRate는 100 미만으로 유지
+        }
+    }
 }
