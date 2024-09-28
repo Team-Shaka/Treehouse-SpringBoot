@@ -73,8 +73,8 @@ jwt:
     key: ${JWT_SECRET}
   #  secret : ${JWT_SECRET}
   authorities-key: authoritiesKey
-  access-token-validity-in-seconds: 600000 # 10 min
-  refresh-token-validity-in-seconds: 3600000 # 1 hour
+  access-token-validity-in-seconds: 7200000 # 2 hour
+  refresh-token-validity-in-seconds: 2592000000 # 30 day
 
 firebase:
   admin-sdk: ${FCM_KEY}
@@ -143,8 +143,8 @@ jwt:
     key: ${JWT_SECRET}
   #  secret : ${JWT_SECRET}
   authorities-key: authoritiesKey
-  access-token-validity-in-seconds: 2000000 # 30 m
-  refresh-token-validity-in-seconds: 3000000 # 14 d
+  access-token-validity-in-seconds: 7200000 # 2 hour
+  refresh-token-validity-in-seconds: 2592000000 # 30 day
 
 firebase:
   admin-sdk: ${FCM_KEY}

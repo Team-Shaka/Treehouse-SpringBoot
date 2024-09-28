@@ -167,6 +167,9 @@ public class CommentService {
         Comment comment = CommentMapper.toComment(writer, post, request.getContext(), CommentType.PARENT, -1L);
         Long commentId = commentCommandAdapter.createComment(comment).getId();
 
+        //활동량 증가
+        user.increaseActiveRate(5);
+
         //알림 생성
         NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
         notificationRequest.setReceiverId(post.getWriter().getUser().getId()); // 여기서 receiver 설정 (예시)
@@ -227,6 +230,9 @@ public class CommentService {
         Reaction savedReaction = reactionCommandAdapter.saveReaction(reaction);
 
         member.addReaction(savedReaction);
+
+        //활동량 증가
+        user.increaseActiveRate(1);
 
         //알림 생성
         NotificationRequestDTO.createNotification notificationRequest = new NotificationRequestDTO.createNotification();
