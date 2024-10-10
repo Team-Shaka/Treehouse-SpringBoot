@@ -99,6 +99,24 @@ public class UserService {
         Boolean isNewUser = !userQueryAdapter.existByPhoneNumber(request.getPhoneNumber());
         Boolean isInvited = invitationQueryAdapter.existByPhoneNumber(request.getPhoneNumber());
 
+        // User가 존재하지만, 해당 User와 연결된 Member가 하나도 없는 경우
+        if (!isNewUser) {
+            User user = userQueryAdapter.findByPhoneNumber(request.getPhoneNumber());
+            // 해당 User와 연관된 Member가 없는지 확인
+            if (user.getMemberList().isEmpty()) {
+                List<Invitation> receivedInvitations = invitationQueryAdapter.findAllByPhone(request.getPhoneNumber());
+                receivedInvitations.forEach(invitation -> {
+                    invitation.setReceiver(null);
+                    invitationCommandAdapter.saveInvitation(invitation);
+                });
+                fcmService.deleteAllFcmToken(user);
+                userCommandAdapter.delete(user); // User 삭제
+
+                isNewUser = true; // 삭제했으므로 isNewUser를 true로 변경
+            }
+        }
+
+
         return UserMapper.toCheckUserStatus(isNewUser, isInvited);
     }
 
