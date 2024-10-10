@@ -17,7 +17,6 @@ import treehouse.server.global.entity.member.Member;
 import treehouse.server.global.entity.redis.RefreshToken;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.AuthException;
-import treehouse.server.global.exception.ThrowClass.GeneralException;
 import treehouse.server.global.fcm.service.FcmService;
 import treehouse.server.global.redis.service.RedisService;
 import treehouse.server.global.security.jwt.dto.TokenDTO;
@@ -59,7 +58,7 @@ public class UserService {
     public UserResponseDTO.registerUser register(UserRequestDTO.registerUser request){
         User user = UserMapper.toUser(request.getUserName(), request.getPhoneNumber());
         User savedUser = userCommandAdapter.register(user);
-        List<Invitation> receivedInvitations = invitationQueryAdapter.findAllByPhone(request.getPhoneNumber());
+        List<Invitation> receivedInvitations = invitationQueryAdapter.findAllPendingByPhone(request.getPhoneNumber());
         receivedInvitations.forEach(invitation -> {
             invitation.setReceiver(savedUser);
             invitationCommandAdapter.saveInvitation(invitation);
@@ -93,7 +92,7 @@ public class UserService {
         return UserMapper.toReissue(token.getAccessToken(), token.getRefreshToken());
     }
 
-
+    @Transactional
     public UserResponseDTO.checkUserStatus checkUserStatus(UserRequestDTO.checkUserStatus request) {
 
         Boolean isNewUser = !userQueryAdapter.existByPhoneNumber(request.getPhoneNumber());

@@ -18,7 +18,7 @@ public class InvitationQueryAdapter {
 
     private final InvitationRepository invitationRepository;
 
-    public List<Invitation> findAllByPhone(String phone) {
+    public List<Invitation> findAllPendingByPhone(String phone) {
         return invitationRepository.findAllByPhone(phone)
                 .stream().filter(invitation -> invitation.getStatus().equals(InvitationStatus.PENDING)).toList();
     }
@@ -44,5 +44,9 @@ public class InvitationQueryAdapter {
         return invitationRepository.findByReceiverAndTreeHouse(user, treeHouse)
                 .filter(invitation -> invitation.getStatus().equals(InvitationStatus.ACCEPTED))
                 .orElseThrow(() -> new InvitationException(GlobalErrorCode.INVITATION_NOT_FOUND));
+    }
+
+    public List<Invitation> findAllByPhone(String phone) {
+        return invitationRepository.findAllByPhone(phone);
     }
 }
