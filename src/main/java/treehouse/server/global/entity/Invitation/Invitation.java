@@ -28,7 +28,7 @@ public class Invitation extends BaseDateTimeEntity {
 
     private LocalDateTime expiredAt; //초대장 만료일자
 
-    @JoinColumn(name = "senderId")
+    @JoinColumn(name = "senderId", nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member sender;
 

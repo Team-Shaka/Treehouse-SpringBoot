@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import treehouse.server.api.branch.business.BranchService;
 import treehouse.server.api.invitation.implement.InvitationCommandAdapter;
 import treehouse.server.api.invitation.implement.InvitationQueryAdapter;
 import treehouse.server.api.invitation.presentation.dto.InvitationRequestDTO;
@@ -21,7 +20,6 @@ import treehouse.server.global.entity.notification.NotificationType;
 import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.exception.GlobalErrorCode;
 import treehouse.server.global.exception.ThrowClass.InvitationException;
-import treehouse.server.global.exception.ThrowClass.UserException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +48,7 @@ public class InvitationService {
     @Transactional
     public InvitationResponseDTO.getInvitations getInvitations(User user) {
 
-        List<Invitation> invitations = invitationQueryAdapter.findAllByPhone(user.getPhone());
+        List<Invitation> invitations = invitationQueryAdapter.findAllPendingByPhone(user.getPhone());
 
         List<InvitationResponseDTO.getInvitation> invitationDtos = invitations.stream()
                 .map(invitation -> {
