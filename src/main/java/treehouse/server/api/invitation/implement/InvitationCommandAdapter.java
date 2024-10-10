@@ -36,4 +36,5 @@ public class InvitationCommandAdapter {
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitationRepository.save(invitation);
     }
+
 }
