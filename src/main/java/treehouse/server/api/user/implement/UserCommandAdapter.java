@@ -49,6 +49,10 @@ public class UserCommandAdapter {
     }
 
     public void withdraw(User user) {
+        user.withdraw();
+    }
+
+    public void delete(User user) {
         userRepository.delete(user);
     }
 }

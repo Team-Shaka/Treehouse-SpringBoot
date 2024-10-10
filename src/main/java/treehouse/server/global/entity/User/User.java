@@ -21,7 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user")
-@SQLDelete(sql = "UPDATE user SET inactivated_at = NOW(), status = 'WITHDRAWAL' WHERE id = ?")
 public class User extends BaseDateTimeEntity {
 
     @Id
@@ -66,6 +65,11 @@ public class User extends BaseDateTimeEntity {
 
     @OneToMany(mappedBy = "receiver")
     List<Notification> notificationList;
+
+    public void withdraw() {
+        this.status = UserStatus.WITHDRAWAL;
+        this.inactivatedAt = LocalDateTime.now();
+    }
 
     public void addMember(Member member) {
         memberList.add(member);
