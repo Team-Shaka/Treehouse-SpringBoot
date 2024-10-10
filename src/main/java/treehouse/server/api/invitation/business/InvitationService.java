@@ -48,7 +48,7 @@ public class InvitationService {
     @Transactional
     public InvitationResponseDTO.getInvitations getInvitations(User user) {
 
-        List<Invitation> invitations = invitationQueryAdapter.findAllPendingByPhone(user.getPhone());
+        List<Invitation> invitations = invitationQueryAdapter.findAllByPhone(user.getPhone());
 
         List<InvitationResponseDTO.getInvitation> invitationDtos = invitations.stream()
                 .map(invitation -> {
@@ -117,7 +117,16 @@ public class InvitationService {
             treehouseId = invitation.getTreeHouse().getId(); // treehouse 관련 로직 개발 후, invitation.getTreeHouse.getId() 등으로 바꾸기
             // 초대장 수락
             invitationCommandAdapter.acceptInvitation(invitation);
+        } else if (request.isAcceptDecision()==false) {
+            // 초대장 거절
+            invitationCommandAdapter.deleteInvitation(invitation);
         }
         return InvitationMapper.toInvitationResult(treehouseId);
+    }
+
+    @Transactional
+    public void deleteInvitation(Long invitationId) {
+        Invitation invitation = invitationQueryAdapter.findById(invitationId);
+        invitationCommandAdapter.deleteInvitation(invitation);
     }
 }

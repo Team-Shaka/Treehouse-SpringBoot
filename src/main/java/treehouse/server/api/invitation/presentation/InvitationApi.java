@@ -53,4 +53,13 @@ public class InvitationApi {
     ){
         return CommonResponse.onSuccess(invitationService.createInvitation(user,request));
     }
+
+    @DeleteMapping("/invitation/{invitationId}")
+    @Operation(summary = "초대장 삭제 API ✅ 🔑", description = "초대장을 삭제하는 API 입니다.")
+    public CommonResponse deleteInvitation(
+            @PathVariable Long invitationId
+    ){
+        invitationService.deleteInvitation(invitationId);
+        return CommonResponse.onSuccess(null);
+    }
 }
