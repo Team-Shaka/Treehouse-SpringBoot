@@ -10,6 +10,7 @@ import treehouse.server.global.entity.Invitation.InvitationStatus;
 import treehouse.server.global.entity.User.User;
 import treehouse.server.global.entity.User.UserRole;
 import treehouse.server.global.entity.redis.RefreshToken;
+import treehouse.server.global.entity.treeHouse.TreeHouse;
 import treehouse.server.global.redis.service.RedisService;
 import treehouse.server.global.security.jwt.dto.TokenDTO;
 import treehouse.server.global.security.provider.TokenProvider;

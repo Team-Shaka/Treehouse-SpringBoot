@@ -60,7 +60,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
     INVITATION_NOT_FOUND(NOT_FOUND, "INVITATION404_1", "존재하지 않는 초대장입니다."),
 
     // INVITATION + 409 CONFLICT : Resource 를 찾을 수 없음
-    INVITATION_ALREADY_EXIST(CONFLICT, "INVITATION409_1", "이미 존재하는 초대장입니다."),
+    INVITATION_ALREADY_EXIST(CONFLICT, "INVITATION409_1", "이미 해당 트리하우스에 초대되었습니다."),
 
     // POST + 401 Unauthorized - 권한 없음
     POST_UNAUTHORIZED(UNAUTHORIZED, "POST401_1", "게시글 수정 및 삭제 권한이 없습니다."),

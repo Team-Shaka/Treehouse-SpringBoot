@@ -51,6 +51,11 @@ public class InvitationService {
         List<Invitation> invitations = invitationQueryAdapter.findAllByPhone(user.getPhone());
 
         List<InvitationResponseDTO.getInvitation> invitationDtos = invitations.stream()
+                // 초대장을 보낸 트리하우스에 이미 가입한 멤버는 제외
+                .filter(invitation ->
+                        invitation.getTreeHouse().getMemberList().stream()
+                                .noneMatch(member -> member.getUser().getId().equals(user.getId()))
+                )
                 .map(invitation -> {
                     TreeHouse treeHouse = invitation.getTreeHouse();
                     List<Member> treeMembers = treeHouse.getMemberList();
